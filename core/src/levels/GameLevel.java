@@ -53,9 +53,7 @@ public abstract class GameLevel {
 	 * 
 	 * @return if this has a threat that needs attention
 	 */
-	public boolean hasThreat(){
-		return false;
-	}
+	public abstract boolean hasThreat();
 	
 	/**
 	 * Poll Gdx.input here to control the game

@@ -56,4 +56,10 @@ public class DemoLevel extends GameLevel {
 		batch.draw(img, x, y);
 	}
 
+	@Override
+	public boolean hasThreat() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
