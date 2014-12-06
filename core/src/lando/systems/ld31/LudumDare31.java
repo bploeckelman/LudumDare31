@@ -28,11 +28,14 @@ public class LudumDare31 extends ApplicationAdapter {
 
     @Override
     public void create () {
+    	
+    	Assets.load();
+    	
     	levelMgr = new LevelManager();
         tweens = new TweenManager();
         batch = new SpriteBatch();
 
-        Assets.load();
+        
         img = Assets.ludumdare;
 
         x = Gdx.graphics.getWidth()  / 2f - img.getWidth()  / 2f;
@@ -76,7 +79,7 @@ public class LudumDare31 extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(img, x, y);
+        //batch.draw(img, x, y);
         levelMgr.render(batch);
         batch.end();
     }

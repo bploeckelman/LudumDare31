@@ -1,7 +1,5 @@
 package lando.systems.ld31;
 
-import java.util.ArrayList;
-
 import levels.GameLevel;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,7 +10,8 @@ public class LevelManager {
 	public int currentLevel;
 	
 	public LevelManager(){
-		//levels[4] = new TapperLevel();
+		levels[4] = new GameLevel();
+		currentLevel = 4;
 	}
 	
 	public void setLevel(int index){
