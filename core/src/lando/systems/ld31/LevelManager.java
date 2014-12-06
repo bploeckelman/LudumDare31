@@ -1,6 +1,7 @@
 package lando.systems.ld31;
 
-import levels.GameLevel;
+import levels.*;
+
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -10,7 +11,7 @@ public class LevelManager {
 	public int currentLevel;
 	
 	public LevelManager(){
-		levels[4] = new GameLevel();
+		levels[4] = new DemoLevel();
 		currentLevel = 4;
 	}
 	
