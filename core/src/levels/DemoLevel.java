@@ -40,10 +40,10 @@ public class DemoLevel extends GameLevel {
 			xdir *= -1;
 			tempX = x + (xdir * dt * speed); 
 		}
-		float tempY = x + (xdir * dt * speed);
+		float tempY = y + (ydir * dt * speed);
 		if (tempY < 0 || tempY > camera.viewportHeight - img.getHeight()){
 			ydir *= -1;
-			tempY = y + (ydir * dt*speed);
+			tempY = y + (ydir * dt * speed);
 		}
 		
 		x = tempX;

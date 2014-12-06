@@ -17,6 +17,7 @@ public class LevelManager {
 	
 	public void setLevel(int index){
 		currentLevel = index;
+		//TODO make a way to transition these
 	}
 	
 	public void update(float dt){
