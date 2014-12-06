@@ -3,7 +3,8 @@ package levels;
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
 
-
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -46,6 +47,70 @@ public abstract class GameLevel {
 		batch.setColor(1,1,1,1);
 		draw(batch);
 		//batch.draw(img, x, y, width, height);
+	}
+	
+	/**
+	 * Find out if the Up Keys is held Down
+	 * @return 
+	 */
+	protected boolean isUpPressed(){
+		return Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.W);
+	}
+	
+	/**
+	 * Find out if the Up Keys were just pressed
+	 * @return
+	 */
+	protected boolean isUpJustPressed(){
+		return Gdx.input.isKeyJustPressed(Keys.UP) || Gdx.input.isKeyJustPressed(Keys.W);
+	}
+	
+	/**
+	 * Find out if the Up Keys is held Down
+	 * @return 
+	 */
+	protected boolean isDownPressed(){
+		return Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.S);
+	}
+	
+	/**
+	 * Find out if the Up Keys were just pressed
+	 * @return
+	 */
+	protected boolean isDownJustPressed(){
+		return Gdx.input.isKeyJustPressed(Keys.DOWN) || Gdx.input.isKeyJustPressed(Keys.S);
+	}
+	
+	/**
+	 * Find out if the Up Keys is held Down
+	 * @return 
+	 */
+	protected boolean isLeftPressed(){
+		return Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A);
+	}
+	
+	/**
+	 * Find out if the Up Keys were just pressed
+	 * @return
+	 */
+	protected boolean isLeftJustPressed(){
+		return Gdx.input.isKeyJustPressed(Keys.LEFT) || Gdx.input.isKeyJustPressed(Keys.A);
+	}
+	
+	/**
+	 * Find out if the Up Keys is held Down
+	 * @return 
+	 */
+	protected boolean isRightPressed(){
+		return Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D);
+	}
+	
+	/**
+	 * Find out if the Up Keys were just pressed
+	 * @return
+	 */
+	protected boolean isRightJustPressed(){
+		return Gdx.input.isKeyJustPressed(Keys.RIGHT) || Gdx.input.isKeyJustPressed(Keys.D);
 	}
 	
 	/**
