@@ -57,9 +57,9 @@ public class DemoLevel extends GameLevel {
 	}
 
 	@Override
-	public boolean hasThreat() {
+	public int hasThreat() {
 		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 }

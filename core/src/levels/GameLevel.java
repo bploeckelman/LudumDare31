@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class GameLevel {
 	
@@ -114,10 +116,13 @@ public abstract class GameLevel {
 	}
 	
 	/**
-	 * 
+	 * 0 - no Threat
+	 * 1 - Mild
+	 * 2 - Medium
+	 * 3 - Imminent
 	 * @return if this has a threat that needs attention
 	 */
-	public abstract boolean hasThreat();
+	public abstract int hasThreat();
 	
 	/**
 	 * Poll Gdx.input here to control the game
