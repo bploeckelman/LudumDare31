@@ -17,14 +17,6 @@ public class LudumDare31 extends ApplicationAdapter {
     SpriteBatch batch;
     LevelManager levelMgr;
     
-    Texture img;
-    float x, y;
-    MutableFloat r, g, b;
-    float accum;
-    float threshold;
-    int xdir, ydir;
-
-    final float speed = 50f;
 
     @Override
     public void create () {
@@ -36,17 +28,6 @@ public class LudumDare31 extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         
-        img = Assets.ludumdare;
-
-        x = Gdx.graphics.getWidth()  / 2f - img.getWidth()  / 2f;
-        y = Gdx.graphics.getHeight() / 2f - img.getHeight() / 2f;
-        r = new MutableFloat(1);
-        g = new MutableFloat(1);
-        b = new MutableFloat(1);
-        accum = 0;
-        threshold = 1;
-        xdir = 1;
-        ydir = 1;
     }
 
     @Override
@@ -60,26 +41,10 @@ public class LudumDare31 extends ApplicationAdapter {
         tweens.update(delta);
         levelMgr.update(delta);
 
-        accum += delta;
-        if (accum > threshold) {
-            accum -= threshold;
-            Timeline.createParallel()
-                    .push(Tween.to(r, 0, threshold).target((float) Math.random()).ease(Cubic.INOUT))
-                    .push(Tween.to(g, 0, threshold).target((float) Math.random()).ease(Cubic.INOUT))
-                    .push(Tween.to(b, 0, threshold).target((float) Math.random()).ease(Cubic.INOUT))
-                    .start(tweens);
-        }
-
-        x += xdir * delta * speed;
-        y += ydir * delta * speed;
-        if (x < 0 || x + img.getWidth()  > Gdx.graphics.getWidth())  xdir *= -1;
-        if (y < 0 || y + img.getHeight() > Gdx.graphics.getHeight()) ydir *= -1;
-
-        Gdx.gl.glClearColor(r.floatValue(),g.floatValue(),b.floatValue(),1);
+        Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        //batch.draw(img, x, y);
         levelMgr.render(batch);
         batch.end();
     }

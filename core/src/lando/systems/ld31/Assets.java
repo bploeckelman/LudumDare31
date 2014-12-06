@@ -13,6 +13,7 @@ public class Assets {
 
     // ----- Textures ---------------------------
     public static Texture ludumdare;
+    public static Texture squareTex;
     public static Random rand;
 
 
@@ -24,6 +25,7 @@ public class Assets {
 
     public static void load() {
         ludumdare = new Texture("ludumdare.png");
+        squareTex = new Texture("square.png");
         rand = new Random();
     }
 

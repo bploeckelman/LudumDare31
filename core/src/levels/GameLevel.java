@@ -45,6 +45,9 @@ public abstract class GameLevel {
 	 */
 	public void render(SpriteBatch batch){
 		batch.setProjectionMatrix(camera.combined);
+		batch.setColor(0,0,0,1);
+		batch.draw(Assets.squareTex, 0, 0, camera.viewportWidth, camera.viewportHeight);
+		batch.setColor(1,1,1,1);
 		draw(batch);
 		//batch.draw(img, x, y, width, height);
 	}
