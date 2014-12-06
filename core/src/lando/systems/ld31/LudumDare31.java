@@ -17,7 +17,6 @@ public class LudumDare31 extends ApplicationAdapter {
     SpriteBatch batch;
     Texture img;
     float x, y;
-//    float r, g, b;
     MutableFloat r, g, b;
     float accum;
     float threshold;
@@ -29,7 +28,10 @@ public class LudumDare31 extends ApplicationAdapter {
     public void create () {
         tweens = new TweenManager();
         batch = new SpriteBatch();
-        img = new Texture("ludumdare.png");
+
+        Assets.load();
+        img = Assets.ludumdare;
+
         x = Gdx.graphics.getWidth()  / 2f - img.getWidth()  / 2f;
         y = Gdx.graphics.getHeight() / 2f - img.getHeight() / 2f;
         r = new MutableFloat(1);
