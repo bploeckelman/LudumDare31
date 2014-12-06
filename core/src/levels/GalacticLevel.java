@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GalacticLevel extends GameLevel {
 
+	
 	@Override
 	public boolean hasThreat() {
 		// TODO Auto-generated method stub
@@ -11,7 +12,7 @@ public class GalacticLevel extends GameLevel {
 	}
 
 	@Override
-	public void handleInput() {
+	public void handleInput(float dt) {
 		// TODO Auto-generated method stub
 
 	}

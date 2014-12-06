@@ -27,7 +27,7 @@ public class DemoLevel extends GameLevel {
     }
     
 	@Override
-	public void handleInput() {
+	public void handleInput(float dt) {
 		// TODO Auto-generated method stub
 
 	}

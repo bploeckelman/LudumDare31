@@ -4,17 +4,13 @@ import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public abstract class GameLevel {
-	
-
 	
 	protected Camera camera;
 	
@@ -61,7 +57,7 @@ public abstract class GameLevel {
 	/**
 	 * Poll Gdx.input here to control the game
 	 */
-	public abstract void handleInput();
+	public abstract void handleInput(float dt);
 	
 	/**
 	 * 

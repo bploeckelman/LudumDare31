@@ -24,7 +24,7 @@ public class LevelManager {
 			if (levels[i] == null) continue;
 			levels[i].update(dt);
 			if (i == currentLevel){
-				levels[i].handleInput();
+				levels[i].handleInput(dt);
 			}
 		}
 	}
