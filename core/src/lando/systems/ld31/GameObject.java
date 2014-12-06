@@ -1,9 +1,9 @@
 package lando.systems.ld31;
 
-/**
- * Author: Ian McNamara <ian.mcnamara@wisc.edu>
- * Teaching and Research Application Development
- * Copyright 2014 Board of Regents of the University of Wisconsin System
- */
-public class GameObject {
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public abstract class GameObject {
+
+    public abstract void draw(SpriteBatch batch);
+
 }
