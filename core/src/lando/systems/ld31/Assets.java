@@ -1,10 +1,8 @@
 package lando.systems.ld31;
 
-import java.util.Random;
-
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+
+import java.util.Random;
 
 /**
  * Brian Ploeckelman created on 12/6/2014.
@@ -16,6 +14,11 @@ public class Assets {
     public static Texture squareTex;
     public static Random rand;
 
+    // Planetary
+    public static Texture planetaryTempEarth;
+
+
+
 
     // ----- Audio ------------------------------
 //    public static Music music;
@@ -26,6 +29,7 @@ public class Assets {
     public static void load() {
         ludumdare = new Texture("ludumdare.png");
         squareTex = new Texture("square.png");
+        planetaryTempEarth = new Texture("planetary/temp-earth.png");
         rand = new Random();
     }
 
