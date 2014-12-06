@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class LudumDare31 extends ApplicationAdapter {
     TweenManager tweens;
     SpriteBatch batch;
+    LevelManager levelMgr;
+    
     Texture img;
     float x, y;
     MutableFloat r, g, b;
@@ -26,6 +28,7 @@ public class LudumDare31 extends ApplicationAdapter {
 
     @Override
     public void create () {
+    	levelMgr = new LevelManager();
         tweens = new TweenManager();
         batch = new SpriteBatch();
 
@@ -52,6 +55,7 @@ public class LudumDare31 extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
         tweens.update(delta);
+        levelMgr.update(delta);
 
         accum += delta;
         if (accum > threshold) {
@@ -73,6 +77,7 @@ public class LudumDare31 extends ApplicationAdapter {
 
         batch.begin();
         batch.draw(img, x, y);
+        levelMgr.render(batch);
         batch.end();
     }
 }
