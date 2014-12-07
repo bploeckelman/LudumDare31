@@ -2,6 +2,7 @@ package levels;
 
 import java.util.ArrayList;
 
+import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
 import levels.human.*;
 
@@ -14,7 +15,7 @@ public class HumanLevel extends GameLevel {
 
 	public int GlassHeight = 36;
 	
-	// time a glass is invisible from being serverd
+	// time a glass is invisible from being served
 	public float ServeTime = 0.2f;
 	
 	final int BarCount = 4;
@@ -26,14 +27,19 @@ public class HumanLevel extends GameLevel {
 	int [] _barlocation;
 	
 	ArrayList<Glass> _glasses = new ArrayList<Glass>(15);
+	ArrayList<Patron> _patrons = new ArrayList<Patron>(15);
 	
 	int _bartenderLevel = 0;
 
 	Bartender _bartender;
 	
+	PatronFactory _patronFactory = new PatronFactory();
+	
 	public HumanLevel()
 	{
 		_barTexture = new Texture(HumanAssets.Bar);
+		
+		Patron.maxX = _barTexture.getWidth();
 	
 		_barlocation = new int[BarCount];
 		_tappers = new Tapper[BarCount];
@@ -107,10 +113,37 @@ public class HumanLevel extends GameLevel {
 				_glasses.remove(glass);
 			}
 		}
+		
+		managePatrons(dt);
+		
+		for (int i = _patrons.size() - 1; i >= 0; i--) {
+			Patron patron = _patrons.get(i);
+			patron.update(dt);
+			if (patron.remove) {
+				_patrons.remove(patron);
+			}
+		}
 	}
 
+	float _patronAddTime = 1f;
+	
+	private void managePatrons(float dt) {
+		_patronAddTime -= dt;
+		
+		if (_patronAddTime < 0) {
+			_patronAddTime = 3f;
+			
+			int y = _barlocation[Assets.rand.nextInt(BarCount)] + 60;		
+			_patrons.add(_patronFactory.getPatron(y));
+		}		
+	}
+		
 	@Override
 	public void draw(SpriteBatch batch) {
+		for (int i = 0; i < _patrons.size(); i++) {
+			_patrons.get(i).draw(batch);
+		}
+		
 		for (int i = 0; i < BarCount; i++) {
 			batch.draw(_barTexture, 0, _barlocation[i]);
 			_tappers[i].draw(batch);
@@ -118,7 +151,7 @@ public class HumanLevel extends GameLevel {
 		
 		for (int i = 0; i < _glasses.size(); i++) {
 			_glasses.get(i).draw(batch);
-		}
+		}		
 		
 		_bartender.draw(batch);
 	}

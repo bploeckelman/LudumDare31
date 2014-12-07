@@ -12,4 +12,8 @@ public class HumanAssets {
 	public static final String EmptyGfx = "tapper/emptyglass.png";
 	
 	public static final String Bar = "tapper/bar.png";
+	
+	public static final String Patron1 = "tapper/patron1.png";
+	public static final String Patron2 = "tapper/patron2.png";
+	public static final String Patron3 = "tapper/patron3.png";
 }
