@@ -7,6 +7,7 @@ import lando.systems.ld31.LevelManager;
 import lando.systems.ld31.Score;
 import lando.systems.ld31.ThreatLevel;
 import levels.human.*;
+import levels.human.Patron.PatronType;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,7 +33,7 @@ public class HumanLevel extends GameLevel {
 	int [] _barlocation;
 	
 	ArrayList<Glass> _glasses = new ArrayList<Glass>(15);
-	ArrayList<Drug> _drugs = new ArrayList<Drug>(5);
+	ArrayList<TimedImage> _items = new ArrayList<TimedImage>(5);
 	
 	Bartender _bartender;
 	PatronManager _patronManager;
@@ -138,20 +139,23 @@ public class HumanLevel extends GameLevel {
 			}
 		}
 		
-		for (int i = _drugs.size() - 1; i >= 0; i--) {
-			Drug drug = _drugs.get(i);
-			drug.update(dt);
-			if (_bartender.intersects(drug)) {
-				_drugs.remove(drug);
-				Score.Total += 100;
-				Score.DrugsCollected++;
+		for (int i = _items.size() - 1; i >= 0; i--) {
+			TimedImage item = _items.get(i);
+			item.update(dt);
+			if (_bartender.intersects(item)) {
+				_items.remove(item);
+				Score.Total += 100;				
+				Score.ItemsCollected++;
 				
-				ThreatLevel.reset(HumanLevel.Title);
-				LevelManager.killMicrobes();
+				if (item.tag == PatronType.exterminator) {
+					LevelManager.killBugs();
+				} else {
+					LevelManager.killMicrobes();
+				}
 			}
 		}
 		
-		_patronManager.update(_glasses, _drugs, dt);
+		_patronManager.update(_glasses, _items, dt);
 	}
 	
 	private boolean catchGlass(Glass glass) {
@@ -171,8 +175,8 @@ public class HumanLevel extends GameLevel {
 			_glasses.get(i).draw(batch);
 		}	
 		
-		for (int i = 0; i < _drugs.size(); i++) {
-			_drugs.get(i).draw(batch);
+		for (int i = 0; i < _items.size(); i++) {
+			_items.get(i).draw(batch);
 		}
 		
 		_bartender.draw(batch);
@@ -182,6 +186,6 @@ public class HumanLevel extends GameLevel {
 	public void reset() {
 		_patronManager.reset();
 		_glasses.clear();
-		_drugs.clear();
+		_items.clear();
 	}
 }

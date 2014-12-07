@@ -2,14 +2,14 @@ package levels.human;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class Drug extends MovementImage {
+public class TimedImage extends MovementImage {
 
-	private static Texture _pills = new Texture(HumanAssets.Pills);
+	public Object tag;
 	
 	private float _duration = 5f;
 	
-	public Drug(int height) {
-		super(_pills, height, 0);
+	public TimedImage(Texture image, int height) {
+		super(image, height, 0);
 		
 		speed = 0;
 	}

@@ -11,20 +11,29 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+
 public class Patron extends MovementImage {
+	
+	public enum PatronType { none, nurse, exterminator };
 	
 	private static Texture _vomit = new Texture(HumanAssets.Puke);
 	private static Texture _puddle = new Texture(HumanAssets.PukePuddle);
-	private static Texture _hat = new Texture(HumanAssets.NurseHat);
+	private static Texture _nurseHat = new Texture(HumanAssets.NurseHat);
+	private static Texture _bugHat = new Texture(HumanAssets.Orkin);
 	private static Sound _vomitSound = getSound(HumanAssets.PukeSound);
+	
+	private static final Texture _pills = new Texture(HumanAssets.Pills);
+	private static final Texture _bugspray = new Texture(HumanAssets.Off);
 	
 	public static int maxX;
 	
-	public boolean isNurse;
-	public boolean leavesMedicine;
-	private ScaleImage _nurseHat;
+	public PatronType patronType = PatronType.none;
+	public boolean hasDrop;
+	private ScaleImage _hat;
 	
-	private Glass _glass;
+	private Glass _glass;	
+	
+
 	float _glassY;
 	private float _glassTime = 1.5f;
 	private float _pukeTime = 0;
@@ -35,8 +44,21 @@ public class Patron extends MovementImage {
 		
 		this.x = x;
 		this.y = y;
-		
-		_nurseHat = new ScaleImage(_hat, 20);
+	}
+	
+	public void setPatronType(PatronType type) {
+		patronType = type;
+		switch (type) {
+			case nurse:
+				_hat = new ScaleImage(_nurseHat, 20);
+				break;
+			case exterminator:
+				_hat = new ScaleImage(_bugHat, 20);
+				break;
+			default:
+				_hat = null;
+				break;
+		}
 	}
 	
 	@Override 
@@ -99,7 +121,7 @@ public class Patron extends MovementImage {
 				_glass.y = _glassY;
 				_glass.drink();
 				
-				leavesMedicine = isNurse && Assets.rand.nextInt(10) < 7;
+				hasDrop = (patronType != PatronType.none) && Assets.rand.nextInt(10) < 7;
 				
 				remove = true;
 			}
@@ -130,11 +152,11 @@ public class Patron extends MovementImage {
 	public void draw(SpriteBatch batch) {
 		super.draw(batch);
 		
-		if (isNurse) {
-			_nurseHat.x = x + ((flipImage) ? 15 : 25);
-			_nurseHat.y = y + 70;
-			_nurseHat.flipImage = flipImage;
-			_nurseHat.draw(batch);
+		if (_hat != null) {
+			_hat.x = x + ((flipImage) ? 15 : 25);
+			_hat.y = y + 70;
+			_hat.flipImage = flipImage;
+			_hat.draw(batch);
 		}
 		
 		if (hasPuked) {
@@ -144,5 +166,25 @@ public class Patron extends MovementImage {
 				batch.draw(_puddle,  x,  y - 63);
 			}
 		}
+	}
+
+	public Texture getDrop() {
+		Texture dropImage = null;
+		
+		if (hasDrop) {
+			switch (patronType) {
+				case exterminator:
+					dropImage = _bugspray;
+					break;
+				case nurse:
+					dropImage = _pills;
+					break;
+				default:
+					dropImage = null;
+					break;
+			}
+		}
+		
+		return dropImage;
 	}
 }

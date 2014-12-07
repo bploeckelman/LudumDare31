@@ -3,6 +3,7 @@ package levels.human;
 import java.util.ArrayList;
 
 import lando.systems.ld31.Assets;
+import levels.human.Patron.PatronType;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,7 +33,7 @@ public class PatronManager {
 		_patrons.clear();
 	}
 	
-	public void update(ArrayList<Glass> glasses, ArrayList<Drug> drugs, float dt) {
+	public void update(ArrayList<Glass> glasses, ArrayList<TimedImage> items, float dt) {
 		_patronAddTime -= dt;
 			
 		for (int i = 0; i < _patrons.size(); i++) {
@@ -44,14 +45,16 @@ public class PatronManager {
 			Patron patron = _patrons.get(i);
 			patron.update(dt);
 			if (patron.remove) {
-				if (patron.leavesMedicine && drugs.size() < 4) {
-					Drug drug = new Drug(40);
+				Texture drop = patron.getDrop();
+				
+				if (drop != null && items.size() < 4) {
+					TimedImage item = new TimedImage(drop, 40);
+					item.tag = patron.patronType;
+					item.level = patron.level;
+					item.x = patron.x;
+					item.y = patron.y - 4;
 					
-					drug.level = patron.level;
-					drug.x = patron.x;
-					drug.y = patron.y - 4;
-					
-					drugs.add(drug);
+					items.add(item);
 				}
 				
 				_patrons.remove(patron);
@@ -78,7 +81,11 @@ public class PatronManager {
 		Texture image = _patronGfx[Assets.rand.nextInt(_patronGfx.length)];	
 		Patron patron = new Patron(image, 90, -image.getWidth(), y);
 		patron.speed = 200 + Assets.rand.nextInt(200);
-		patron.isNurse = Assets.rand.nextDouble() < 0.15;
+		
+		if (Assets.rand.nextDouble() < 0.15) {
+			patron.setPatronType(Assets.rand.nextBoolean() ? Patron.PatronType.nurse : PatronType.exterminator);
+		}
+
 		return patron;
 	}
 

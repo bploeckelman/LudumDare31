@@ -22,4 +22,7 @@ public class HumanAssets {
 	public static final String PukeSound = "tapper/vomit.mp3";
 	public static final String NurseHat = "tapper/nurse.png";
 	public static final String Pills = "tapper/pills.png";
+	
+	public static final String Orkin = "tapper/orkin.png";
+	public static final String Off = "tapper/off.png";
 }
