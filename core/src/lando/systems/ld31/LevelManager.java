@@ -168,7 +168,7 @@ public class LevelManager implements InputProcessor{
 		if (pointer != 0) return false;
 		Vector3 gamePos = camera.unproject(new Vector3(screenX, screenY, 0));
 		if (gamePos.x > GameConstants.GameWidth && gamePos.x < GameConstants.GameWidth + 78){
-			int level = (int)(((GameConstants.ScreenHeight - gamePos.y) - 125) / 75 );
+			int level = (int)Math.floor(((GameConstants.ScreenHeight - gamePos.y) - 125) / 75 );
 			setLevel(level);
 			return true;
 		}
