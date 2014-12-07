@@ -125,7 +125,12 @@ public class Insects extends GameLevel {
                 }
             }
             this.enemies = tempEnemies;
+        }
 
+        if(this.towers != null){
+            for(int x = 0; x < this.towers.size(); x++){
+                this.towers.get(x).updateTower(this.enemies, dt);
+            }
         }
 
     }
@@ -146,15 +151,17 @@ public class Insects extends GameLevel {
             }
         }
 
-        if(this.enemies != null){
-            for(int x = 0; x < this.enemies.size(); x++){
-                this.enemies.get(x).drawSprite(batch);
-            }
-        }
 
         if(this.towers != null){
             for(int x =0; x < this.towers.size(); x++){
                 this.towers.get(x).drawSprite(batch);
+                this.towers.get(x).renderBullets(batch);
+            }
+        }
+
+        if(this.enemies != null){
+            for(int x = 0; x < this.enemies.size(); x++){
+                this.enemies.get(x).drawSprite(batch);
             }
         }
 
