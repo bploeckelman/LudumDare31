@@ -67,7 +67,7 @@ public class PlanetaryLevel extends GameLevel {
         earth = new Earth();
         // Set the position now.
         earth.setPosition(earthPos);
-
+        zoomOutPoint = earthPos.cpy();
 
         // Moon
         // Where's the moon?

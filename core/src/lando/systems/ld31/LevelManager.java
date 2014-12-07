@@ -15,6 +15,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 public class LevelManager implements InputProcessor{
 
@@ -105,26 +106,26 @@ public class LevelManager implements InputProcessor{
         Texture currentTexture = currentFBO.getColorBufferTexture();
         
         batch.begin();
-        if (lastLevel == -1){
-	        
-	        batch.draw(currentTexture, 0, currentFBO.getHeight(), currentFBO.getWidth(), -currentFBO.getHeight());
-	        
+        if (lastLevel == -1){	        
+	        batch.draw(currentTexture, 0, currentFBO.getHeight(), currentFBO.getWidth(), -currentFBO.getHeight());        
         } else {
         	if (lastLevel < currentLevel){ // Zooming out
         		float alpha = transition.floatValue();
         		float currentAlpha = 1 + alpha;
         		float lastAlpha = alpha;
-    	        batch.draw(currentTexture, currentFBO.getWidth()/2 * (1 - currentAlpha), currentFBO.getHeight() - (currentFBO.getHeight()/2 * ( 1- currentAlpha)), currentFBO.getWidth() * currentAlpha, -currentFBO.getHeight() * currentAlpha);
+        		Vector2 zoomPoint = levels[currentLevel].zoomOutPoint;
+    	        batch.draw(currentTexture, zoomPoint.x * (1 - currentAlpha), currentFBO.getHeight() - (zoomPoint.y * ( 1- currentAlpha)), currentFBO.getWidth() * currentAlpha, -currentFBO.getHeight() * currentAlpha);
     	        batch.setColor(1, 1, 1, transition.floatValue());
-    	        batch.draw(lastTexture, currentFBO.getWidth() /2 * (1 -lastAlpha), currentFBO.getHeight() - (currentFBO.getHeight()/2 * ( 1- lastAlpha)), currentFBO.getWidth() * ( lastAlpha), -currentFBO.getHeight()* (alpha));
+    	        batch.draw(lastTexture, zoomPoint.x * (1 -lastAlpha), currentFBO.getHeight() - (zoomPoint.y * ( 1- lastAlpha)), currentFBO.getWidth() * ( lastAlpha), -currentFBO.getHeight()* (alpha));
     	        batch.setColor(Color.WHITE);
         	} else { // zooming in
         		float alpha =  1 - transition.floatValue();
         		float currentAlpha = alpha;
         		float lastAlpha = 1 + alpha;
-    	        batch.draw(lastTexture, currentFBO.getWidth()/2 * (1 - lastAlpha), currentFBO.getHeight() - (currentFBO.getHeight()/2 * ( 1- lastAlpha)), currentFBO.getWidth()* lastAlpha, -currentFBO.getHeight()* lastAlpha);
+        		Vector2 zoomPoint = levels[lastLevel].zoomOutPoint;
+    	        batch.draw(lastTexture, zoomPoint.x  * (1 - lastAlpha), currentFBO.getHeight() - (zoomPoint.y * ( 1- lastAlpha)), currentFBO.getWidth()* lastAlpha, -currentFBO.getHeight()* lastAlpha);
     	        batch.setColor(1, 1, 1, alpha);
-    	        batch.draw(currentTexture, currentFBO.getWidth()/2 * (1 - currentAlpha), currentFBO.getHeight() - (currentFBO.getHeight()/2 * ( 1- currentAlpha)), currentFBO.getWidth()* ( currentAlpha), -currentFBO.getHeight()* ( currentAlpha));
+    	        batch.draw(currentTexture, zoomPoint.x  * (1 - currentAlpha), currentFBO.getHeight() - (zoomPoint.y * ( 1- currentAlpha)), currentFBO.getWidth()* ( currentAlpha), -currentFBO.getHeight()* ( currentAlpha));
     	        batch.setColor(Color.WHITE);
         	}
         }

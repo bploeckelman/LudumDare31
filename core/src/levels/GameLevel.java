@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public abstract class GameLevel {
 	
 	protected Camera camera;
+	public Vector2 zoomOutPoint;
 	
 	/**
 	 * Start threat on creation, this won't get created until the 
@@ -25,6 +26,7 @@ public abstract class GameLevel {
 		camera = new OrthographicCamera(GameConstants.ScreenWidth, GameConstants.ScreenHeight);
 		camera.translate(camera.viewportWidth/2, camera.viewportHeight/2, 0);
 		camera.update();
+		zoomOutPoint = new Vector2(camera.viewportWidth/2, camera.viewportHeight/2);
 
 	}
 	
