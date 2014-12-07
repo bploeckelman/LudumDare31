@@ -34,6 +34,27 @@ public class GalacticLevel extends GameLevel {
 
 
 	}
+	
+	Galaxy touchedGalaxy;
+	
+	@Override
+	public boolean touchDown(int screenX, int screenY, int button) {
+		for (int i = 0; i < galaxies.size(); i++){
+			System.out.println("Down");
+		}
+		return false;
+	};
+	
+	@Override
+	public boolean touchUp(int screenX, int screenY, int button) {
+		touchedGalaxy = null;
+		return false;
+	};
+	
+	@Override
+	public boolean touchDragged(int screenX, int screenY) {
+		return false;
+	};
 
 	@Override
 	public void update(float dt) {

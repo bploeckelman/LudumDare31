@@ -123,7 +123,7 @@ public abstract class GameLevel {
 	 * @param button
 	 * @return
 	 */
-	protected boolean touchDown(int screenX, int screenY, int button) {
+	public boolean touchDown(int screenX, int screenY, int button) {
 		return false;
 	}
 	
@@ -135,7 +135,7 @@ public abstract class GameLevel {
 	 * @param button
 	 * @return
 	 */
-	protected boolean touchUp(int screenX, int screenY, int button) {
+	public boolean touchUp(int screenX, int screenY, int button) {
 		return false;
 	}
 	

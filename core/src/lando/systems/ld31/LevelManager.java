@@ -88,6 +88,9 @@ public class LevelManager implements InputProcessor{
 		// TODO Auto-generated method stub
 		if (pointer != 0) return false;
 		touchedDown = true;
+		if (levels[currentLevel] != null){
+			levels[currentLevel].touchDown(screenX, screenY, button);
+		}
 		return false;
 	}
 
@@ -96,6 +99,9 @@ public class LevelManager implements InputProcessor{
 		// TODO Auto-generated method stub
 		if (pointer != 0) return false;
 		touchedDown = false;
+		if (levels[currentLevel] != null){
+			levels[currentLevel].touchUp(screenX, screenY, button);
+		}
 		return false;
 	}
 
@@ -103,12 +109,17 @@ public class LevelManager implements InputProcessor{
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		// TODO Auto-generated method stub
 		if (pointer != 0) return false;
+		if (levels[currentLevel] != null){
+			levels[currentLevel].touchDragged(screenX, screenY);
+		}
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
+		if (levels[currentLevel] != null){
+			levels[currentLevel].mouseMoved(screenX, screenY);
+		}
 		return false;
 	}
 
