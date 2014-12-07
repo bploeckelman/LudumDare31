@@ -1,5 +1,6 @@
 package levels;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.math.Vector2;
@@ -46,7 +47,6 @@ public class Insects extends GameLevel {
         this.getWidthAndHeight();
         this.baseMap = new MapTiles[this.tileWidth][];
         generateMap();
-
     }
 
 
@@ -56,14 +56,17 @@ public class Insects extends GameLevel {
 
     public void updateThreat(int pathsLeft){
 
-        if(pathsLeft < 7 && this.currentThreat < 2){
-            this.currentThreat = 1;
-        }else if(pathsLeft < 5 && this.currentThreat < 3){
-            this.currentThreat = 2;
-        }else if(pathsLeft < 3){
-            this.currentThreat = 3;
-        }else{
-            this.currentThreat = 0;
+        int threat = 0;
+        if(pathsLeft < 6 && pathsLeft > 4){
+            threat = 1;
+        }else if(pathsLeft <= 4 && pathsLeft >= 3){
+            threat = 2;
+        }else if (pathsLeft < 3){
+            threat = 3;
+        }
+
+        if(threat > this.currentThreat){
+            this.currentThreat = threat;
         }
 
     }
