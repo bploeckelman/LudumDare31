@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -21,7 +20,9 @@ import com.badlogic.gdx.math.Vector3;
 
 public class LevelManager implements InputProcessor{
 
-    public GameLevel[] levels = new GameLevel[7];
+	public static final int levelCount = 7;
+	
+    public GameLevel[] levels = new GameLevel[levelCount];
     public int currentLevel;
     public int lastLevel;
     public int targetLevel;
@@ -232,8 +233,28 @@ public class LevelManager implements InputProcessor{
 					setLevel(targetLevel);
 				}
 			}
-			
 		}
 	};
-
+	
+	public static void killBugs() {
+		resetLevel(2);
+	}
+	
+	public static void killMicrobes() {
+		resetLevel(0);
+	}
+	
+	public static void resetPatrons() {
+		resetLevel(3);
+	}
+	
+	private static void resetLevel(int levelIndex)
+	{
+		if (levelIndex < 0 || levelIndex >= LevelManager.levelCount) return;
+		
+		GameLevel level = LudumDare31.levelMgr.levels[levelIndex];
+		if (level != null) {
+			level.reset();
+		}		
+	}	
 }

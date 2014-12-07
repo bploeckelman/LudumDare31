@@ -3,6 +3,7 @@ package levels;
 import java.util.ArrayList;
 
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.LevelManager;
 import lando.systems.ld31.Score;
 import lando.systems.ld31.ThreatLevel;
 import levels.human.*;
@@ -146,6 +147,7 @@ public class HumanLevel extends GameLevel {
 				Score.DrugsCollected++;
 				
 				ThreatLevel.reset(HumanLevel.Title);
+				LevelManager.killMicrobes();
 			}
 		}
 		
@@ -174,5 +176,12 @@ public class HumanLevel extends GameLevel {
 		}
 		
 		_bartender.draw(batch);
+	}
+	
+	@Override
+	public void reset() {
+		_patronManager.reset();
+		_glasses.clear();
+		_drugs.clear();
 	}
 }

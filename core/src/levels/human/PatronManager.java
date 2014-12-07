@@ -29,6 +29,7 @@ public class PatronManager {
 	public void reset() {
 		_patronAddTime = 1f;
 		_addReset = 3f;
+		_patrons.clear();
 	}
 	
 	public void update(ArrayList<Glass> glasses, ArrayList<Drug> drugs, float dt) {

@@ -67,6 +67,8 @@ public abstract class GameLevel {
 		return startNext;
 	}
 	
+	public void reset() { }
+	
 	/**
 	 * Find out if the Up Keys is held Down
 	 * @return 
