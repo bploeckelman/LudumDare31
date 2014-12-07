@@ -10,6 +10,8 @@ import java.util.Random;
  */
 public class Assets {
 
+	public static int score;
+	
     // ----- Textures ---------------------------
     public static Texture ludumdare;
     public static Texture squareTex;

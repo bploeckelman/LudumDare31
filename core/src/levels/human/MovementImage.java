@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public abstract class MovementImage {
 
 	public boolean remove;
+	public int level;
 	
 	private Texture _image;
 	
@@ -16,6 +17,8 @@ public abstract class MovementImage {
 	
 	public int width;
 	public int height;
+
+	public boolean shouldUpdate = true;
 	
 	float _invisibleTime;
 	
@@ -37,7 +40,7 @@ public abstract class MovementImage {
 	
 	public void update(float dt) {
 		_invisibleTime -= dt;
-		if (_invisibleTime > 0) return;		
+		if (_invisibleTime > 0 || !shouldUpdate) return;		
 		
 		x += speed*dt;
 		if (checkX()) {

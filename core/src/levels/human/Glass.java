@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Glass extends MovementImage {
 	
+	private final int _initialSpeed = -300;
+	
 	private static Texture _fullGfx = new Texture(HumanAssets.FullGfx);
 	private static Texture _emptyGfx = new Texture(HumanAssets.EmptyGfx);
 	
@@ -16,7 +18,7 @@ public class Glass extends MovementImage {
 		x = barEnd - width;
 		y = barTop;
 		
-		speed = -300;
+		speed = _initialSpeed;
 	}
 	
 	@Override
@@ -27,5 +29,11 @@ public class Glass extends MovementImage {
 	@Override
 	protected boolean checkX() {
 		return x < -width;
+	}
+
+	public void drink() {
+		speed = (int)(_initialSpeed* -1.3);
+		isFull = false;
+		shouldUpdate = true;		
 	}
 }

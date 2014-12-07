@@ -27,13 +27,11 @@ public class HumanLevel extends GameLevel {
 	int [] _barlocation;
 	
 	ArrayList<Glass> _glasses = new ArrayList<Glass>(15);
-	ArrayList<Patron> _patrons = new ArrayList<Patron>(15);
 	
 	int _bartenderLevel = 0;
 
 	Bartender _bartender;
-	
-	PatronFactory _patronFactory = new PatronFactory();
+	PatronManager _patronManager;
 	
 	public HumanLevel()
 	{
@@ -61,6 +59,8 @@ public class HumanLevel extends GameLevel {
 			_tappers[i] = new Tapper();
 			_tappers[i].position = new Vector2(tapperX, y - Tapper.height);
 		}
+		
+		_patronManager = new PatronManager(_barlocation);
 				
 		_bartender.y = _barlocation[_bartenderLevel];
 	}
@@ -92,8 +92,11 @@ public class HumanLevel extends GameLevel {
 		if (serve && _serveTime < 0) {
 			_bartender.serve();
 			_tappers[_bartenderLevel].serve();
-			_glasses.add(new Glass(GlassHeight, _barTexture.getWidth(), 
-					_barlocation[_bartenderLevel] + _barTexture.getHeight(), ServeTime));
+			
+			Glass glass = new Glass(GlassHeight, _barTexture.getWidth(), 
+					_barlocation[_bartenderLevel] + _barTexture.getHeight(), ServeTime);
+			glass.level = _bartenderLevel;
+			_glasses.add(glass);
 			
 			_serveTime  = ServeTime;
 		}
@@ -114,35 +117,12 @@ public class HumanLevel extends GameLevel {
 			}
 		}
 		
-		managePatrons(dt);
-		
-		for (int i = _patrons.size() - 1; i >= 0; i--) {
-			Patron patron = _patrons.get(i);
-			patron.update(dt);
-			if (patron.remove) {
-				_patrons.remove(patron);
-			}
-		}
-	}
-
-	float _patronAddTime = 1f;
-	
-	private void managePatrons(float dt) {
-		_patronAddTime -= dt;
-		
-		if (_patronAddTime < 0) {
-			_patronAddTime = 3f;
-			
-			int y = _barlocation[Assets.rand.nextInt(BarCount)] + 60;		
-			_patrons.add(_patronFactory.getPatron(y));
-		}		
+		_patronManager.update(_glasses, dt);
 	}
 		
 	@Override
 	public void draw(SpriteBatch batch) {
-		for (int i = 0; i < _patrons.size(); i++) {
-			_patrons.get(i).draw(batch);
-		}
+		_patronManager.draw(batch);
 		
 		for (int i = 0; i < BarCount; i++) {
 			batch.draw(_barTexture, 0, _barlocation[i]);
