@@ -3,6 +3,7 @@ package levels;
 import java.util.ArrayList;
 import java.util.List;
 
+import lando.systems.ld31.Assets;
 import levels.galactic.Galaxy;
 import levels.galactic.MilkyWay;
 
@@ -35,6 +36,13 @@ public class GalacticLevel extends GameLevel {
 
 	}
 	
+	public void addNewGalaxy(){
+		Vector2 dir = new Vector2(1,0);
+		dir.rotate(Assets.rand.nextFloat() * 360);
+		dir.scl(1200);
+		galaxies.add(new Galaxy(dir));
+	}
+	
 	Galaxy touchedGalaxy;
 	
 	@Override
@@ -42,6 +50,7 @@ public class GalacticLevel extends GameLevel {
 		Vector2 gamePos = getGamePos(new Vector2(screenX, screenY));
 		for (int i = 0; i < galaxies.size(); i++){
 			Galaxy gal = galaxies.get(i);
+			if (gal == home) continue;
 			if (gamePos.cpy().dst(gal.getPos()) < gal.width){
 				touchedGalaxy = gal;
 				touchedGalaxy.path.clear();
@@ -68,8 +77,15 @@ public class GalacticLevel extends GameLevel {
 
 	@Override
 	public void update(float dt) {
-		for (int i = 0; i < galaxies.size(); i++){
+		for (int i = galaxies.size() -1; i >= 0; i--){
 			galaxies.get(i).update(dt, galaxies);
+			if (!galaxies.get(i).alive) galaxies.remove(i);
+		}
+		
+		spawnTimer -= dt;
+		if (spawnTimer < 0){
+			addNewGalaxy();
+			spawnTimer += (20 + Assets.rand.nextFloat() * 15);
 		}
 
 	}

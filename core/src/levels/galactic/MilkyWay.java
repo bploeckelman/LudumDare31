@@ -19,6 +19,7 @@ public class MilkyWay extends Galaxy{
 		sprite.setSize(40, 40);
 		sprite.setCenter(pos.x, pos.y);
 		mass = 20;
+		isMilkyWay = true;
 
 	}
 	
