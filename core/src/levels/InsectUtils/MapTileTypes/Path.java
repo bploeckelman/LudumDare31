@@ -11,7 +11,7 @@ public class Path extends MapTiles {
     public Path(){
 
         this.name = "Path";
-       // this.tileTexture = Assets.insectsAssets.Path;
+        this.tileTexture = Assets.insectsAssets.Path;
     }
 
 

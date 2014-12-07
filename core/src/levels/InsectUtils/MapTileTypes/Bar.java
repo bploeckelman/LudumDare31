@@ -11,7 +11,7 @@ public class Bar extends MapTiles{
     public Bar(){
 
         this.name = "Bar";
-        //this.tileTexture = Assets.insectsAssets.Bar;
+        this.tileTexture = Assets.insectsAssets.Bar;
 
     }
 

@@ -16,7 +16,7 @@ public class LevelManager {
 		levels[3] = new HumanLevel();
 		levels[2] = new Insects();
 		levels[4] = new DemoLevel();
-		currentLevel = 4;
+		currentLevel = 2;
 
 	}
 
