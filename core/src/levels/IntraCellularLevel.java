@@ -162,6 +162,8 @@ public class IntraCellularLevel extends GameLevel {
 
     @Override
     public void draw(SpriteBatch batch) {
+        batch.draw(IntraCellularAssets.background, 0, 0, camera.viewportWidth - 100, camera.viewportHeight);
+
         for(int i = 0; i < bullets.size(); i++) {
             bullets.get(i).sprite.draw(batch);
         }
