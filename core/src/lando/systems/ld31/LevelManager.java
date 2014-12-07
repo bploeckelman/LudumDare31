@@ -22,7 +22,7 @@ public class LevelManager implements InputProcessor{
 
 	public static final int levelCount = 7;
 	
-    public GameLevel[] levels = new GameLevel[levelCount];
+    public GameLevel[] levels = new GameLevel[levelCount + 1];
     public int currentLevel;
     public int lastLevel;
     public int targetLevel;
@@ -42,6 +42,7 @@ public class LevelManager implements InputProcessor{
         levels[4] = new CityLevel();
         levels[5] = new PlanetaryLevel();
         levels[6] = new GalacticLevel();
+        levels[7] = new Snowman();
         currentLevel = 3;
         lastLevel = -1;
         Gdx.input.setInputProcessor(this);
@@ -129,7 +130,7 @@ public class LevelManager implements InputProcessor{
         // Hud time
         batch.setProjectionMatrix(camera.combined);
         batch.draw(Assets.sidebarBackground, GameConstants.GameWidth, 0, 100, GameConstants.ScreenHeight);
-        for (int i = 0; i < levels.length; i++){
+        for (int i = 0; i < levelCount; i++){
         	Texture tex = Assets.sidebarBlack;
         	if (levels[i] != null){
         		tex = Assets.sidebarStatus[levels[i].hasThreat()];
