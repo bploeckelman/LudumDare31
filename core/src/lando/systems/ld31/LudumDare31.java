@@ -32,9 +32,9 @@ public class LudumDare31 extends ApplicationAdapter {
 
     @Override
     public void render () {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            Gdx.app.exit();
-        }
+        //if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        //    Gdx.app.exit();
+        //}
 
         float delta = Gdx.graphics.getDeltaTime();
 

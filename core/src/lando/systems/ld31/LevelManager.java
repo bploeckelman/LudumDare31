@@ -79,15 +79,8 @@ public class LevelManager implements InputProcessor{
     public void update(float dt){
         for (int i = 0; i < levels.length; i++){
             if (levels[i] == null) continue;
-            levels[i].top = i == currentLevel;
-            levels[i].update(i == currentLevel ? dt : dt/2.0f);
-            
-            if (i == currentLevel){
-                levels[i].handleInput(dt);
-            }
-        }
-
-        
+            levels[i].update(dt, (i == currentLevel));
+        }        
         
         if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
             if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) {
