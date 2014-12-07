@@ -94,14 +94,24 @@ public class IntraCellularLevel extends GameLevel {
             }
         }
 
-        nextAsteroid = nextAsteroid - dt;
+        nextAsteroid -= dt;
         if(nextAsteroid <= 0) {
             asteroids.add(new Asteroid(camera.viewportWidth, camera.viewportHeight));
             nextAsteroid = Assets.rand.nextInt(10);
         }
 
-        for(int i = 0; i < asteroids.size(); i++) {
+        ASTEROIDS: for(int i = 0; i < asteroids.size(); i++) {
             Asteroid asteroid = asteroids.get(i);
+
+            for(int j = 0; j < bullets.size(); j++) {
+                Bullet bullet = bullets.get(j);
+                if(bullet.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + bullet.sprite.getWidth()/2) {
+                    asteroid.split(asteroids, bullet.velocity);
+                    i--;
+                    bullets.remove(bullet);
+                    continue ASTEROIDS;
+                }
+            }
 
             asteroid.setPosition(asteroid.getX() + asteroid.velocity.x * dt, asteroid.getY() + asteroid.velocity.y * dt);
             if(asteroid.getX() < 0) {

@@ -4,21 +4,43 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
 
+import java.util.List;
+
 public class Asteroid {
+    public enum Size {
+        SMALL (2, null),
+        MEDIUM (4, SMALL),
+        LARGE (8, MEDIUM);
+
+        public final int scale;
+        public final Size splitInto;
+        Size(int scale, Size splitInto) {
+            this.scale = scale;
+            this.splitInto = splitInto;
+        }
+    }
+
     public Sprite sprite;
     public Vector2 velocity;
     public Vector2 position;
 
-    public Asteroid(float x, float y) {
+    private Size size;
+
+    public Asteroid(float x, float y, Size size, Vector2 velocity) {
+        this.size = size;
+
         position = new Vector2(x, y);
 
         sprite = new Sprite(IntraCellularAssets.asteroid);
-        sprite.setSize(sprite.getWidth() * 8, sprite.getHeight() * 8);
+        sprite.setSize(sprite.getWidth() * size.scale, sprite.getHeight() * size.scale);
         sprite.setCenter(x, y);
 
-        velocity = new Vector2(0, 1);
-        velocity.setAngle(Assets.rand.nextInt(360));
-        velocity.scl(Assets.rand.nextFloat() * 500);
+        this.velocity = velocity;
+    }
+
+    public Asteroid(float x, float y) {
+        this(x, y, Size.values()[Assets.rand.nextInt(3)],
+                (new Vector2(0, 1)).setAngle(Assets.rand.nextInt(360)).scl(Assets.rand.nextFloat() * 500));
     }
 
     public void setPosition(float x, float y) {
@@ -42,5 +64,14 @@ public class Asteroid {
     public void setY(float y) {
         position.y = y;
         sprite.setCenter(position.x, y);
+    }
+
+    public void split(List asteroids, Vector2 newVelocity) {
+        asteroids.remove(this);
+
+        if(size.splitInto != null) {
+            asteroids.add(new Asteroid(position.x, position.y, size.splitInto, newVelocity.cpy().nor().rotate(90).scl(velocity)));
+            asteroids.add(new Asteroid(position.x, position.y, size.splitInto, newVelocity.cpy().nor().rotate(-90).scl(velocity)));
+        }
     }
 }
