@@ -23,7 +23,7 @@ public class Spider extends Enemies {
         this.currentPosition = new Vector2(16, (pathYStart*32) + 16);
         this.enemySprite.setCenter(this.currentPosition.x, this.currentPosition.y);
 
-        this.speed = 30;
+        this.speed = 10;
         this.alive = true;
 
     }

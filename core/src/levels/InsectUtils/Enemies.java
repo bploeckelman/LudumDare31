@@ -22,7 +22,6 @@ public abstract class Enemies {
 
     public Enemies(int pathYStart){
 
-
         this.checkPoints.add(new Vector2((float) 4.5 * 32, (pathYStart * 32) + 16));
         this.checkPoints.add(new Vector2((float) 4.5 * 32, (pathYStart * 32) + (5*32) + 16));
         this.checkPoints.add(new Vector2((float) 7.5 * 32, (pathYStart * 32) + (5*32) + 16));
@@ -31,11 +30,8 @@ public abstract class Enemies {
         this.checkPoints.add(new Vector2((float) 14.5 * 32, (pathYStart * 32) - (7*32) + 16));
         this.checkPoints.add(new Vector2((float) 18.5 * 32, (pathYStart * 32) - (7*32) + 16));
         this.checkPoints.add(new Vector2((float) 18.5 * 32, (pathYStart * 32) + 16));
-        this.checkPoints.add(new Vector2((float) 30.5 * 32, (pathYStart * 32) + 16));
-
+        this.checkPoints.add(new Vector2((float) 26.5 * 32, (pathYStart * 32) + 16));
     }
-
-
 
     public String getName(){ return this.name; }
 
@@ -48,6 +44,8 @@ public abstract class Enemies {
     }
 
     public boolean alive(){ return this.alive; }
+
+    public int pathsLeft(){ return this.checkPoints.size(); }
 
     public abstract void updateSprite(float dt);
 }

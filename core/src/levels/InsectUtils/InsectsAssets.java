@@ -15,6 +15,8 @@ public class InsectsAssets {
 
     public static Texture Spider;
 
+    public static Texture DartTower;
+
     public InsectsAssets(){
 
         Bar = new Texture("insects/Bar.png");
@@ -22,6 +24,8 @@ public class InsectsAssets {
         Path = new Texture("insects/Path.png");
 
         Spider = new Texture("insects/Spider.png");
+
+        DartTower = new Texture("insects/DartTower.png");
     }
 
     public void dispose(){

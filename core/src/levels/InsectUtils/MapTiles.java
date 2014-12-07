@@ -9,6 +9,7 @@ public abstract class MapTiles {
 
     protected String name = "MapTile";
     protected Texture tileTexture;
+    protected boolean hasTower;
 
     public String getName(){
         return this.name;
@@ -16,5 +17,13 @@ public abstract class MapTiles {
 
     public Texture getTileTexture(){
         return tileTexture;
+    }
+
+    public void setHasTower(boolean hasTower){
+        this.hasTower = hasTower;
+    }
+
+    public boolean hasTower(){
+        return this.hasTower;
     }
 }

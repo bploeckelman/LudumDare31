@@ -62,7 +62,7 @@ public class LevelManager implements InputProcessor{
         levels[currentLevel].render(batch);
     }
 
-    
+
 	@Override
 	public boolean keyDown(int keycode) {
 		// TODO Auto-generated method stub
@@ -82,7 +82,7 @@ public class LevelManager implements InputProcessor{
 	}
 
 	boolean touchedDown = false;
-	
+
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
@@ -128,7 +128,7 @@ public class LevelManager implements InputProcessor{
 		// TODO Auto-generated method stub
 		if (!touchedDown){
 			currentLevel = MathUtils.clamp(currentLevel + Math.abs(amount) / amount, 0, 6);
-			
+
 		}
 		return false;
 	}

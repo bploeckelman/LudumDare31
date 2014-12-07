@@ -2,6 +2,9 @@ package levels;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.math.Vector2;
+import lando.systems.ld31.Assets;
+import lando.systems.ld31.GameConstants;
 import levels.InsectUtils.EnemyTypes.Spider;
 import levels.InsectUtils.MapTileTypes.Bar;
 import levels.InsectUtils.MapTileTypes.Path;
@@ -9,6 +12,8 @@ import levels.InsectUtils.MapTileTypes.Beer;
 import levels.InsectUtils.MapTiles;
 
 import levels.InsectUtils.Enemies;
+import levels.InsectUtils.Tower;
+import levels.InsectUtils.TowerTypes.Dart;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -18,19 +23,26 @@ import java.util.ArrayList;
  */
 public class Insects extends GameLevel {
 
+    protected int currentThreat;
+
     protected MapTiles[][] baseMap;
     protected ArrayList<Enemies> enemies;
+    protected ArrayList<Tower> towers;
     protected int tileWidth;
     protected int tileHeight;
 
     protected float enemyDeltaTime;
+    protected float nextEnemyDeltaTime;
     protected int pathYStart;
 
 
     public Insects(){
         super();
+
+        this.currentThreat = 0;
         this.enemyDeltaTime = 0;
         this.enemies = new ArrayList<Enemies>();
+        this.towers = new ArrayList<Tower>();
         this.getWidthAndHeight();
         this.baseMap = new MapTiles[this.tileWidth][];
         generateMap();
@@ -39,19 +51,61 @@ public class Insects extends GameLevel {
 
 
     public int hasThreat() {
-        return 0;
+        return this.currentThreat;
+    }
+
+    public void updateThreat(int pathsLeft){
+
+        if(pathsLeft < 7 && this.currentThreat < 2){
+            this.currentThreat = 1;
+        }else if(pathsLeft < 5 && this.currentThreat < 3){
+            this.currentThreat = 2;
+        }else if(pathsLeft < 3){
+            this.currentThreat = 3;
+        }else{
+            this.currentThreat = 0;
+        }
+
     }
 
     public void handleInput(float dt){
 
     }
 
+
+    public boolean touchUp(int screenX, int screenY, int button) {
+        return this.addTower(getGamePos(new Vector2(screenX, screenY)));
+    }
+
+    protected boolean addTower(Vector2 clickPos){
+
+        int cellXNum = (int) Math.floor(clickPos.x / 32);
+        int cellYNum = (int) Math.floor(clickPos.y / 32);
+
+        if(cellXNum >= this.baseMap.length){ // if they're clicking off the map return false
+            return false;
+        }
+
+        // don't add towers to path
+        if(this.baseMap[cellXNum][cellYNum] instanceof Path || this.baseMap[cellXNum][cellYNum] instanceof Beer ||
+                                                                            this.baseMap[cellXNum][cellYNum].hasTower()){
+            return false;
+        }
+
+        Tower newTower = new Dart(new Vector2(cellXNum * 32, cellYNum * 32));
+        this.towers.add(newTower);
+        this.baseMap[cellXNum][cellYNum].setHasTower(true);
+
+        return true;
+    }
+
     @Override
     public void update(float dt) {
 
-        if(this.enemyDeltaTime > 5){
+        if(this.enemyDeltaTime > this.nextEnemyDeltaTime){
             Spider spider = new Spider(this.pathYStart);
             this.enemies.add(spider);
+            this.nextEnemyDeltaTime = (Assets.rand.nextFloat() * 4) + 1;
             this.enemyDeltaTime = 0;
         }else{
             this.enemyDeltaTime = this.enemyDeltaTime + dt;
@@ -62,16 +116,14 @@ public class Insects extends GameLevel {
         if(this.enemies != null){
             for(int x = 0; x < this.enemies.size(); x++){
                 this.enemies.get(x).updateSprite(dt);
-                if(this.enemies.get(x).alive()){
+                if(this.enemies.get(x).alive()) {
                     tempEnemies.add(this.enemies.get(x));
+                    this.updateThreat(this.enemies.get(x).pathsLeft());
                 }
             }
             this.enemies = tempEnemies;
 
         }
-
-
-
 
     }
 
@@ -92,8 +144,14 @@ public class Insects extends GameLevel {
         }
 
         if(this.enemies != null){
-            for(int x = 0; x < enemies.size(); x++){
+            for(int x = 0; x < this.enemies.size(); x++){
                 this.enemies.get(x).drawSprite(batch);
+            }
+        }
+
+        if(this.towers != null){
+            for(int x =0; x < this.towers.size(); x++){
+                this.towers.get(x).drawSprite(batch);
             }
         }
 
@@ -102,7 +160,7 @@ public class Insects extends GameLevel {
 
     public void getWidthAndHeight(){
 
-        float width = this.camera.viewportWidth;
+        float width = GameConstants.GameWidth + 32;
         float height = this.camera.viewportHeight;
 
         this.tileWidth = (int) Math.floor(width / 32);
@@ -128,9 +186,15 @@ public class Insects extends GameLevel {
         while(x < this.tileWidth){
 
 
-            if((this.tileWidth - x) < 3){
+            if((this.tileWidth - x) < 4){
 
                 this.baseMap[x][currenty] = new Beer();
+                this.baseMap[x][currenty+1] = new Beer();
+                this.baseMap[x][currenty-1] = new Beer();
+                this.baseMap[x+1][currenty] = new Beer();
+                this.baseMap[x+1][currenty+1] = new Beer();
+                this.baseMap[x+1][currenty-1] = new Beer();
+
                 x = x + 500; // break x out of the tile width
 
             }else if(x < 4){
