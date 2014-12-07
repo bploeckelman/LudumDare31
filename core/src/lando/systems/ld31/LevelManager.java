@@ -139,6 +139,8 @@ public class LevelManager implements InputProcessor{
         	batch.draw(Assets.sidebarLabels[i], GameConstants.GameWidth + 2, GameConstants.ScreenHeight - 196 - (i * 75), 78, 75);
 
         }
+        batch.draw(Assets.sidebarSelection, GameConstants.GameWidth + 46, GameConstants.ScreenHeight - 199 - (currentLevel * 75));
+        
         batch.end();
     }
 

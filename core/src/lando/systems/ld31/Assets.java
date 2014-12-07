@@ -31,6 +31,7 @@ public class Assets {
     public static Texture sidebarBlack;
     public static Texture[] sidebarStatus = new Texture[4];
     public static Texture[] sidebarLabels = new Texture[7];
+    public static Texture sidebarSelection;
     public static BitmapFont gameFont;
     public static BitmapFont smallFont;
 
@@ -65,6 +66,7 @@ public class Assets {
         sidebarLabels[4] = new Texture("sidebar/side_meter_10x.png");
         sidebarLabels[5] = new Texture("sidebar/side_meter_100x.png");
         sidebarLabels[6] = new Texture("sidebar/side_meter_1000x.png");
+        sidebarSelection = new Texture("sidebar/selection.png");
         rand = new Random();
         insectsAssets = new InsectsAssets();
     }
