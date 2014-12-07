@@ -2,6 +2,7 @@ package levels;
 
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.TutorialManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -21,6 +22,8 @@ public abstract class GameLevel {
 	public String tutorialText;
 	protected boolean startNext;
 	public boolean top;
+	
+	private static TutorialManager _tutorialManager = new TutorialManager();
 	
 	/**
 	 * Start threat on creation, this won't get created until the 
@@ -57,32 +60,7 @@ public abstract class GameLevel {
 				
 		draw(batch);
 		
-		if (tutorialText != null) {
-			drawBox(batch, 144, 108, 4, tutorialText);
-		}
-	}
-	
-	protected void drawBox(SpriteBatch batch, float hPad, float vPad, float thickness, String text) {
-		
-		float width = GameConstants.ScreenWidth- (hPad*2);
-		float height = GameConstants.GameHeight - (vPad*2);
-		
-		batch.draw(Assets.squareTex, hPad, vPad, width, height);
-		batch.setColor(0, 0, 0, 1);
-		
-		hPad += thickness;
-		vPad += thickness;
-		
-		width -= (thickness*2);
-		height -= (thickness*2);
-		
-		batch.draw(Assets.squareTex, hPad, vPad, width, height);
-		batch.setColor(1, 1, 1, 1);
-		
-		hPad += thickness;
-		vPad += (thickness * 4);
-		width -= (thickness*2);
-		Assets.gameFont.drawWrapped(batch, tutorialText, hPad, GameConstants.GameHeight - vPad, width, HAlignment.CENTER);	
+		_tutorialManager.draw(batch, tutorialText);
 	}
 	
 	public boolean startNext(){
@@ -175,6 +153,10 @@ public abstract class GameLevel {
 	 * @return
 	 */
 	public boolean touchUp(int screenX, int screenY, int button) {
+		if (_tutorialManager.touchUp(screenX, screenY, button)) {
+			tutorialText = null;
+		}
+		
 		return false;
 	}
 	

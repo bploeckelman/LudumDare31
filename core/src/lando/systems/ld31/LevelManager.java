@@ -81,24 +81,6 @@ public class LevelManager implements InputProcessor{
             if (levels[i] == null) continue;
             levels[i].update(dt, (i == currentLevel));
         }        
-        
-        if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
-            if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) {
-            	setLevel(0);
-            } else if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
-            	setLevel(1);
-            } else if (Gdx.input.isKeyJustPressed(Keys.NUM_2)) {
-            	setLevel(2);
-            } else if (Gdx.input.isKeyJustPressed(Keys.NUM_3)) {
-            	setLevel(3);
-            } else if (Gdx.input.isKeyJustPressed(Keys.NUM_4)) {
-            	setLevel(4);
-            } else if (Gdx.input.isKeyJustPressed(Keys.NUM_5)) {
-                setLevel(5);
-            } else if (Gdx.input.isKeyJustPressed(Keys.NUM_6)) {
-                setLevel(6);
-            }
-        }
     }
 
     public void render(SpriteBatch batch){

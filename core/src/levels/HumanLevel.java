@@ -38,7 +38,7 @@ public class HumanLevel extends GameLevel {
 	
 	public HumanLevel()
 	{
-		tutorialText = "Keep the thirsty patrons satisfied and keep your tavern clean...\nMove: Up, Down, Left\nServe: Right";
+		tutorialText = "Keep the thirsty patrons satisfied and keep your tavern clean, or you might get sick...\n\n\nMove: Up, Down, Left\nServe: Right";
 		_barTexture = new Texture(HumanAssets.Bar);
 		
 		Patron.maxX = _barTexture.getWidth();
