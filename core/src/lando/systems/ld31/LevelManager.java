@@ -46,7 +46,7 @@ public class LevelManager implements InputProcessor{
     private final float transitionLength = 1f;
     public void setLevel(int index){
     	if (lastLevel != -1 || index == currentLevel) return;
-    	
+    	if (levels[index] == null) return; // Not ready for this one yet
     	lastLevel = currentLevel;
         currentLevel = index;
         

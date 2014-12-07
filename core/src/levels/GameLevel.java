@@ -17,6 +17,8 @@ public abstract class GameLevel {
 	
 	protected Camera camera;
 	public Vector2 zoomOutPoint;
+	public String tutorialText = "Change me";
+	protected boolean startNext;
 	
 	/**
 	 * Start threat on creation, this won't get created until the 
@@ -27,7 +29,7 @@ public abstract class GameLevel {
 		camera.translate(camera.viewportWidth/2, camera.viewportHeight/2, 0);
 		camera.update();
 		zoomOutPoint = new Vector2(camera.viewportWidth/2, camera.viewportHeight/2);
-
+		startNext = false;
 	}
 	
 	/**
@@ -51,6 +53,10 @@ public abstract class GameLevel {
 		batch.setColor(1,1,1,1);
 		draw(batch);
 		//batch.draw(img, x, y, width, height);
+	}
+	
+	public boolean startNext(){
+		return startNext;
 	}
 	
 	/**
