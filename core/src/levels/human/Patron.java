@@ -131,7 +131,7 @@ public class Patron extends MovementImage {
 		super.draw(batch);
 		
 		if (isNurse) {
-			_nurseHat.x = x + 5;
+			_nurseHat.x = x + ((flipImage) ? 15 : 25);
 			_nurseHat.y = y + 70;
 			_nurseHat.flipImage = flipImage;
 			_nurseHat.draw(batch);
@@ -139,7 +139,7 @@ public class Patron extends MovementImage {
 		
 		if (hasPuked) {
 			if ((_pukeTime - 0.7f) > 0) {		
-				batch.draw(_vomit, x + width/2, y - 60);
+				batch.draw(_vomit, x + width/2, y - 70);
 			} else {
 				batch.draw(_puddle,  x,  y - 63);
 			}
