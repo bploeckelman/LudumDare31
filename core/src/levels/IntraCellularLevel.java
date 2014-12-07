@@ -50,6 +50,7 @@ public class IntraCellularLevel extends GameLevel {
 
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && lastFired >= Bullet.fireRate) {
             bullets.add(ship.shoot());
+            lastFired = 0;
         } else {
             lastFired = lastFired > Bullet.fireRate ? Bullet.fireRate : lastFired + dt;
         }

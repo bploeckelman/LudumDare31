@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
 
 public class Bullet {
-    public static float fireRate = 1/10;
+    public static float fireRate = .2f;
     public static float fireDuration = 1;
 
     public Sprite sprite;
