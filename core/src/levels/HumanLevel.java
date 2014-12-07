@@ -50,7 +50,7 @@ public class HumanLevel extends GameLevel {
 		int tapperX = GameConstants.GameWidth - Tapper.width;
 		
 		_bartender = new Bartender(_levelHeight - 20);
-		_bartender.x = GameConstants.GameWidth - Tapper.width - _bartender.width;;
+		_bartender.setRight(GameConstants.GameWidth - Tapper.width);
 		
 		int y = 25;
 		
@@ -86,6 +86,10 @@ public class HumanLevel extends GameLevel {
 		_bartender.move(_barlocation[_bartenderLevel]);
 		
 		serveBeer(isRightJustPressed(), dt);
+		
+		if (isLeftPressed()) {
+			_bartender.walk(dt);
+		}
 	}
 	
 	private float _serveTime = 0;
