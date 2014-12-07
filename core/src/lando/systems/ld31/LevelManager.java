@@ -17,12 +17,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class LevelManager implements InputProcessor{
 
     public GameLevel[] levels = new GameLevel[7];
     public int currentLevel;
     public int lastLevel;
+    public int targetLevel;
     public MutableFloat transition = new MutableFloat(0);
     private final FrameBuffer currentFBO;
     private final FrameBuffer lastFBO;
@@ -50,10 +52,19 @@ public class LevelManager implements InputProcessor{
 
     private final float transitionLength = 1f;
     public void setLevel(int index){
+    	if (index < 0 || index >= levels.length) return;
     	if (lastLevel != -1 || index == currentLevel) return;
     	if (levels[index] == null) return; // Not ready for this one yet
+    	targetLevel = index;
+    	
     	lastLevel = currentLevel;
-        currentLevel = index;
+    	if (currentLevel < targetLevel)
+    	{
+    		currentLevel ++;
+    	} else {
+    		currentLevel --;
+    	}
+        
         
         transition.setValue(1f);
         
@@ -76,6 +87,8 @@ public class LevelManager implements InputProcessor{
             }
         }
 
+        
+        
         if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
             if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) {
             	setLevel(0);
@@ -177,6 +190,12 @@ public class LevelManager implements InputProcessor{
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
 		if (pointer != 0) return false;
+		Vector3 gamePos = camera.unproject(new Vector3(screenX, screenY, 0));
+		if (gamePos.x > GameConstants.GameWidth && gamePos.x < GameConstants.GameWidth + 78){
+			int level = (int)(((GameConstants.ScreenHeight - gamePos.y) - 125) / 75 );
+			setLevel(level);
+			return true;
+		}
 		touchedDown = true;
 		if (levels[currentLevel] != null && screenX < GameConstants.GameWidth){
 			levels[currentLevel].touchDown(screenX, screenY, button);
@@ -231,7 +250,12 @@ public class LevelManager implements InputProcessor{
 		public void onEvent(int type, BaseTween<?> source)
 		{
 			if(type == TweenCallback.END){
-				lastLevel = -1;
+				if (currentLevel == targetLevel){
+					lastLevel = -1;
+				} else {
+					lastLevel = -1;
+					setLevel(targetLevel);
+				}
 			}
 			
 		}
