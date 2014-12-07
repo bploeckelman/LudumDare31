@@ -31,10 +31,11 @@ public class Galaxy {
 		alive = true;
 		this.vel = new Vector2(0,0); // head towards the center
 		sprite = new Sprite(Assets.squareTex);
-		sprite.setOriginCenter();
+
 		
 		sprite.setSize(40, 40);
 		sprite.setCenter(pos.x, pos.y);
+		sprite.setOriginCenter();
 		mass = 5;
 		width = 40;
 
@@ -97,10 +98,22 @@ public class Galaxy {
 	public void draw(SpriteBatch batch) {
 		sprite.setSize(width,  width);
 		sprite.setCenter(pos.x, pos.y);
+		sprite.setOriginCenter();
 		sprite.draw(batch);
+		Vector2 lastPoint = pos.cpy();
 		for (int i = 0; i < path.size(); i++){
+		
 			Vector2 point = path.get(i);
+			Vector2 dir = point.cpy().sub(lastPoint);
+			int dist = (int)dir.len();
+			dir.nor();
+			for (int j = 0; j < dist; j++){
+				Vector2 pointPos = dir.cpy().scl(j).add(lastPoint);
+				batch.draw(Assets.squareTex, pointPos.x, pointPos.y, 1, 1);
+			}
+
 			batch.draw(Assets.squareTex, point.x, point.y, 1, 1); 
+			lastPoint = path.get(i);
 		}
 	}
 }
