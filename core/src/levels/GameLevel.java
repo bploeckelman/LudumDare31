@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -17,7 +18,7 @@ public abstract class GameLevel {
 	
 	protected Camera camera;
 	public Vector2 zoomOutPoint;
-	public String tutorialText = "Change me";
+	public String tutorialText;
 	protected boolean startNext;
 	public boolean top;
 	
@@ -53,8 +54,35 @@ public abstract class GameLevel {
 		batch.setColor(0,0,0,1);
 		batch.draw(Assets.squareTex, 0, 0, camera.viewportWidth, camera.viewportHeight);
 		batch.setColor(1,1,1,1);
+				
 		draw(batch);
-		//batch.draw(img, x, y, width, height);
+		
+		if (tutorialText != null) {
+			drawBox(batch, 144, 108, 4, tutorialText);
+		}
+	}
+	
+	protected void drawBox(SpriteBatch batch, float hPad, float vPad, float thickness, String text) {
+		
+		float width = GameConstants.ScreenWidth- (hPad*2);
+		float height = GameConstants.GameHeight - (vPad*2);
+		
+		batch.draw(Assets.squareTex, hPad, vPad, width, height);
+		batch.setColor(0, 0, 0, 1);
+		
+		hPad += thickness;
+		vPad += thickness;
+		
+		width -= (thickness*2);
+		height -= (thickness*2);
+		
+		batch.draw(Assets.squareTex, hPad, vPad, width, height);
+		batch.setColor(1, 1, 1, 1);
+		
+		hPad += thickness;
+		vPad += (thickness * 4);
+		width -= (thickness*2);
+		Assets.gameFont.drawWrapped(batch, tutorialText, hPad, GameConstants.GameHeight - vPad, width, HAlignment.CENTER);	
 	}
 	
 	public boolean startNext(){
@@ -184,6 +212,32 @@ public abstract class GameLevel {
 	 * Poll Gdx.input here to control the game
 	 */
 	public abstract void handleInput(float dt);
+	
+	float _tutorialTime = 5f;
+	
+	public void update(float dt, boolean isTop)
+	{
+		top = isTop;
+		
+		if (!isTop) {
+			dt /= 2;
+		}
+		
+		if (tutorialText == null) {
+			update(dt);
+			
+			if (isTop) {
+				handleInput(dt);
+			}
+		} else {
+			_tutorialTime -= dt;
+			
+			if (_tutorialTime < 0 || Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+				tutorialText = null;
+			}
+		}
+	}
+	
 	
 	/**
 	 * 
