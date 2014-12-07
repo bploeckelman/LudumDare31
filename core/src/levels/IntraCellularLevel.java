@@ -96,6 +96,8 @@ public class IntraCellularLevel extends GameLevel {
 
     @Override
     public void update(float dt) {
+        ship.invulnerabilityTimeLeft = ship.invulnerabilityTimeLeft <= 0 ? 0 : ship.invulnerabilityTimeLeft - dt;
+
         ship.setPosition(ship.getX() + ship.velocity.x * dt, ship.getY() + ship.velocity.y * dt);
         if(ship.getX() + (ship.sprite.getWidth()/2) < 0) {
             ship.setX(camera.viewportWidth - 100 + (ship.sprite.getWidth()/2));
@@ -170,7 +172,9 @@ public class IntraCellularLevel extends GameLevel {
                 asteroid.setY(0 - (asteroid.sprite.getHeight()/2));
             }
 
-            if(ship.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + ship.sprite.getWidth()/2) {
+            if(ship.invulnerabilityTimeLeft <= 0 &&
+                    ship.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + ship.sprite.getWidth()/2)
+            {
                 playSound(IntraCellularAssets.shipExplode, .5f);
                 ship.reset((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
             }
@@ -189,7 +193,9 @@ public class IntraCellularLevel extends GameLevel {
             bullets.get(i).sprite.draw(batch);
         }
 
-        ship.sprite.draw(batch);
+        if(ship.invulnerabilityTimeLeft % .25f < .125) {
+            ship.sprite.draw(batch);
+        }
 
         for(int i = 0; i < asteroids.size(); i++) {
             asteroids.get(i).sprite.draw(batch);
