@@ -19,7 +19,7 @@ import java.util.Map;
 public class CityLevel extends GameLevel {
 
     final int tile_size  = 32;
-    final int tiles_wide = GameConstants.ScreenWidth  / tile_size - 2;
+    final int tiles_wide = GameConstants.ScreenWidth  / tile_size - 3;
     final int tiles_high = GameConstants.ScreenHeight / tile_size - 2;
     final float margin_bottom = tile_size * 2;
 
@@ -193,16 +193,16 @@ public class CityLevel extends GameLevel {
             }
         }
         // Add graph connections
-//        PowerTile tile;
-//        for (int y = 0; y < tiles_high; ++y) {
-//            for (int x = 0; x < tiles_wide; ++x) {
-//                tile = powerGrid[y][x];
-//                if (y + 1 <  tiles_high) tile.up    = powerGrid[y + 1][x];
-//                if (y - 1 >= 0)          tile.down  = powerGrid[y - 1][x];
-//                if (x - 1 >= 0)          tile.left  = powerGrid[y][x - 1];
-//                if (x + 1 <  tiles_wide) tile.right = powerGrid[y][x + 1];
-//            }
-//        }
+        PowerTile tile;
+        for (int y = 0; y < tiles_high; ++y) {
+            for (int x = 0; x < tiles_wide; ++x) {
+                tile = powerGrid[y][x];
+                if (y + 1 <  tiles_high) tile.up    = powerGrid[y + 1][x];
+                if (y - 1 >= 0)          tile.down  = powerGrid[y - 1][x];
+                if (x - 1 >= 0)          tile.left  = powerGrid[y][x - 1];
+                if (x + 1 <  tiles_wide) tile.right = powerGrid[y][x + 1];
+            }
+        }
     }
 
     private void populateTextures() {
