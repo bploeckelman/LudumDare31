@@ -11,10 +11,11 @@ import levels.InsectUtils.Enemies;
  */
 public class Dart extends Bullet {
 
-    public Dart(Vector2 origin, Enemies target){
+    public Dart(Vector2 origin, Enemies target, int towerDamage){
 
         this.name = "Dart";
         this.shotSpeed = 20;
+        this.damage = 1;
         Sprite  newBullet = new Sprite(Assets.insectsAssets.DartBullet);
         newBullet.setSize(4, 4);
         Vector2 newBulletLocation = new Vector2(origin.x, origin.y);
@@ -27,6 +28,10 @@ public class Dart extends Bullet {
 
     public void updateBullet(float dt){
 
+        if(!this.onScreen){
+            return;
+        }
+
         Vector2 target = this.target.getCurrentPosition().cpy();
         Vector2 direction = target.sub(this.currentPosition);
 
@@ -34,7 +39,7 @@ public class Dart extends Bullet {
         float distance = direction.len();
 
         if(distance < 10){
-            this.target.setAlive(false);
+            this.target.damageEnemy(this.damage);
             this.onScreen = false;
         }else{
             direction.nor().scl(dt*this.shotSpeed);

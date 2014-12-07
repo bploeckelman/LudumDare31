@@ -19,12 +19,11 @@ public class Dart extends Tower {
         super();
         this.name = "Dart";
         this.range = 100;
-        this.shootSpeed = 2;
+        this.shootSpeed = 1;
+        this.towerDamage = 1;
+        this.cost = 10;
         this.towerSprite = new Sprite(Assets.insectsAssets.DartTower);
         this.towerSprite.setSize(16, 16);
-
-        //this.towerSprite.setX(towerPosition.x + 8);
-        //this.towerSprite.setY(towerPosition.y + 8);
 
         Vector2 position = new Vector2(towerPosition.x + 16, towerPosition.y + 16);
         this.position = position;
@@ -37,6 +36,9 @@ public class Dart extends Tower {
         // first update towerBullets
         for(int x = 0; x < this.towerBullets.size(); x++){
             this.towerBullets.get(x).updateBullet(dt);
+            if(!this.towerBullets.get(x).getOnScreen()){ // remove off screen bullets
+                this.towerBullets.remove(x);
+            }
         }
 
         if(this.lastShotTime > this.shootSpeed) {
@@ -53,7 +55,7 @@ public class Dart extends Tower {
                 if (distance < this.range) {
                     this.towerSprite.setRotation(rotation);
                     this.target = enemies.get(x);
-                    Bullet newBullet = new levels.InsectUtils.BulletTypes.Dart(this.position, enemies.get(x));
+                    Bullet newBullet = new levels.InsectUtils.BulletTypes.Dart(this.position, enemies.get(x), this.towerDamage);
                     this.towerBullets.add(newBullet);
                     this.lastShotTime = 0;
 

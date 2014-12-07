@@ -18,6 +18,7 @@ public abstract class Enemies {
     protected ArrayList<Vector2> checkPoints = new ArrayList<Vector2>();
     protected boolean alive;
     protected int health;
+    protected int value;
 
     protected Vector2 currentPosition;
 
@@ -40,6 +41,8 @@ public abstract class Enemies {
 
     public Sprite getEnemySprite(){ return this.enemySprite; }
 
+    public int getValue(){ return this.value; }
+
     public Vector2 getCurrentPosition(){ return this.currentPosition; }
 
     public void drawSprite(SpriteBatch batch){
@@ -48,7 +51,13 @@ public abstract class Enemies {
 
     public boolean alive(){ return this.alive; }
 
-    public void setAlive(boolean alive){ this.alive = alive; }
+    public void damageEnemy(int damage){
+        this.health = this.health - damage;
+
+        if(this.health < 1){
+            this.alive = false;
+        }
+    }
 
     public int pathsLeft(){ return this.checkPoints.size(); }
 

@@ -15,7 +15,8 @@ public class Spider extends Enemies {
         super(pathYStart);
 
         this.name = "Spider";
-        this.health = 5;
+        this.health = 3;
+        this.value = 1;
         Texture spiderTexture = Assets.insectsAssets.Spider;
         this.enemySprite = new Sprite(spiderTexture);
         this.enemySprite.setSize(16, 16);

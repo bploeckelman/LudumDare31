@@ -36,12 +36,15 @@ public class Insects extends GameLevel {
     protected float nextEnemyDeltaTime;
     protected int pathYStart;
 
+    protected int money; // amount the player has to spend
+
 
     public Insects(){
         super();
 
         this.currentThreat = 0;
         this.enemyDeltaTime = 0;
+        this.money = 15;
         this.enemies = new ArrayList<Enemies>();
         this.towers = new ArrayList<Tower>();
         this.getWidthAndHeight();
@@ -96,8 +99,12 @@ public class Insects extends GameLevel {
         }
 
         Tower newTower = new Dart(new Vector2(cellXNum * 32, cellYNum * 32));
-        this.towers.add(newTower);
-        this.baseMap[cellXNum][cellYNum].setHasTower(true);
+
+        if(this.money > newTower.getCost()){
+            this.money = this.money - newTower.getCost();
+            this.towers.add(newTower);
+            this.baseMap[cellXNum][cellYNum].setHasTower(true);
+        }
 
         return true;
     }
@@ -122,6 +129,8 @@ public class Insects extends GameLevel {
                 if(this.enemies.get(x).alive()) {
                     tempEnemies.add(this.enemies.get(x));
                     this.updateThreat(this.enemies.get(x).pathsLeft());
+                }else{
+                    this.money = this.money + this.enemies.get(x).getValue();
                 }
             }
             this.enemies = tempEnemies;
@@ -138,18 +147,14 @@ public class Insects extends GameLevel {
     @Override
     public void draw(SpriteBatch batch) {
 
-        // init vars
-        float width = this.camera.viewportWidth;
-        float height = this.camera.viewportHeight;
-
-        int px = 0;
-        int py = 0;
 
         for(int x = 0; x < this.tileWidth; x++){
             for(int y = 0; y < this.tileHeight; y++){
                 batch.draw(this.baseMap[x][y].getTileTexture(), (x)*32, (y)*32);
             }
         }
+
+        Assets.smallFont.draw(batch, "Coins: " + Integer.toString(this.money), 0, (this.tileHeight * 32) - 64);
 
 
         if(this.towers != null){

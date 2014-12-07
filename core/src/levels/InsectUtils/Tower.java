@@ -15,6 +15,8 @@ public abstract class Tower {
     protected Sprite towerSprite;
     protected float shootSpeed;
     protected float range;
+    protected int towerDamage;
+    protected int cost;
     protected Vector2 position;
     protected Enemies target;
     protected ArrayList<Bullet> towerBullets;
@@ -29,6 +31,8 @@ public abstract class Tower {
     public float getShootSpeed(){ return this.shootSpeed; }
 
     public Sprite getTowerSprite(){ return this.towerSprite; }
+
+    public int getCost(){ return this.cost; }
 
     public void drawSprite(SpriteBatch batch){
         this.towerSprite.draw(batch);
