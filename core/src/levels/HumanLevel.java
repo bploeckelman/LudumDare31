@@ -3,18 +3,22 @@ package levels;
 import java.util.ArrayList;
 
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.GameObject;
 import lando.systems.ld31.LevelManager;
 import lando.systems.ld31.Score;
 import lando.systems.ld31.ThreatLevel;
 import levels.human.*;
 import levels.human.Patron.PatronType;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class HumanLevel extends GameLevel {
+	
+	private static Sound _ding = GameObject.getSound("tapper/ding.mp3");
 
 	public static final String Title = "HumanLevel";
 	public static boolean hasFocus;
@@ -152,6 +156,11 @@ public class HumanLevel extends GameLevel {
 				} else {
 					LevelManager.killMicrobes();
 				}
+				
+				playSound(_ding);
+				
+			} else if (item.remove){
+				_items.remove(item);
 			}
 		}
 		

@@ -6,6 +6,7 @@ import lando.systems.ld31.TutorialManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
@@ -233,5 +234,9 @@ public abstract class GameLevel {
 	
 	public abstract void draw(SpriteBatch batch);
 	
-
+	public void playSound(Sound sound) {
+		if (top) {
+			sound.play();
+		}
+	}
 }
