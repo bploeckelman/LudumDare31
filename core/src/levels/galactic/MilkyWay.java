@@ -21,6 +21,7 @@ public class MilkyWay extends Galaxy{
 		mass = 20;
 		isMilkyWay = true;
 
+
 	}
 	
 	@Override

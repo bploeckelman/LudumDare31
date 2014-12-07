@@ -86,6 +86,7 @@ public class GalacticLevel extends GameLevel {
 		if (spawnTimer < 0){
 			addNewGalaxy();
 			spawnTimer += (20 + Assets.rand.nextFloat() * 15);
+
 		}
 
 	}

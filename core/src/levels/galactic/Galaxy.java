@@ -20,11 +20,13 @@ public class Galaxy {
 	public ArrayList<Vector2> path = new ArrayList<Vector2>();
 	public boolean alive;
 	public boolean isMilkyWay;
+
 	
 	public float mass;
 	
 	public Galaxy(Vector2 pos){
 		this.pos = pos;
+
 		isMilkyWay = false;
 		alive = true;
 		this.vel = new Vector2(0,0); // head towards the center
@@ -35,6 +37,7 @@ public class Galaxy {
 		sprite.setCenter(pos.x, pos.y);
 		mass = 5;
 		width = 40;
+
 
 	}
 	

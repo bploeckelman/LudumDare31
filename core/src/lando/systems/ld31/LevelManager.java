@@ -151,7 +151,6 @@ public class LevelManager implements InputProcessor{
 	}
 
 	boolean touchedDown = false;
-
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
@@ -171,6 +170,7 @@ public class LevelManager implements InputProcessor{
 		if (levels[currentLevel] != null && screenX < GameConstants.GameWidth){
 			levels[currentLevel].touchUp(screenX, screenY, button);
 		}
+
 		return false;
 	}
 
@@ -214,4 +214,5 @@ public class LevelManager implements InputProcessor{
 			
 		}
 	};
+
 }
