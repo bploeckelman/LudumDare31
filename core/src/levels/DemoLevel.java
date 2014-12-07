@@ -54,6 +54,8 @@ public class DemoLevel extends GameLevel {
 	@Override
 	public void draw(SpriteBatch batch) {
 		batch.draw(img, x, y);
+		Assets.gameFont.draw(batch, "Large text?", 0, 200);
+		Assets.smallFont.draw(batch, "Small font", 0, 300);
 	}
 
 	@Override

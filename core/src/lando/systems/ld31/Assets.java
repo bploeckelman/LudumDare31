@@ -1,6 +1,9 @@
 package lando.systems.ld31;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+
 import levels.InsectUtils.InsectsAssets;
 
 import java.util.Random;
@@ -27,7 +30,8 @@ public class Assets {
     public static Texture sidebarBlack;
     public static Texture[] sidebarStatus = new Texture[4];
     public static Texture[] sidebarLabels = new Texture[7];
-   
+    public static BitmapFont gameFont;
+    public static BitmapFont smallFont;
 
 
 
@@ -38,6 +42,9 @@ public class Assets {
 
 
     public static void load() {
+    	gameFont = new BitmapFont(Gdx.files.internal("font/ariel.fnt"), false);
+    	smallFont = new BitmapFont(Gdx.files.internal("font/book30b.fnt"), false);
+    	
         ludumdare = new Texture("ludumdare.png");
         squareTex = new Texture("square.png");
         planetaryTempEarth = new Texture("planetary/temp-earth.png");
