@@ -14,7 +14,7 @@ public class LevelManager {
 	public LevelManager(){
 		levels[0] = new DemoLevel();
 		levels[1] = new DemoLevel();
-		levels[2] = new DemoLevel();//new Insects();
+		levels[2] = new Insects();
 		levels[3] = new HumanLevel();
 		levels[4] = new CityLevel();
 		levels[5] = new PlanetaryLevel();
@@ -35,7 +35,7 @@ public class LevelManager {
 				levels[i].handleInput(dt);
 			}
 		}
-		
+
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) {
 				currentLevel = 0;
@@ -51,7 +51,7 @@ public class LevelManager {
 				currentLevel = 5;
 			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_6)) {
 				currentLevel = 6;
-			} 
+			}
 		}
 	}
 
