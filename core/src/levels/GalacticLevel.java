@@ -27,9 +27,10 @@ public class GalacticLevel extends GameLevel {
 	public int hasThreat() {
 		float closest = Float.MAX_VALUE;
 		for (int i = 0; i < galaxies.size(); i++){
-			if (galaxies.get(i) == home) continue;
-			if (galaxies.get(i).path.isEmpty()){
-				float dist = home.pos.dst2(galaxies.get(i).pos);
+			Galaxy gal = galaxies.get(i);
+			if (gal == home) continue;
+			if (gal.path.isEmpty()){
+				float dist = home.pos.dst2(gal.pos) - home.width/2 - gal.width/2;
 				if (dist < closest){
 					closest = dist;
 				}
@@ -38,10 +39,10 @@ public class GalacticLevel extends GameLevel {
 		if (closest < 100 * 100){
 			return 3;
 		}
-		if (closest < 300 * 300){
+		if (closest < 200 * 200){
 			return 2;
 		}
-		if (closest < 600 * 600){
+		if (closest < 300 * 300){
 			return 1;
 		}
 		return 0;
