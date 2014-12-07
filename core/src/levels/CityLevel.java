@@ -176,6 +176,9 @@ public class CityLevel extends GameLevel {
             if (CityTileTypes.connectsUp(thisTile.powerGridType) && CityTileTypes.connectsDown(thatTile.powerGridType)) {
                 thisTile.up = thatTile;
                 thatTile.down = thisTile;
+            } else {
+                thisTile.up = null;
+                thatTile.down = null;
             }
         }
         if (y - 1 >= 0) {
@@ -183,6 +186,9 @@ public class CityLevel extends GameLevel {
             if (CityTileTypes.connectsDown(thisTile.powerGridType) && CityTileTypes.connectsUp(thatTile.powerGridType)) {
                 thisTile.down = thatTile;
                 thatTile.up = thisTile;
+            } else {
+                thisTile.down = null;
+                thatTile.up = null;
             }
         }
         if (x - 1 >= 0) {
@@ -190,6 +196,9 @@ public class CityLevel extends GameLevel {
             if (CityTileTypes.connectsLeft(thisTile.powerGridType) && CityTileTypes.connectsRight(thatTile.powerGridType)) {
                 thisTile.left = thatTile;
                 thatTile.right = thisTile;
+            } else {
+                thisTile.left = null;
+                thatTile.right = null;
             }
         }
         if (x + 1 <  tiles_wide) {
@@ -197,6 +206,9 @@ public class CityLevel extends GameLevel {
             if (CityTileTypes.connectsRight(thisTile.powerGridType) && CityTileTypes.connectsLeft(thatTile.powerGridType)) {
                 thisTile.right = thatTile;
                 thatTile.left = thisTile;
+            } else {
+                thisTile.right = null;
+                thatTile.left = null;
             }
         }
     }
