@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class LudumDare31 extends ApplicationAdapter {
-    TweenManager tweens;
+    public static TweenManager tweens;
     SpriteBatch batch;
     LevelManager levelMgr;
     
@@ -44,8 +44,7 @@ public class LudumDare31 extends ApplicationAdapter {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
+        
         levelMgr.render(batch);
-        batch.end();
     }
 }
