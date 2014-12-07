@@ -2,7 +2,8 @@ package lando.systems.ld31;
 
 import levels.*;
 
-
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class LevelManager {
@@ -11,13 +12,14 @@ public class LevelManager {
 	public int currentLevel;
 
 	public LevelManager(){
-
-		levels[6] = new GalacticLevel();
+		levels[0] = new DemoLevel();
+		levels[1] = new DemoLevel();
+		levels[2] = new DemoLevel();//new Insects();
 		levels[3] = new HumanLevel();
-		levels[2] = new Insects();
-		levels[4] = new DemoLevel();
-		currentLevel = 2;
-
+		levels[4] = new CityLevel();
+		levels[5] = new PlanetaryLevel();
+		levels[6] = new GalacticLevel();
+		currentLevel = 0;
 	}
 
 	public void setLevel(int index){
@@ -32,6 +34,24 @@ public class LevelManager {
 			if (i == currentLevel){
 				levels[i].handleInput(dt);
 			}
+		}
+		
+		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
+			if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) {
+				currentLevel = 0;
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
+				currentLevel = 1;
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_2)) {
+				currentLevel = 2;
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_3)) {
+				currentLevel = 3;
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_4)) {
+				currentLevel = 4;
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_5)) {
+				currentLevel = 5;
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_6)) {
+				currentLevel = 6;
+			} 
 		}
 	}
 
