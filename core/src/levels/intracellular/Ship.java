@@ -9,6 +9,7 @@ public class Ship {
     public Vector2 velocity;
     public Vector2 acceleration = new Vector2(0,1);
     public Vector2 position;
+    public boolean isThrusting;
 
     public Ship(float x, float y) {
         sprite = new Sprite(IntraCellularAssets.ship);
@@ -75,5 +76,14 @@ public class Ship {
 
     public Bullet shoot() {
         return new Bullet(position.x, position.y, sprite.getRotation() + 90, velocity);
+    }
+
+    public void thrust(boolean t) {
+        isThrusting = t;
+        if(isThrusting) {
+            sprite.setTexture(IntraCellularAssets.shipThrusting);
+        } else {
+            sprite.setTexture(IntraCellularAssets.ship);
+        }
     }
 }

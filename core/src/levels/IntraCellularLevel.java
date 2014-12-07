@@ -27,7 +27,6 @@ public class IntraCellularLevel extends GameLevel {
     float lastFired;
     float nextWave;
     int threatLevel;
-    boolean isShipThrusting;
 
     public IntraCellularLevel() {
         tutorialText = "Use mouse to rotate.\n" +
@@ -66,15 +65,15 @@ public class IntraCellularLevel extends GameLevel {
 
         if(isUpPressed()) {
             ship.accelerate(dt);
-            if(!isShipThrusting) {
+            if(!ship.isThrusting) {
                 IntraCellularAssets.shipThrust.loop();
-                isShipThrusting = true;
+                ship.thrust(true);
             }
         } else {
             ship.slowDown(dt);
-            if(isShipThrusting) {
+            if(ship.isThrusting) {
                 IntraCellularAssets.shipThrust.stop();
-                isShipThrusting = false;
+                ship.thrust(false);
             }
         }
 
