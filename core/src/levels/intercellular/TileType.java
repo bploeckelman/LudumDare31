@@ -1,4 +1,4 @@
-package levels.intercell;
+package levels.intercellular;
 
 /**
  * Created by vandillen on 12/6/14.

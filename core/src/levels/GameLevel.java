@@ -115,6 +115,7 @@ public abstract class GameLevel {
 		return Gdx.input.isKeyJustPressed(Keys.RIGHT) || Gdx.input.isKeyJustPressed(Keys.D);
 	}
 	
+	
 	/**
 	 * This method is called whenever the mouse is clicked. Make sure you call getGamePos
 	 * so it is in game coords
