@@ -118,7 +118,7 @@ public class IntraCellularLevel extends GameLevel {
             }
 
             if(bullet.alive > Bullet.fireDuration) {
-                bullets.remove(bullet);
+                bullets.remove(i);
                 i--;
             }
         }
@@ -140,9 +140,9 @@ public class IntraCellularLevel extends GameLevel {
             for(int j = 0; j < bullets.size(); j++) {
                 Bullet bullet = bullets.get(j);
                 if(bullet.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + bullet.sprite.getWidth()/2) {
-                    asteroid.split(asteroids, bullet.velocity);
+                    asteroid.split(asteroids, i, bullet.velocity);
                     i--;
-                    bullets.remove(bullet);
+                    bullets.remove(j);
                     continue ASTEROIDS;
                 }
             }

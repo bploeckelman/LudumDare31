@@ -65,8 +65,8 @@ public class Asteroid {
         sprite.setCenter(position.x, y);
     }
 
-    public void split(List asteroids, Vector2 newVelocity) {
-        asteroids.remove(this);
+    public void split(List asteroids, int index, Vector2 newVelocity) {
+        asteroids.remove(index);
 
         if(size.splitInto != null) {
             asteroids.add(new Asteroid(position.x, position.y, size.splitInto, newVelocity.cpy().nor().rotate(90).scl(velocity)));
