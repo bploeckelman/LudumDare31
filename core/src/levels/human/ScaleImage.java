@@ -7,21 +7,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ScaleImage extends GameObject {
 
-	public int x;
-	public int y;
+	public float x;
+	public float y;
 	
-	public int width;
-	public int height;
+	public float rotation;
+	
+	public float width;
+	public float height;
 	
 	protected boolean flipImage = false;
 	
 	Texture _image;
 	
-	public ScaleImage(Texture image, int height) {
+	public ScaleImage(Texture image, float height) {
 		_image = image;		
 		setHeight(height);	}
 	
-	public void setHeight(int height) {
+	public void setHeight(float height) {
 		this.height = height;
 		width = (int)((float)height/_image.getHeight()*_image.getWidth());
 	}
@@ -32,12 +34,8 @@ public class ScaleImage extends GameObject {
 	
 	@Override
 	public void draw(SpriteBatch batch) {
-		int drawX = x;
-		int w = width;
-		if (flipImage) {
-			drawX += width;
-			w = -width;
-		}
-		batch.draw(getImage(),  drawX,  y,  w,  height);
+		Texture image = getImage();
+		batch.draw(image, x, y, width/2, height/2, width, height, 1f, 1f,
+				rotation, 0, 0, image.getWidth(), image.getHeight(), flipImage, false);	
 	}
 }

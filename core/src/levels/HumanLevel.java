@@ -137,8 +137,8 @@ public class HumanLevel extends GameLevel {
 	private boolean catchGlass(Glass glass) {
 		if (glass.isFull || glass.level != _bartenderLevel) return false;
 		
-		int bartenderRight = _bartender.x + _bartender.width / 2;
-		int glassRight = glass.x + glass.width;
+		float bartenderRight = _bartender.x + _bartender.width / 2;
+		float glassRight = glass.x + glass.width;
 				
 		return (glassRight >= _bartender.x && glass.x <= bartenderRight);
 	}

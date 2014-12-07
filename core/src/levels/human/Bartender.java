@@ -8,7 +8,7 @@ public class Bartender extends MovementImage {
 	private static final Texture _bartender = new Texture(HumanAssets.Bartender);
 	private static final Sound _moveSound = getSound(HumanAssets.BartenderMove);
 	
-	int _defaultX;
+	float _defaultX;
 	
 	public Bartender(int height) {
 		super(_bartender, height, 0);
@@ -41,7 +41,7 @@ public class Bartender extends MovementImage {
 		return false;
 	}
 
-	public void setRight(int xPosition) {
+	public void setRight(float xPosition) {
 		x = _defaultX = xPosition - width;
 	}
 

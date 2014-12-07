@@ -23,6 +23,7 @@ public class Patron extends MovementImage {
 	private ScaleImage _nurseHat;
 	
 	private Glass _glass;
+	float _glassY;
 	private float _glassTime = 1.5f;
 	private float _pukeTime = 0;
 	
@@ -47,7 +48,9 @@ public class Patron extends MovementImage {
 		
 		if (_glass != null) {
 			_glassTime -= dt;
-			_glass.x = x + width - 3;
+			_glass.x = x + width - (_glass.y - _glassY);
+			_glass.y += 15 *dt;
+			_glass.rotation += 90 * dt/1.5f;
 		}
 	}
 	
@@ -90,6 +93,8 @@ public class Patron extends MovementImage {
 		if (x > -width) {
 			// throw glass back
 			if (_glassTime < 0) {
+				_glass.rotation = 0;
+				_glass.y = _glassY;
 				_glass.drink();
 				remove = true;
 			}
@@ -111,6 +116,7 @@ public class Patron extends MovementImage {
 			if (glass.isFull && level == glass.level && glass.shouldUpdate && glass.x <= x + width) {
 				glass.shouldUpdate = false;
 				_glass = glass;
+				_glassY = glass.y;
 				speed = _glass.speed / 2;
 			}
 		}
