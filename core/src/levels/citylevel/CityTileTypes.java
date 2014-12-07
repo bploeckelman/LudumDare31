@@ -1,5 +1,7 @@
 package levels.citylevel;
 
+import lando.systems.ld31.Assets;
+
 /**
  * Brian Ploeckelman created on 12/6/2014.
  */
@@ -21,6 +23,7 @@ public enum CityTileTypes {
 
     power_station(11),
     power_pole(12),
+
     power_line_h(13),
     power_line_v(14),
     power_line_x(15),
@@ -28,7 +31,6 @@ public enum CityTileTypes {
     power_line_corner_rt(17),
     power_line_corner_lb(18),
     power_line_corner_rb(19),
-
     power_line_up_t(22),
     power_line_down_t(23),
     power_line_left_t(24),
@@ -48,6 +50,49 @@ public enum CityTileTypes {
             if (tile.i() == i) return tile;
         }
         return unknown;
+    }
+
+    // hack together all the things!
+
+    // -------------------------------------------------------------------------
+    private static CityTileTypes[] power_line_types = new CityTileTypes[] {
+            power_line_h,
+            power_line_v,
+            power_line_x,
+            power_line_corner_lt,
+            power_line_corner_rt,
+            power_line_corner_lb,
+            power_line_corner_rb,
+            power_line_up_t,
+            power_line_down_t,
+            power_line_left_t,
+            power_line_right_t
+    };
+    public static CityTileTypes getRandomPowerLineType() {
+        return power_line_types[Assets.rand.nextInt(power_line_types.length)];
+    }
+    // -------------------------------------------------------------------------
+
+    // ---------------------------------------------------------
+    public static boolean connectsUp (CityTileTypes a){
+        return (a == power_line_x         || a == power_line_v
+             || a == power_line_up_t      || a == power_line_left_t     || a == power_line_right_t
+             || a == power_line_corner_lt || a == power_line_corner_rt);
+    }
+    public static boolean connectsDown(CityTileTypes a) {
+        return (a == power_line_x         || a == power_line_h
+             || a == power_line_up_t      || a == power_line_left_t     || a == power_line_right_t
+             || a == power_line_corner_lb || a == power_line_corner_rb);
+    }
+    public static boolean connectsLeft(CityTileTypes a) {
+        return (a == power_line_x         || a == power_line_h
+             || a == power_line_up_t      || a == power_line_left_t     || a == power_line_down_t
+             || a == power_line_corner_lt || a == power_line_corner_lb);
+    }
+    public static boolean connectsRight(CityTileTypes a) {
+        return (a == power_line_x         || a == power_line_h
+             || a == power_line_up_t      || a == power_line_right_t     || a == power_line_down_t
+             || a == power_line_corner_rt || a == power_line_corner_rb);
     }
 
 }

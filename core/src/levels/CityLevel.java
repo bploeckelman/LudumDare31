@@ -18,14 +18,13 @@ import java.util.Map;
  */
 public class CityLevel extends GameLevel {
 
-    final int tile_size  = 32;
-    final int tiles_wide = GameConstants.ScreenWidth  / tile_size - 3;
-    final int tiles_high = GameConstants.ScreenHeight / tile_size - 2;
-    final float margin_bottom = tile_size * 2;
+    public static final int tile_size  = 32;
+    public static final int tiles_wide = GameConstants.ScreenWidth  / tile_size - 3;
+    public static final int tiles_high = GameConstants.ScreenHeight / tile_size - 2;
+    public static final float margin_bottom = tile_size * 2;
 
     // ------- OLD SHIT vvvvvv --------------------------
 
-    Map<CityTileTypes, TextureRegion> textures;
     CityTileTypes tiles[][];
     CityTileTypes powerlines[][];
 
@@ -34,7 +33,10 @@ public class CityLevel extends GameLevel {
 
     // ------- OLD SHIT ^^^^^^ --------------------------
 
+    public static Map<CityTileTypes, TextureRegion> textures;
+
     PowerTile powerGrid[][];
+    PowerConnectionBar powerBar;
 
 
     public CityLevel() {
@@ -47,77 +49,77 @@ public class CityLevel extends GameLevel {
         powerlines = new CityTileTypes[tiles_high][tiles_wide];
         tiles = new CityTileTypes[tiles_high][tiles_wide];
 
+        powerBar = new PowerConnectionBar();
+
         generatePowerGrid();
         populateTiles();
         enableGenerators();
     }
 
-    private void enableGenerators() {
-        for (int i = 0; i < powerSources.length; ++i) {
-            CityPowerSource powerSource = powerSources[i];
-            int x = powerSource.x;
-            int y = powerSource.y;
-
-            PowerTile generator = powerGrid[y][x];
-            generator.energized = true;
-            if (y + 1 <  tiles_high) generator.up    = powerGrid[y + 1][x];
-            if (y - 1 >= 0)          generator.down  = powerGrid[y - 1][x];
-            if (x - 1 >= 0)          generator.left  = powerGrid[y][x - 1];
-            if (x + 1 <  tiles_wide) generator.right = powerGrid[y][x + 1];
-        }
-    }
-
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
+    Vector2 tilePos = new Vector2();
     @Override
     public void handleInput ( float dt){
         if (Gdx.input.justTouched()) {
-            screenPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            worldPos = camera.unproject(screenPos);
-
-            int x = (int) (worldPos.x / tile_size);
-            int y = (int) ((worldPos.y - margin_bottom) / tile_size);
-            activatePowerGridTile(x, y);
+            placePowerGridTile((int) tilePos.x, (int) tilePos.y);
         }
     }
 
-    private void activatePowerGridTile(int x, int y) {
-        if (x < 0 || y < 0 || x >= tiles_wide || y >= tiles_high) return;
+    private void placePowerGridTile(int x, int y) {
+        if (x < 0 || y < 0 || x >= tiles_wide || y >= tiles_high) {
+            // TODO (brian): removeme
+            Gdx.app.log("GAH!", "attempted to place power grid tile out of bounds: " + x + ", " + y);
+            return;
+        }
 
-        PowerTile other;
-        PowerTile tile = powerGrid[y][x];
+        // Place the current power tile grid at the tile under the mouse
+        PowerTile thisTile = powerGrid[y][x];
+        thisTile.powerGridType = powerBar.currentPowerLineType;
+
+        // Update the power bar
+        powerBar.dequeueCurrentType();
+
+        // Connect up neighbors tiles that have a power connection
+        PowerTile thatTile;
         if (y + 1 <  tiles_high) {
-            other = powerGrid[y + 1][x];
-            if (other.down == tile || other.energized) {
-                tile.energized = true;
-                tile.up = other;
+            thatTile = powerGrid[y + 1][x];
+            if (CityTileTypes.connectsUp(thisTile.powerGridType) && CityTileTypes.connectsDown(thatTile.powerGridType)) {
+                thisTile.up = thatTile;
+                thatTile.down = thisTile;
             }
         }
         if (y - 1 >= 0) {
-            other = powerGrid[y - 1][x];
-            if (other.up == tile || other.energized) {
-                tile.energized = true;
-                tile.down = other;
+            thatTile = powerGrid[y + 1][x];
+            if (CityTileTypes.connectsDown(thisTile.powerGridType) && CityTileTypes.connectsUp(thatTile.powerGridType)) {
+                thisTile.down = thatTile;
+                thatTile.up = thisTile;
             }
         }
         if (x - 1 >= 0) {
-            other = powerGrid[y][x - 1];
-            if (other.right == tile || other.energized) {
-                tile.energized = true;
-                tile.left = other;
+            thatTile = powerGrid[y + 1][x];
+            if (CityTileTypes.connectsLeft(thisTile.powerGridType) && CityTileTypes.connectsRight(thatTile.powerGridType)) {
+                thisTile.left = thatTile;
+                thatTile.right = thisTile;
             }
         }
         if (x + 1 <  tiles_wide) {
-            other = powerGrid[y][x + 1];
-            if (other.left == tile || other.energized) {
-                tile.energized = true;
-                tile.right = other;
+            thatTile = powerGrid[y + 1][x];
+            if (CityTileTypes.connectsRight(thisTile.powerGridType) && CityTileTypes.connectsLeft(thatTile.powerGridType)) {
+                thisTile.right = thatTile;
+                thatTile.left = thisTile;
             }
         }
     }
 
     @Override
     public void update(float dt) {
+        // Update mouse positions
+        screenPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        worldPos = camera.unproject(screenPos);
+        tilePos.set((int)  (worldPos.x / tile_size),
+                    (int) ((worldPos.y - margin_bottom) / tile_size));
+
         // TODO (brian): is it time for a power line to break somewhere?
         // TODO (brian): is there a threat?  how severe?
     }
@@ -146,36 +148,18 @@ public class CityLevel extends GameLevel {
         }
 
         batch.setColor(Color.WHITE);
-        CityTileTypes powerGridType;
         for (int y = 0; y < tiles_high; ++y) {
             for (int x = 0; x < tiles_wide; ++x) {
-                powerGridType = getPowerGridType(powerGrid[y][x]);
-                batch.draw(textures.get(powerGridType),
+                batch.draw(textures.get(powerGrid[y][x].powerGridType),
                         x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
             }
         }
-    }
 
-    private CityTileTypes getPowerGridType(PowerTile powerTile) {
-        boolean hasUp    = powerTile.up    != null;
-        boolean hasDown  = powerTile.down  != null;
-        boolean hasLeft  = powerTile.left  != null;
-        boolean hasRight = powerTile.right != null;
-
-        if      (!hasUp && !hasDown && !hasLeft && !hasRight) return CityTileTypes.empty;
-        else if ( hasUp &&  hasDown &&  hasLeft &&  hasRight) return CityTileTypes.power_line_x;
-        else if (!hasUp &&  hasDown &&  hasLeft &&  hasRight) return CityTileTypes.power_line_down_t;
-        else if ( hasUp && !hasDown &&  hasLeft &&  hasRight) return CityTileTypes.power_line_up_t;
-        else if ( hasUp &&  hasDown && !hasLeft &&  hasRight) return CityTileTypes.power_line_right_t;
-        else if ( hasUp &&  hasDown &&  hasLeft && !hasRight) return CityTileTypes.power_line_left_t;
-        else if ( hasUp && !hasDown &&  hasLeft && !hasRight) return CityTileTypes.power_line_corner_lt;
-        else if ( hasUp && !hasDown && !hasLeft &&  hasRight) return CityTileTypes.power_line_corner_rt;
-        else if (!hasUp &&  hasDown &&  hasLeft && !hasRight) return CityTileTypes.power_line_corner_lb;
-        else if (!hasUp &&  hasDown && !hasLeft &&  hasRight) return CityTileTypes.power_line_corner_rb;
-        else if ( hasUp   || hasDown  )                       return CityTileTypes.power_line_v;
-        else if ( hasLeft || hasRight )                       return CityTileTypes.power_line_h;
-
-        return CityTileTypes.empty;
+        // HUD type stuff ---------------------
+        powerBar.draw(batch);
+        // Draw the currently active power grid type
+        batch.draw(textures.get(powerBar.currentPowerLineType),
+                tilePos.x * tile_size, tilePos.y * tile_size + margin_bottom, tile_size, tile_size);
     }
 
     @Override
@@ -193,15 +177,30 @@ public class CityLevel extends GameLevel {
             }
         }
         // Add graph connections
-        PowerTile tile;
-        for (int y = 0; y < tiles_high; ++y) {
-            for (int x = 0; x < tiles_wide; ++x) {
-                tile = powerGrid[y][x];
-                if (y + 1 <  tiles_high) tile.up    = powerGrid[y + 1][x];
-                if (y - 1 >= 0)          tile.down  = powerGrid[y - 1][x];
-                if (x - 1 >= 0)          tile.left  = powerGrid[y][x - 1];
-                if (x + 1 <  tiles_wide) tile.right = powerGrid[y][x + 1];
-            }
+//        PowerTile tile;
+//        for (int y = 0; y < tiles_high; ++y) {
+//            for (int x = 0; x < tiles_wide; ++x) {
+//                tile = powerGrid[y][x];
+//                if (y + 1 <  tiles_high) tile.up    = powerGrid[y + 1][x];
+//                if (y - 1 >= 0)          tile.down  = powerGrid[y - 1][x];
+//                if (x - 1 >= 0)          tile.left  = powerGrid[y][x - 1];
+//                if (x + 1 <  tiles_wide) tile.right = powerGrid[y][x + 1];
+//            }
+//        }
+    }
+
+    private void enableGenerators() {
+        for (int i = 0; i < powerSources.length; ++i) {
+            CityPowerSource powerSource = powerSources[i];
+            int x = powerSource.x;
+            int y = powerSource.y;
+
+            PowerTile generator = powerGrid[y][x];
+            generator.energized = true;
+            if (y + 1 <  tiles_high) generator.up    = powerGrid[y + 1][x];
+            if (y - 1 >= 0)          generator.down  = powerGrid[y - 1][x];
+            if (x - 1 >= 0)          generator.left  = powerGrid[y][x - 1];
+            if (x + 1 <  tiles_wide) generator.right = powerGrid[y][x + 1];
         }
     }
 
