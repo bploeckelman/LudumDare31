@@ -1,6 +1,7 @@
 package lando.systems.ld31;
 
 import com.badlogic.gdx.graphics.Texture;
+import levels.InsectUtils.InsectsAssets;
 
 import java.util.Random;
 
@@ -17,6 +18,9 @@ public class Assets {
     // Planetary
     public static Texture planetaryTempEarth;
 
+    // Insects
+    public static InsectsAssets insectsAssets;
+
 
 
 
@@ -31,6 +35,7 @@ public class Assets {
         squareTex = new Texture("square.png");
         planetaryTempEarth = new Texture("planetary/temp-earth.png");
         rand = new Random();
+        insectsAssets = new InsectsAssets();
     }
 
     public static void dispose() {

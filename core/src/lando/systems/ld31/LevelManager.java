@@ -9,19 +9,22 @@ public class LevelManager {
 
 	public GameLevel[] levels = new GameLevel[7];
 	public int currentLevel;
-	
+
 	public LevelManager(){
+
 		levels[6] = new GalacticLevel();
 		levels[3] = new HumanLevel();
+		levels[2] = new Insects();
 		levels[4] = new DemoLevel();
-		currentLevel = 3;
+		currentLevel = 4;
+
 	}
-	
+
 	public void setLevel(int index){
 		currentLevel = index;
 		//TODO make a way to transition these
 	}
-	
+
 	public void update(float dt){
 		for (int i = 0; i < levels.length; i++){
 			if (levels[i] == null) continue;
@@ -31,7 +34,7 @@ public class LevelManager {
 			}
 		}
 	}
-	
+
 	public void render(SpriteBatch batch){
 		levels[currentLevel].render(batch);
 	}

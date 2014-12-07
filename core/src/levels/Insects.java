@@ -2,6 +2,7 @@ package levels;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import levels.InsectUtils.EnemyTypes.Spider;
 import levels.InsectUtils.MapTileTypes.Bar;
 import levels.InsectUtils.MapTileTypes.Path;
 import levels.InsectUtils.MapTileTypes.Beer;
@@ -9,20 +10,26 @@ import levels.InsectUtils.MapTiles;
 
 import levels.InsectUtils.Enemies;
 
+import java.util.ArrayList;
+
 /**
  * Created by jhoopes on 12/6/14.
  */
 public class Insects extends GameLevel {
 
     protected MapTiles[][] baseMap;
-    protected Enemies[] enemies;
+    protected ArrayList<Enemies> enemies;
     protected int tileWidth;
     protected int tileHeight;
+
+    protected float enemyDeltaTime;
+    protected int pathYStart;
 
 
     public Insects(){
         super();
-
+        this.enemyDeltaTime = 0;
+        this.enemies = new ArrayList<Enemies>();
         this.getWidthAndHeight();
         this.baseMap = new MapTiles[this.tileWidth][];
         generateMap();
@@ -41,9 +48,20 @@ public class Insects extends GameLevel {
     @Override
     public void update(float dt) {
 
-        for(int x = 0; x < enemies.length; x++){
-            enemies[x].updateSprite(dt);
+        if(this.enemyDeltaTime > 5){
+            Spider spider = new Spider(this.pathYStart);
+            this.enemies.add(spider);
+            this.enemyDeltaTime = 0;
+        }else{
+            this.enemyDeltaTime = this.enemyDeltaTime + dt;
         }
+
+        if(this.enemies != null){
+            for(int x = 0; x < this.enemies.size(); x++){
+                this.enemies.get(x).updateSprite(dt);
+            }
+        }
+
 
     }
 
@@ -59,12 +77,14 @@ public class Insects extends GameLevel {
 
         for(int x = 0; x < this.tileWidth; x++){
             for(int y = 0; y < this.tileHeight; y++){
-                batch.draw(this.baseMap[x][y].getTileTexture(), (x+1)*32, (y+1)*32);
+                batch.draw(this.baseMap[x][y].getTileTexture(), (x)*32, (y)*32);
             }
         }
 
-        for(int x = 0; x < enemies.length; x++){
-            enemies[x].drawSprite(batch);
+        if(this.enemies != null){
+            for(int x = 0; x < enemies.size(); x++){
+                this.enemies.get(x).drawSprite(batch);
+            }
         }
 
 
@@ -93,6 +113,7 @@ public class Insects extends GameLevel {
 
         int half = (int) Math.floor(this.tileHeight / 2);
         int currenty = half;
+        this.pathYStart = half;
         int x = 0;
         while(x < this.tileWidth){
 
