@@ -74,6 +74,6 @@ public class Ship {
     }
 
     public Bullet shoot() {
-        return new Bullet(position.x, position.y, sprite.getRotation() + 90);
+        return new Bullet(position.x, position.y, sprite.getRotation() + 90, velocity);
     }
 }

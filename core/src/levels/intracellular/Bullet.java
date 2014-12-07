@@ -14,7 +14,7 @@ public class Bullet {
     public Vector2 velocity;
     public Vector2 position;
 
-    public Bullet(float x, float y, float d) {
+    public Bullet(float x, float y, float d, Vector2 shipVelocity) {
         origin = new Vector2(x, y);
         position = new Vector2(x, y);
         alive = 0;
@@ -25,6 +25,7 @@ public class Bullet {
         velocity = new Vector2(0, 1);
         velocity.setAngle(d);
         velocity.scl(500);
+        velocity.add(shipVelocity);
     }
 
     public void setPosition(float x, float y) {
