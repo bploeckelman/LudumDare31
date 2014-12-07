@@ -25,8 +25,10 @@ public class Patron extends MovementImage {
 	public void update(float dt) {
 		super.update(dt);
 		
-		flipImage = _pukeTime > 0;
-		shouldUpdate = !flipImage;
+		if (_pukeTime > 0) {
+			_pukeTime -= dt;
+			shouldUpdate = _pukeTime < 0;
+		}
 		
 		if (_glass != null) {
 			_glassTime -= dt;
@@ -39,26 +41,27 @@ public class Patron extends MovementImage {
 		
 		boolean isMax = x > (maxX - width);
 		
-		//if (isMax && puke()) {
-		//	Score.PukingPatrons++;
-		//	shouldUpdate = false;
-		//	return false;
-		//}
+		if (isMax && puke()) {
+			return false;			
+		}
 		
 		return isMax || checkGlass();
 	}
 	
-	boolean _hasPuked;
+	public boolean hasPuked;
 	
 	private boolean puke() {
-		boolean puke = !_hasPuked;
+		boolean puked = false;
 		
-		if (!puke) {
-			_pukeTime = 0.4f;
-			_hasPuked = true;
+		if (!hasPuked) {
+			flipImage = hasPuked = true;
+			_pukeTime = 1f;
+			Score.PukingPatrons++;
+			shouldUpdate = false;
+			puked = true;
 		}
 		
-		return puke;
+		return puked;
 	}
 	
 	private boolean checkGlass() {
@@ -80,7 +83,7 @@ public class Patron extends MovementImage {
 	}
 
 	public void check(ArrayList<Glass> _glasses) {
-		if (_glass != null) return;
+		if (_glass != null || hasPuked) return;
 		
 		for (int i = 0; i < _glasses.size(); i++) {
 			Glass glass = _glasses.get(i);
