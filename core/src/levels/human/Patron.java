@@ -2,6 +2,7 @@ package levels.human;
 
 import java.util.ArrayList;
 
+import lando.systems.ld31.Assets;
 import lando.systems.ld31.Score;
 import lando.systems.ld31.ThreatLevel;
 import levels.HumanLevel;
@@ -20,6 +21,7 @@ public class Patron extends MovementImage {
 	public static int maxX;
 	
 	public boolean isNurse;
+	public boolean leavesMedicine;
 	private ScaleImage _nurseHat;
 	
 	private Glass _glass;
@@ -96,6 +98,9 @@ public class Patron extends MovementImage {
 				_glass.rotation = 0;
 				_glass.y = _glassY;
 				_glass.drink();
+				
+				leavesMedicine = isNurse && Assets.rand.nextInt(10) < 7;
+				
 				remove = true;
 			}
 		} else {

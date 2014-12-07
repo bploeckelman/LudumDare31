@@ -3,7 +3,7 @@ package levels.human;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public abstract class MovementImage extends ScaleImage {
+public class MovementImage extends ScaleImage {
 
 	public boolean remove;
 	public int level;
@@ -30,7 +30,9 @@ public abstract class MovementImage extends ScaleImage {
 		}
 	}
 	
-	protected abstract boolean checkX();
+	protected boolean checkX() {
+		return false;
+	}
 	
 	@Override
 	public void draw(SpriteBatch batch) {

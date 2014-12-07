@@ -31,7 +31,7 @@ public class PatronManager {
 		_addReset = 3f;
 	}
 	
-	public void update(ArrayList<Glass> glasses, float dt) {
+	public void update(ArrayList<Glass> glasses, ArrayList<Drug> drugs, float dt) {
 		_patronAddTime -= dt;
 			
 		for (int i = 0; i < _patrons.size(); i++) {
@@ -43,6 +43,16 @@ public class PatronManager {
 			Patron patron = _patrons.get(i);
 			patron.update(dt);
 			if (patron.remove) {
+				if (patron.leavesMedicine && drugs.size() < 4) {
+					Drug drug = new Drug(40);
+					
+					drug.level = patron.level;
+					drug.x = patron.x;
+					drug.y = patron.y - 4;
+					
+					drugs.add(drug);
+				}
+				
 				_patrons.remove(patron);
 			}
 		}
@@ -64,11 +74,15 @@ public class PatronManager {
 	}
 	
 	private Patron createPatron(int y) {
-		Texture image = _patronGfx[Assets.rand.nextInt(_patronGfx.length)];		
+		Texture image = getRandom(_patronGfx);	
 		Patron patron = new Patron(image, 90, -image.getWidth(), y);
 		patron.speed = 200 + Assets.rand.nextInt(200);
-		patron.isNurse = Assets.rand.nextDouble() < 0.1;
+		patron.isNurse = Assets.rand.nextDouble() < 0.8; //0.1;
 		return patron;
+	}
+
+	private Texture getRandom(Texture[] gfxArray) {
+		return gfxArray[Assets.rand.nextInt(gfxArray.length)];	
 	}
 
 	public void draw(SpriteBatch batch) {

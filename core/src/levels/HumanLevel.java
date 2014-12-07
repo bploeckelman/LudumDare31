@@ -31,9 +31,8 @@ public class HumanLevel extends GameLevel {
 	int [] _barlocation;
 	
 	ArrayList<Glass> _glasses = new ArrayList<Glass>(15);
+	ArrayList<Drug> _drugs = new ArrayList<Drug>(5);
 	
-	int _bartenderLevel = 0;
-
 	Bartender _bartender;
 	PatronManager _patronManager;
 	
@@ -65,7 +64,7 @@ public class HumanLevel extends GameLevel {
 		
 		_patronManager = new PatronManager(_barlocation);
 				
-		_bartender.y = _barlocation[_bartenderLevel];
+		_bartender.y = _barlocation[_bartender.level];
 	}
 	
 	@Override
@@ -75,15 +74,21 @@ public class HumanLevel extends GameLevel {
 
 	@Override
 	public void handleInput(float dt) {
+		int level = _bartender.level;
+		
 		if (isUpJustPressed()) {
-			_bartenderLevel++;
+			level++;
 		}
 		else if (isDownJustPressed()) {
-			_bartenderLevel--;
+			level--;
 		}
 		
-		_bartenderLevel = (int)MathUtils.clamp(_bartenderLevel, 0, BarCount-1);
-		_bartender.move(_barlocation[_bartenderLevel]);
+		level = (int)MathUtils.clamp(level, 0, BarCount-1);
+	
+		if (level != _bartender.level) {
+			_bartender.level = level;
+			_bartender.move(_barlocation[level]);
+		}	
 		
 		serveBeer(isRightJustPressed(), dt);
 		
@@ -98,11 +103,11 @@ public class HumanLevel extends GameLevel {
 		
 		if (serve && _serveTime < 0) {
 			_bartender.serve();
-			_tappers[_bartenderLevel].serve();
+			_tappers[_bartender.level].serve();
 			
 			Glass glass = new Glass(GlassHeight, _barTexture.getWidth(), 
-					_barlocation[_bartenderLevel] + _barTexture.getHeight(), ServeTime);
-			glass.level = _bartenderLevel;
+					_barlocation[_bartender.level] + _barTexture.getHeight(), ServeTime);
+			glass.level = _bartender.level;
 			_glasses.add(glass);
 			
 			_serveTime  = ServeTime;
@@ -131,16 +136,23 @@ public class HumanLevel extends GameLevel {
 			}
 		}
 		
-		_patronManager.update(_glasses, dt);
+		for (int i = _drugs.size() - 1; i >= 0; i--) {
+			Drug drug = _drugs.get(i);
+			drug.update(dt);
+			if (_bartender.intersects(drug)) {
+				_drugs.remove(drug);
+				Score.Total += 100;
+				Score.DrugsCollected++;
+				
+				ThreatLevel.reset(HumanLevel.Title);
+			}
+		}
+		
+		_patronManager.update(_glasses, _drugs, dt);
 	}
 	
 	private boolean catchGlass(Glass glass) {
-		if (glass.isFull || glass.level != _bartenderLevel) return false;
-		
-		float bartenderRight = _bartender.x + _bartender.width / 2;
-		float glassRight = glass.x + glass.width;
-				
-		return (glassRight >= _bartender.x && glass.x <= bartenderRight);
+		return !glass.isFull && _bartender.intersects(glass);
 	}
 		
 	@Override
@@ -154,7 +166,11 @@ public class HumanLevel extends GameLevel {
 		
 		for (int i = 0; i < _glasses.size(); i++) {
 			_glasses.get(i).draw(batch);
-		}		
+		}	
+		
+		for (int i = 0; i < _drugs.size(); i++) {
+			_drugs.get(i).draw(batch);
+		}
 		
 		_bartender.draw(batch);
 	}

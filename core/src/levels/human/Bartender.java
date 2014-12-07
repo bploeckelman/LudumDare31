@@ -36,11 +36,6 @@ public class Bartender extends MovementImage {
 		_moveSound.play();
 	}
 
-	@Override
-	protected boolean checkX() {
-		return false;
-	}
-
 	public void setRight(float xPosition) {
 		x = _defaultX = xPosition - width;
 	}
@@ -50,5 +45,13 @@ public class Bartender extends MovementImage {
 		if (x < 20) {
 			x = 20;
 		}
+	}
+
+	public boolean intersects(MovementImage image) {
+
+		float bartenderRight = x + width/2;
+		float imageRight = image.x + image.width;
+				
+		return (image.level == level && imageRight >= x && image.x <= bartenderRight);
 	}
 }

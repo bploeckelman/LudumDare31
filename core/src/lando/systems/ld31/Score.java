@@ -7,5 +7,6 @@ public class Score {
 	public static int BrokenGlasses;
 	public static int MissedGlasses;
 	public static int PukingPatrons;
+	public static int DrugsCollected;
 
 }
