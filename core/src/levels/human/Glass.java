@@ -1,7 +1,10 @@
 package levels.human;
 
+import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.Score;
+
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Glass extends MovementImage {
 	
@@ -9,6 +12,7 @@ public class Glass extends MovementImage {
 	
 	private static Texture _fullGfx = new Texture(HumanAssets.FullGfx);
 	private static Texture _emptyGfx = new Texture(HumanAssets.EmptyGfx);
+	private static Sound _crashSound = getSound(HumanAssets.CrashSound);
 	
 	public boolean isFull = true;
 	
@@ -27,8 +31,18 @@ public class Glass extends MovementImage {
 	}
 
 	@Override
-	protected boolean checkX() {
-		return x < -width;
+	protected boolean checkX() {		
+		boolean crash = (isFull) ? x < -width : x > GameConstants.GameWidth - width;
+		
+		if (crash) {
+			_crashSound.play();
+			Score.BrokenGlasses++;
+			if (!isFull) {
+				Score.MissedGlasses++;
+			}
+		}
+		
+		return crash;
 	}
 
 	public void drink() {

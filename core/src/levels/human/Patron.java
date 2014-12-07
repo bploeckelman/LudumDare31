@@ -2,7 +2,7 @@ package levels.human;
 
 import java.util.ArrayList;
 
-import lando.systems.ld31.Assets;
+import lando.systems.ld31.Score;
 
 import com.badlogic.gdx.graphics.Texture;
 
@@ -12,6 +12,7 @@ public class Patron extends MovementImage {
 	
 	private Glass _glass;
 	private float _glassTime = 1.5f;
+	private float _pukeTime = 0;
 	
 	public Patron(Texture image, int height, int x, int y) {
 		super(image, height, 0f);
@@ -24,6 +25,9 @@ public class Patron extends MovementImage {
 	public void update(float dt) {
 		super.update(dt);
 		
+		flipImage = _pukeTime > 0;
+		shouldUpdate = !flipImage;
+		
 		if (_glass != null) {
 			_glassTime -= dt;
 			_glass.x = x + width - 3;
@@ -32,7 +36,29 @@ public class Patron extends MovementImage {
 	
 	@Override
 	protected boolean checkX() {
-		return x > (maxX - width) || checkGlass();
+		
+		boolean isMax = x > (maxX - width);
+		
+		//if (isMax && puke()) {
+		//	Score.PukingPatrons++;
+		//	shouldUpdate = false;
+		//	return false;
+		//}
+		
+		return isMax || checkGlass();
+	}
+	
+	boolean _hasPuked;
+	
+	private boolean puke() {
+		boolean puke = !_hasPuked;
+		
+		if (!puke) {
+			_pukeTime = 0.4f;
+			_hasPuked = true;
+		}
+		
+		return puke;
 	}
 	
 	private boolean checkGlass() {
@@ -46,7 +72,7 @@ public class Patron extends MovementImage {
 			}
 		} else {
 			_glass.remove = true;
-			Assets.score += 200;
+			Score.Total += 200;
 			remove = true;
 		}
 		

@@ -1,14 +1,14 @@
 package levels.human;
 
+import lando.systems.ld31.GameObject;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public abstract class MovementImage {
+public abstract class MovementImage extends GameObject {
 
 	public boolean remove;
 	public int level;
-	
-	private Texture _image;
 	
 	public int speed = 100;
 	
@@ -20,6 +20,9 @@ public abstract class MovementImage {
 
 	public boolean shouldUpdate = true;
 	
+	protected boolean flipImage = false;
+	
+	Texture _image;
 	float _invisibleTime;
 	
 	public MovementImage(Texture image, int height, float time) {
@@ -53,6 +56,12 @@ public abstract class MovementImage {
 	public void draw(SpriteBatch batch) {
 		if (remove || _invisibleTime > 0) return;
 		
-		batch.draw(getImage(),  x,  y,  width,  height);
+		int drawX = x;
+		int w = width;
+		if (flipImage) {
+			drawX += width;
+			w = -width;
+		}
+		batch.draw(getImage(),  drawX,  y,  w,  height);
 	}
 }
