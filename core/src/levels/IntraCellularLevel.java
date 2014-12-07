@@ -25,6 +25,11 @@ public class IntraCellularLevel extends GameLevel {
     float nextWave;
 
     public IntraCellularLevel() {
+        tutorialText = "Use left and right arrow keys (or a and d) to rotate.\n" +
+                "Use up arrow (or w) to accelerate.\n" +
+                "Use the space bar to fire.\n\n" +
+                "Destroy the viruses invading your cell!";
+
         IntraCellularAssets.init();
         ship = new Ship((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
         asteroids = new ArrayList<Asteroid>();
