@@ -12,7 +12,7 @@ public class LevelManager {
     public int currentLevel;
 
     public LevelManager(){
-        levels[0] = new DemoLevel();
+        levels[0] = new IntraCellularLevel();
         levels[1] = new DemoLevel();
         levels[2] = new Insects();
         levels[3] = new HumanLevel();
