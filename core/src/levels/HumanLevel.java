@@ -2,8 +2,8 @@ package levels;
 
 import java.util.ArrayList;
 
-import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.Score;
 import levels.human.*;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -43,11 +43,10 @@ public class HumanLevel extends GameLevel {
 		_tappers = new Tapper[BarCount];
 				
 		_levelHeight = (int)((GameConstants.ScreenHeight*.85) / BarCount);
-		int tapperX = GameConstants.ScreenWidth - Tapper.width;
+		int tapperX = GameConstants.GameWidth - Tapper.width;
 		
-		_bartender = new Bartender();
-		_bartender.setHeight(_levelHeight - 20);
-		_bartender.x = GameConstants.ScreenWidth - 70;
+		_bartender = new Bartender(_levelHeight - 20);
+		_bartender.x = GameConstants.GameWidth - Tapper.width - _bartender.width;;
 		
 		int y = 25;
 		
@@ -112,12 +111,26 @@ public class HumanLevel extends GameLevel {
 		for (int i = _glasses.size() - 1; i >= 0; i--) {
 			Glass glass = _glasses.get(i);
 			glass.update(dt);
+			if (catchGlass(glass)) {
+				Score.Total += 100;
+				glass.remove = true;
+			}
+			
 			if (glass.remove) {
 				_glasses.remove(glass);
 			}
 		}
 		
 		_patronManager.update(_glasses, dt);
+	}
+	
+	private boolean catchGlass(Glass glass) {
+		if (glass.isFull || glass.level != _bartenderLevel) return false;
+		
+		int bartenderRight = _bartender.x + _bartender.width / 2;
+		int glassRight = glass.x + glass.width;
+				
+		return (glassRight >= _bartender.x && glass.x <= bartenderRight);
 	}
 		
 	@Override

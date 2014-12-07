@@ -9,8 +9,6 @@ import java.util.Random;
  * Brian Ploeckelman created on 12/6/2014.
  */
 public class Assets {
-
-	public static int score;
 	
     // ----- Textures ---------------------------
     public static Texture ludumdare;
