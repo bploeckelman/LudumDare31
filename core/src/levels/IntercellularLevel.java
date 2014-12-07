@@ -2,6 +2,8 @@ package levels;
 
 import java.util.ArrayList;
 
+import aurelienribon.tweenengine.equations.Quad;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.ParticleSystem;
 import levels.intercellular.BloodCell;
 import levels.intercellular.TileType;
 
@@ -30,9 +33,11 @@ public class IntercellularLevel extends GameLevel {
 
     public Rectangle gameBounds;
     public ArrayList<BloodCell> cells;
+
     
     // Class constructor
     public IntercellularLevel() {
+
     	cells = new ArrayList<BloodCell>();
     	gameBounds = new Rectangle((GameConstants.GameWidth - (tile_size * 10 + 16)) / 2.0f, 0, tile_size * 10 + 16, GameConstants.ScreenHeight);
     	spawnCell = new BloodCell(spawnPoint.x, spawnPoint.y, this, false);
@@ -113,11 +118,20 @@ public class IntercellularLevel extends GameLevel {
     
     @Override
     public void update(float dt) {
+    	
     	for (int i = 0; i < cells.size(); i++){
     		cells.get(i).update(dt);
     	}
     	for (int i = cells.size() -1; i >= 0; i--){
-    		if (!cells.get(i).alive) cells.remove(i);
+    		if (!cells.get(i).alive) {
+    			BloodCell cell = cells.remove(i);
+    			for (int j = 0; j < 40; j++){
+    				Vector2 cellCenter = new Vector2(16,16).add(cell.pos);
+    				Vector2 dest = new Vector2(1,0).rotate(Assets.rand.nextInt(360)).scl(Assets.rand.nextFloat() * 40)
+    						.add(cellCenter);
+    				particles.addParticle(cellCenter, dest, Color.WHITE, Color.RED, 1f, Quad.OUT);
+    			}
+    		}
     	}
     	if (nextSpawn <= 0 && !cellsMoving()){
     		addChains();
@@ -131,6 +145,10 @@ public class IntercellularLevel extends GameLevel {
     		if (pos.equals(cells.get(i).gridPos)) return cells.get(i);
     	}
     	return null;
+    }
+    
+    public void fixHangers(){
+    	// TODO maybe do this.
     }
     
     public ArrayList<BloodCell> getNeighbors(BloodCell cell){

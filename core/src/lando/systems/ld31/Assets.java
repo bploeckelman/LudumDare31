@@ -18,6 +18,7 @@ public class Assets {
     public static Texture squareTex;
     public static Random rand;
     public static Texture milkyWay;
+    public static Texture bloodVessel;
 
     // Planetary
     public static Texture planetaryTempEarth;
@@ -67,6 +68,7 @@ public class Assets {
         sidebarLabels[5] = new Texture("sidebar/side_meter_100x.png");
         sidebarLabels[6] = new Texture("sidebar/side_meter_1000x.png");
         sidebarSelection = new Texture("sidebar/selection.png");
+        bloodVessel = new Texture("intercellular/blood_vessel_01.png");
         rand = new Random();
         insectsAssets = new InsectsAssets();
     }
