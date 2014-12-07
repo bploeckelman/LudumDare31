@@ -77,12 +77,8 @@ public class PatronManager {
 		Texture image = _patronGfx[Assets.rand.nextInt(_patronGfx.length)];	
 		Patron patron = new Patron(image, 90, -image.getWidth(), y);
 		patron.speed = 200 + Assets.rand.nextInt(200);
-		patron.isNurse = Assets.rand.nextDouble() < 0.8; //0.1;
+		patron.isNurse = Assets.rand.nextDouble() < 0.15;
 		return patron;
-	}
-
-	private Texture getRandom(Texture[] gfxArray) {
-		return gfxArray[Assets.rand.nextInt(gfxArray.length)];	
 	}
 
 	public void draw(SpriteBatch batch) {
