@@ -17,4 +17,7 @@ public class HumanAssets {
 	public static final String Patron1 = "tapper/patron1.png";
 	public static final String Patron2 = "tapper/patron2.png";
 	public static final String Patron3 = "tapper/patron3.png";
+	public static final String Puke = "tapper/vomit.png";
+	public static final String PukePuddle = "tapper/puddle.png";
+	public static final String PukeSound = "tapper/vomit.mp3";
 }

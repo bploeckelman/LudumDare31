@@ -53,6 +53,7 @@ public abstract class MovementImage extends GameObject {
 	
 	protected abstract boolean checkX();
 	
+	@Override
 	public void draw(SpriteBatch batch) {
 		if (remove || _invisibleTime > 0) return;
 		

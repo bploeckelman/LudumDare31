@@ -4,9 +4,15 @@ import java.util.ArrayList;
 
 import lando.systems.ld31.Score;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Patron extends MovementImage {
+	
+	private static Texture _vomit = new Texture(HumanAssets.Puke);
+	private static Texture _puddle = new Texture(HumanAssets.PukePuddle);
+	private static Sound _vomitSound = getSound(HumanAssets.PukeSound);
 	
 	public static int maxX;
 	
@@ -59,6 +65,7 @@ public class Patron extends MovementImage {
 			Score.PukingPatrons++;
 			shouldUpdate = false;
 			puked = true;
+			_vomitSound.play();
 		}
 		
 		return puked;
@@ -92,6 +99,18 @@ public class Patron extends MovementImage {
 				glass.shouldUpdate = false;
 				_glass = glass;
 				speed = _glass.speed / 2;
+			}
+		}
+	}
+	
+	public void draw(SpriteBatch batch) {
+		super.draw(batch);
+		
+		if (hasPuked) {
+			if ((_pukeTime - 0.7f) > 0) {		
+				batch.draw(_vomit, x + width/2, y - 60);
+			} else {
+				batch.draw(_puddle,  x,  y - 63);
 			}
 		}
 	}
