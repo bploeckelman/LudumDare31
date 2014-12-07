@@ -13,19 +13,25 @@ import levels.intracellular.Ship;
 import java.util.ArrayList;
 
 public class IntraCellularLevel extends GameLevel {
+    public static float waveDuration = 10;
+    public static float waveTick = 20;
+
     Ship ship;
     ArrayList<Asteroid> asteroids;
     float nextAsteroid;
     ArrayList<Bullet> bullets;
     float lastFired;
 
+    float nextWave;
+
     public IntraCellularLevel() {
         IntraCellularAssets.init();
         ship = new Ship(camera.viewportWidth/2, camera.viewportHeight/2);
         asteroids = new ArrayList<Asteroid>();
-        nextAsteroid = 3;
+        nextAsteroid = 0;
         bullets = new ArrayList<Bullet>();
         lastFired = Bullet.fireRate;
+        nextWave = 3;
     }
 
     @Override
@@ -95,9 +101,13 @@ public class IntraCellularLevel extends GameLevel {
         }
 
         nextAsteroid -= dt;
-        if(nextAsteroid <= 0) {
+        nextWave -= dt;
+        if(nextWave <= 0) {
+            nextWave = (Assets.rand.nextFloat() * waveDuration) + waveTick;
+        }
+        if(nextAsteroid <= 0 && nextWave <= waveDuration) {
             asteroids.add(new Asteroid(camera.viewportWidth, camera.viewportHeight));
-            nextAsteroid = Assets.rand.nextInt(10);
+            nextAsteroid = Assets.rand.nextInt(4) + 1;
         }
 
         ASTEROIDS: for(int i = 0; i < asteroids.size(); i++) {
