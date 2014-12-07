@@ -3,6 +3,8 @@ package levels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.ThreatLevel;
 import levels.intracellular.Asteroid;
@@ -27,9 +29,9 @@ public class IntraCellularLevel extends GameLevel {
     int threatLevel;
 
     public IntraCellularLevel() {
-        tutorialText = "Use left and right arrow keys (or a and d) to rotate.\n" +
+        tutorialText = "Use mouse to rotate.\n" +
                 "Use up arrow (or w) to accelerate.\n" +
-                "Use the space bar to fire.\n\n" +
+                "Use the space bar or click to fire.\n\n" +
                 "Destroy the viruses invading your cell!";
 
         IntraCellularAssets.init();
@@ -67,11 +69,19 @@ public class IntraCellularLevel extends GameLevel {
             ship.slowDown(dt);
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && lastFired >= Bullet.fireRate) {
+        if((Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) &&
+                lastFired >= Bullet.fireRate) {
             bullets.add(ship.shoot());
             lastFired = 0;
         } else {
             lastFired = lastFired > Bullet.fireRate ? Bullet.fireRate : lastFired + dt;
+        }
+
+        Vector3 mousePos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        if(mousePos.x < camera.viewportWidth - 100) {
+            Vector2 mousePos2 = new Vector2(mousePos.x, mousePos.y);
+            Vector2 dir = mousePos2.sub(ship.position).nor();
+            ship.sprite.setRotation(dir.angle() - 90);
         }
     }
 
