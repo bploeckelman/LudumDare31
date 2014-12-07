@@ -60,8 +60,8 @@ public class HumanLevel extends GameLevel {
 	}
 	
 	@Override
-	public boolean hasThreat() {
-		return false;
+	public int hasThreat() {
+		return 0;
 	}
 
 	@Override

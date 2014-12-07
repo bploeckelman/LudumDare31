@@ -11,7 +11,7 @@ public class Beer extends MapTiles {
     public Beer(){
 
         this.name = "Beer";
-        this.tileTexture = Assets.insectsAssets.Beer;
+        //this.tileTexture = Assets.insectsAssets.Beer;
     }
 
 }

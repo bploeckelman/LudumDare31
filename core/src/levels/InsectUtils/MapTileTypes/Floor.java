@@ -1,4 +1,6 @@
-package levels.insectutils.MapTileTypes;
+package levels.InsectUtils.MapTileTypes;
+
+
 
 /**
  * Created by jhoopes on 12/6/14.

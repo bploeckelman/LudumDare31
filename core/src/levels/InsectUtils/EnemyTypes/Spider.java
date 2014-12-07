@@ -13,8 +13,8 @@ public class Spider extends Enemies {
     public Spider(){
 
         this.name = "Spider";
-        Texture spiderTexture = Assets.insectsAssets.Spider;
-        this.enemySprite = new Sprite(spiderTexture);
+        //Texture spiderTexture = Assets.insectsAssets.Spider;
+        //this.enemySprite = new Sprite(spiderTexture);
 
 
     }
