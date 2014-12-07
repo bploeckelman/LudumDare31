@@ -8,14 +8,14 @@ import java.util.List;
 
 public class Asteroid {
     public enum Size {
-        SMALL (2, null),
-        MEDIUM (4, SMALL),
-        LARGE (8, MEDIUM);
+        SMALL (32, null),
+        MEDIUM (64, SMALL),
+        LARGE (128, MEDIUM);
 
-        public final int scale;
+        public final int value;
         public final Size splitInto;
-        Size(int scale, Size splitInto) {
-            this.scale = scale;
+        Size(int value, Size splitInto) {
+            this.value = value;
             this.splitInto = splitInto;
         }
     }
@@ -31,7 +31,7 @@ public class Asteroid {
         position = new Vector2(x, y);
 
         sprite = new Sprite(IntraCellularAssets.asteroid);
-        sprite.setSize(sprite.getWidth() * size.scale, sprite.getHeight() * size.scale);
+        sprite.setSize(size.value, size.value);
         sprite.setCenter(x, y);
 
         this.velocity = velocity;

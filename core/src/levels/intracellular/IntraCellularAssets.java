@@ -9,7 +9,7 @@ public class IntraCellularAssets {
 
     public static void init() {
         ship = new Texture("intracellular/ship.png");
-        asteroid = new Texture("intracellular/asteroid.png");
+        asteroid = new Texture("intracellular/virus_128x128.png");
         bullet = new Texture("intracellular/bullet.png");
     }
 

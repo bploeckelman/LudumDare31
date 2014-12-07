@@ -3,7 +3,6 @@ package levels;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.ThreatLevel;
 import levels.intracellular.Asteroid;
@@ -155,7 +154,7 @@ public class IntraCellularLevel extends GameLevel {
                 ship.reset((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
             }
 
-            threatLevel += asteroid.size.scale * 3;
+            threatLevel += asteroid.size.value / 5;
         }
 
         ThreatLevel.set(screenName, threatLevel);
