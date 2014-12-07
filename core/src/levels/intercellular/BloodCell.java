@@ -64,7 +64,25 @@ public class BloodCell {
     			n.get(i).alive = false;
     		}
     		this.alive = false;
+    	} else {
+    		ArrayList<BloodCell> chain = new ArrayList<BloodCell>();
+    		ArrayList<BloodCell> toCheck = new ArrayList<BloodCell>();
+    		toCheck.add(this);
+    		while (!toCheck.isEmpty()){
+    			BloodCell cell = toCheck.remove(0);
+    			if (cell.type == this.type && !chain.contains(cell)) {
+    				chain.add(cell);
+    				ArrayList<BloodCell> n = level.getNeighbors(cell);
+    				toCheck.addAll(n);
+    			}
+    		}
+    		if (chain.size() > 2){
+    			for(int i = 0; i < chain.size(); i++){
+    				chain.get(i).alive = false;
+    			}
+    		}
     	}
+    	
     	
     	return new Vector2((x * level.tile_size) + level.gameBounds.x, GameConstants.ScreenHeight - (y * level.tile_size));
     }
