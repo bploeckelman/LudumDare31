@@ -6,14 +6,14 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
 import levels.PlanetaryLevel;
 
-public class Earth {
+public class Moon {
 
     private static float hW;
     private static float hH;
 
     static {
-        hW = PlanetaryLevel.EARTH_WIDTH / 2;
-        hH = PlanetaryLevel.EARTH_HEIGHT / 2;
+        hW = PlanetaryLevel.MOON_WIDTH / 2;
+        hH = PlanetaryLevel.MOON_HEIGHT / 2;
     }
 
     // -----------------------------------------------
@@ -24,16 +24,16 @@ public class Earth {
     /** Rotation of earth in degrees */
     private float r = 0f;
 
-    private Sprite baseEarth;
+    private Sprite baseMoon;
 
     // -----------------------------------------------
 
 
-    public Earth() {
+    public Moon() {
 
-        baseEarth = new Sprite(Assets.planetaryTempEarth, Assets.planetaryTempEarth.getWidth(), Assets.planetaryTempEarth.getHeight());
-        baseEarth.setSize(PlanetaryLevel.EARTH_WIDTH, PlanetaryLevel.EARTH_HEIGHT);
-        baseEarth.setOriginCenter();
+        baseMoon = new Sprite(Assets.planetaryTempEarth, Assets.planetaryTempEarth.getWidth(), Assets.planetaryTempEarth.getHeight());
+        baseMoon.setSize(PlanetaryLevel.MOON_WIDTH, PlanetaryLevel.MOON_HEIGHT);
+        baseMoon.setOriginCenter();
 
     }
 
@@ -41,7 +41,7 @@ public class Earth {
 
 
     public void draw(SpriteBatch batch) {
-        baseEarth.draw(batch);
+        baseMoon.draw(batch);
     }
 
     public Vector2 getPosition() {
@@ -52,12 +52,12 @@ public class Earth {
     }
     public void setPosition(Vector2 position) {
         pos.set(position);
-        baseEarth.setX(pos.x - hW);
-        baseEarth.setY(pos.y - hH);
+        baseMoon.setX(pos.x - hW);
+        baseMoon.setY(pos.y - hH);
     }
     public void setRotation(float rotation) {
         r = rotation;
-        baseEarth.setRotation(r);
+        baseMoon.setRotation(r);
     }
 
 }
