@@ -11,9 +11,10 @@ public class LevelManager {
 	public int currentLevel;
 	
 	public LevelManager(){
-		levels[4] = new GalacticLevel();
-		currentLevel = 4;
-		
+		levels[6] = new GalacticLevel();
+		levels[3] = new HumanLevel();
+		levels[4] = new DemoLevel();
+		currentLevel = 3;
 	}
 	
 	public void setLevel(int index){
