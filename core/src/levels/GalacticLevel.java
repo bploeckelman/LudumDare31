@@ -25,7 +25,25 @@ public class GalacticLevel extends GameLevel {
 	
 	@Override
 	public int hasThreat() {
-		// TODO Auto-generated method stub
+		float closest = Float.MAX_VALUE;
+		for (int i = 0; i < galaxies.size(); i++){
+			if (galaxies.get(i) == home) continue;
+			if (galaxies.get(i).path.isEmpty()){
+				float dist = home.pos.dst2(galaxies.get(i).pos);
+				if (dist < closest){
+					closest = dist;
+				}
+			}
+		}
+		if (closest < 100 * 100){
+			return 3;
+		}
+		if (closest < 300 * 300){
+			return 2;
+		}
+		if (closest < 600 * 600){
+			return 1;
+		}
 		return 0;
 	}
 

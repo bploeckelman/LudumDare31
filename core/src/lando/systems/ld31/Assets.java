@@ -23,6 +23,11 @@ public class Assets {
     // Insects
     public static InsectsAssets insectsAssets;
 
+    public static Texture sidebarBackground;
+    public static Texture sidebarBlack;
+    public static Texture[] sidebarStatus = new Texture[4];
+    public static Texture[] sidebarLabels = new Texture[7];
+   
 
 
 
@@ -38,6 +43,19 @@ public class Assets {
         planetaryTempEarth = new Texture("planetary/temp-earth.png");
         planetaryTempExplosion = new Texture("planetary/temp-missle-explosion.png");
         planetaryTempRocket = new Texture("planetary/temp_rocket.png");
+        sidebarBackground = new Texture("sidebar/side_meter_backdrop.png");
+        sidebarBlack= new Texture("sidebar/side_meter_fill_black.png");
+        sidebarStatus[0] = new Texture("sidebar/side_meter_fill_green.png");
+        sidebarStatus[1] = new Texture("sidebar/side_meter_fill_yellow.png");
+        sidebarStatus[2] = new Texture("sidebar/side_meter_fill_orange.png");
+        sidebarStatus[3] = new Texture("sidebar/side_meter_fill_red.png");
+        sidebarLabels[0] = new Texture("sidebar/side_meter_0001x.png");
+        sidebarLabels[1] = new Texture("sidebar/side_meter_001x.png");
+        sidebarLabels[2] = new Texture("sidebar/side_meter_01x.png");
+        sidebarLabels[3] = new Texture("sidebar/side_meter_1x.png");
+        sidebarLabels[4] = new Texture("sidebar/side_meter_10x.png");
+        sidebarLabels[5] = new Texture("sidebar/side_meter_100x.png");
+        sidebarLabels[6] = new Texture("sidebar/side_meter_1000x.png");
         rand = new Random();
         insectsAssets = new InsectsAssets();
     }

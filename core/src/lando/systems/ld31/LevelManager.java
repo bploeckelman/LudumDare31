@@ -8,6 +8,7 @@ import aurelienribon.tweenengine.primitives.MutableFloat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Input.Keys;
@@ -25,8 +26,12 @@ public class LevelManager implements InputProcessor{
     public MutableFloat transition = new MutableFloat(0);
     private final FrameBuffer currentFBO;
     private final FrameBuffer lastFBO;
+    private OrthographicCamera camera;
 
     public LevelManager(){
+    	camera = new OrthographicCamera(GameConstants.ScreenWidth, GameConstants.ScreenHeight);
+    	camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
+    	camera.update();
         levels[0] = new IntraCellularLevel();
         levels[1] = new DemoLevel();
         levels[2] = new Insects();
@@ -63,7 +68,9 @@ public class LevelManager implements InputProcessor{
     public void update(float dt){
         for (int i = 0; i < levels.length; i++){
             if (levels[i] == null) continue;
+            levels[i].top = i == currentLevel;
             levels[i].update(i == currentLevel ? dt : dt/2.0f);
+            
             if (i == currentLevel){
                 levels[i].handleInput(dt);
             }
@@ -128,6 +135,20 @@ public class LevelManager implements InputProcessor{
     	        batch.draw(currentTexture, zoomPoint.x  * (1 - currentAlpha), currentFBO.getHeight() - (zoomPoint.y * ( 1- currentAlpha)), currentFBO.getWidth()* ( currentAlpha), -currentFBO.getHeight()* ( currentAlpha));
     	        batch.setColor(Color.WHITE);
         	}
+        }
+        
+        // Hud time
+        batch.setProjectionMatrix(camera.combined);
+        batch.draw(Assets.sidebarBackground, GameConstants.GameWidth, 0, 100, GameConstants.ScreenHeight);
+        for (int i = 0; i < levels.length; i++){
+        	Texture tex = Assets.sidebarBlack;
+        	if (levels[i] != null){
+        		tex = Assets.sidebarStatus[levels[i].hasThreat()];
+        	}
+        	batch.draw(tex, GameConstants.GameWidth + 48, GameConstants.ScreenHeight - 196 - (i * 75), 32, 75);
+        	
+        	batch.draw(Assets.sidebarLabels[i], GameConstants.GameWidth + 2, GameConstants.ScreenHeight - 196 - (i * 75), 78, 75);
+
         }
         batch.end();
     }
