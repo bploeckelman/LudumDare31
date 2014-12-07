@@ -234,8 +234,11 @@ public abstract class GameLevel {
 	public abstract void draw(SpriteBatch batch);
 	
 	public void playSound(Sound sound) {
+		playSound(sound, 1);
+	}
+	public void playSound(Sound sound, float volume) {
 		if (top) {
-			sound.play();
+			sound.play(volume);
 		}
 	}
 }

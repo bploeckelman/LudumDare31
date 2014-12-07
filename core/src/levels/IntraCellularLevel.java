@@ -27,6 +27,7 @@ public class IntraCellularLevel extends GameLevel {
     float lastFired;
     float nextWave;
     int threatLevel;
+    boolean isShipThrusting;
 
     public IntraCellularLevel() {
         tutorialText = "Use mouse to rotate.\n" +
@@ -65,13 +66,22 @@ public class IntraCellularLevel extends GameLevel {
 
         if(isUpPressed()) {
             ship.accelerate(dt);
+            if(!isShipThrusting) {
+                IntraCellularAssets.shipThrust.loop();
+                isShipThrusting = true;
+            }
         } else {
             ship.slowDown(dt);
+            if(isShipThrusting) {
+                IntraCellularAssets.shipThrust.stop();
+                isShipThrusting = false;
+            }
         }
 
         if((Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) &&
                 lastFired >= Bullet.fireRate) {
             bullets.add(ship.shoot());
+            playSound(IntraCellularAssets.shipShoot, .75f);
             lastFired = 0;
         } else {
             lastFired = lastFired > Bullet.fireRate ? Bullet.fireRate : lastFired + dt;
@@ -141,6 +151,7 @@ public class IntraCellularLevel extends GameLevel {
                 Bullet bullet = bullets.get(j);
                 if(bullet.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + bullet.sprite.getWidth()/2) {
                     asteroid.split(asteroids, i, bullet.velocity);
+                    playSound(IntraCellularAssets.asteroidExplode);
                     i--;
                     bullets.remove(j);
                     continue ASTEROIDS;
@@ -161,6 +172,7 @@ public class IntraCellularLevel extends GameLevel {
             }
 
             if(ship.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + ship.sprite.getWidth()/2) {
+                playSound(IntraCellularAssets.shipExplode, .5f);
                 ship.reset((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
             }
 
