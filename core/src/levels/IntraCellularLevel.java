@@ -26,7 +26,7 @@ public class IntraCellularLevel extends GameLevel {
 
     public IntraCellularLevel() {
         IntraCellularAssets.init();
-        ship = new Ship(camera.viewportWidth/2, camera.viewportHeight/2);
+        ship = new Ship((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
         asteroids = new ArrayList<Asteroid>();
         nextAsteroid = 0;
         bullets = new ArrayList<Bullet>();
@@ -65,16 +65,16 @@ public class IntraCellularLevel extends GameLevel {
     @Override
     public void update(float dt) {
         ship.setPosition(ship.getX() + ship.velocity.x * dt, ship.getY() + ship.velocity.y * dt);
-        if(ship.getX() < 0) {
-            ship.setX(camera.viewportWidth);
-        } else if(ship.getX() > camera.viewportWidth) {
-            ship.setX(0);
+        if(ship.getX() + (ship.sprite.getWidth()/2) < 0) {
+            ship.setX(camera.viewportWidth - 100 + (ship.sprite.getWidth()/2));
+        } else if(ship.getX() - (ship.sprite.getWidth()/2) > camera.viewportWidth - 100) {
+            ship.setX(0 - (ship.sprite.getWidth()/2));
         }
 
-        if(ship.getY() < 0) {
-            ship.setY(camera.viewportHeight);
-        } else if(ship.getY() > camera.viewportHeight) {
-            ship.setY(0);
+        if(ship.getY() + (ship.sprite.getHeight()/2) < 0) {
+            ship.setY(camera.viewportHeight + (ship.sprite.getHeight()/2));
+        } else if(ship.getY() - (ship.sprite.getHeight()/2) > camera.viewportHeight) {
+            ship.setY(0 - (ship.sprite.getHeight()/2));
         }
 
         for(int i = 0; i < bullets.size(); i++) {
@@ -83,8 +83,8 @@ public class IntraCellularLevel extends GameLevel {
             bullet.setPosition(bullet.getX() + bullet.velocity.x * dt, bullet.getY() + bullet.velocity.y * dt);
             bullet.alive += dt;
             if(bullet.getX() < 0) {
-                bullet.setX(camera.viewportWidth);
-            } else if(bullet.getX() > camera.viewportWidth) {
+                bullet.setX(camera.viewportWidth - 100);
+            } else if(bullet.getX() > camera.viewportWidth - 100) {
                 bullet.setX(0);
             }
 
@@ -106,7 +106,7 @@ public class IntraCellularLevel extends GameLevel {
             nextWave = (Assets.rand.nextFloat() * waveDuration) + waveTick;
         }
         if(nextAsteroid <= 0 && nextWave <= waveDuration) {
-            asteroids.add(new Asteroid(camera.viewportWidth, camera.viewportHeight));
+            asteroids.add(new Asteroid(camera.viewportWidth - 100, camera.viewportHeight));
             nextAsteroid = Assets.rand.nextInt(4) + 1;
         }
 
@@ -124,20 +124,20 @@ public class IntraCellularLevel extends GameLevel {
             }
 
             asteroid.setPosition(asteroid.getX() + asteroid.velocity.x * dt, asteroid.getY() + asteroid.velocity.y * dt);
-            if(asteroid.getX() < 0) {
-                asteroid.setX(camera.viewportWidth);
-            } else if(asteroid.getX() > camera.viewportWidth) {
-                asteroid.setX(0);
+            if(asteroid.getX() + (asteroid.sprite.getWidth()/2)< 0) {
+                asteroid.setX(camera.viewportWidth - 100 + (asteroid.sprite.getWidth()/2));
+            } else if(asteroid.getX() - (asteroid.sprite.getWidth()/2) > camera.viewportWidth - 100) {
+                asteroid.setX(0 - (asteroid.sprite.getWidth()/2));
             }
 
-            if(asteroid.getY() < 0) {
-                asteroid.setY(camera.viewportHeight);
-            } else if(asteroid.getY() > camera.viewportHeight) {
-                asteroid.setY(0);
+            if(asteroid.getY() + (asteroid.sprite.getHeight()/2) < 0) {
+                asteroid.setY(camera.viewportHeight + (asteroid.sprite.getHeight()/2));
+            } else if(asteroid.getY() - (asteroid.sprite.getHeight()/2) > camera.viewportHeight) {
+                asteroid.setY(0 - (asteroid.sprite.getHeight()/2));
             }
 
             if(ship.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + ship.sprite.getWidth()/2) {
-                ship.reset(camera.viewportWidth/2, camera.viewportHeight/2);
+                ship.reset((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
             }
         }
     }
