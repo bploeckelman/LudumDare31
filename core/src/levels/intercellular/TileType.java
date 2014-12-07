@@ -6,10 +6,8 @@ package levels.intercellular;
 public enum TileType {
 
     goodWhite,
-    neutralClear,
-    neutralBlack,
     badYellow,
-    badGreem,
+    badGreen,
     badBlue,
 
 }

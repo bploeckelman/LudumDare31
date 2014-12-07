@@ -1,9 +1,18 @@
 package levels;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import levels.intercellular.BloodCell;
+import levels.intercellular.TileType;
 
 /**
  * Created by vandillen on 12/6/14.
@@ -11,29 +20,25 @@ import lando.systems.ld31.GameConstants;
 public class IntercellularLevel extends GameLevel {
 
     // Constants
-    private final int slotCellsForShooter = 2;
-    private final int tile_size  = 32;
-    private final int tiles_wide = GameConstants.ScreenWidth / tile_size - 2;
+    public final int tile_size  = 32;
+    private final int tiles_wide = 320 + 16;
     private final int tiles_high = GameConstants.ScreenHeight / tile_size;
+    public Vector2 spawnPoint = new Vector2(GameConstants.GameWidth/2.0f, 40);
+    public BloodCell spawnCell;
 
-    // Ivars
-    private int windowGameSize;
-    private int[] intercellTiles;
-    private int[] cellTileColorAttribute;
-    private String shooter;
-    private int[] incomingCellsForShooter;
-    private String healthMeterName;
-    private int currentHealthNumber;
-    private int windowMargin;
+    public float nextSpawn = 0;
 
+    public Rectangle gameBounds;
+    public ArrayList<BloodCell> cells;
+    
     // Class constructor
     public IntercellularLevel() {
-        windowGameSize = 150; // ** Fix this later **
-        shooter = "shooter";
-        currentHealthNumber = 0;
-        healthMeterName = "healthMeter";
-        caluculateIntercellTiles();
+    	cells = new ArrayList<BloodCell>();
+    	gameBounds = new Rectangle((GameConstants.GameWidth - (tile_size * 10 + 16)) / 2.0f, 0, tile_size * 10 + 16, GameConstants.ScreenHeight);
+    	spawnCell = new BloodCell(spawnPoint.x, spawnPoint.y, this, false);
     }
+    
+
 
     // 2d array to a 1d:
     // index = x + (y * width);
@@ -46,13 +51,7 @@ public class IntercellularLevel extends GameLevel {
 
     // random method for incoming cells to shoot
 
-    // Using gameWindowSize Calculate the vein space for actual play
-    public void caluculateIntercellTiles() {
-        //windowMargin = windowGameSize/4; // ** Fix this later **
-        //int startingTile = clearTile;
-        intercellTiles = new int[5]; // ** Fix this later **
 
-    }
 
     @Override
     public int hasThreat() {
@@ -64,13 +63,110 @@ public class IntercellularLevel extends GameLevel {
 
     }
 
+    public void wipeBoard(){
+    	cells.clear();
+    }
+    
+    public void lose(){
+    	wipeBoard();
+    }
+    
+    public void addChains(){
+    	for(int i = 0; i < cells.size(); i++){
+    		BloodCell cell = cells.get(i);
+    		cell.gridPos.y += 2;
+    		cell.pos.y -= 64;
+    		if (cell.pos.y <= 0){
+    			lose();
+    		}
+    	}
+    	for (int y = 1; y < 3; y++){
+	    	for (int x = 0; x < 10; x++){
+	    		Vector2 gamePos = BloodCell.gridPosToGame(new Vector2(x,y), this);
+	    		BloodCell cell = new BloodCell(gamePos.x, gamePos.y, this, true);
+	    		cell.gridPos = new Vector2(x,y);
+	    		cell.alive = true;
+	    		cell.settled = true;
+	    		cells.add(cell);
+	    	}
+    	}
+    }
+    
+    @Override
+    public boolean touchUp(int screenX, int screenY, int button) {
+    	if (cellsMoving() || nextSpawn <= 0) return false;
+    	Vector2 gamePos = getGamePos(new Vector2(screenX, screenY));
+    	float rot = gamePos.sub(16,16).sub(spawnPoint).angle();
+    	spawnCell.fire(rot);
+    	cells.add(spawnCell);
+    	spawnCell = new BloodCell(spawnPoint.x, spawnPoint.y, this, false);
+    	return true;
+    };
+    
+    public boolean cellsMoving(){
+    	boolean moving = false;
+    	for (int i =0; i < cells.size(); i++){
+    		if (!cells.get(i).settled) moving = true;
+    	}
+    	return moving;
+    }
+    
     @Override
     public void update(float dt) {
-
+    	for (int i = 0; i < cells.size(); i++){
+    		cells.get(i).update(dt);
+    	}
+    	for (int i = cells.size() -1; i >= 0; i--){
+    		if (!cells.get(i).alive) cells.remove(i);
+    	}
+    	if (nextSpawn <= 0 && !cellsMoving()){
+    		addChains();
+    		nextSpawn += 10;
+    	}
+    	nextSpawn = Math.max(nextSpawn - dt, 0);
+    }
+    
+    public BloodCell getCellAtPos(Vector2 pos){
+    	for (int i = 0; i < cells.size(); i++){
+    		if (pos.equals(cells.get(i).gridPos)) return cells.get(i);
+    	}
+    	return null;
+    }
+    
+    public ArrayList<BloodCell> getNeighbors(BloodCell cell){
+    	ArrayList<BloodCell> neighbors= new ArrayList<BloodCell>();
+    	Vector2 grid = cell.gridPos;
+    	int xOffset = 0;
+    	if ((int)grid.y % 2 == 0 ) xOffset = 1;
+    	
+    	BloodCell neighbor = getCellAtPos(new Vector2(grid.x-1 + xOffset, grid.y -1));
+    	if (neighbor != null) neighbors.add(neighbor);
+        neighbor = getCellAtPos(new Vector2(grid.x + xOffset, grid.y -1));
+    	if (neighbor != null) neighbors.add(neighbor);
+    	
+    	neighbor = getCellAtPos(new Vector2(grid.x - 1, grid.y));
+    	if (neighbor != null) neighbors.add(neighbor);
+        neighbor = getCellAtPos(new Vector2(grid.x + 1, grid.y));
+    	if (neighbor != null) neighbors.add(neighbor);
+    	
+    	neighbor = getCellAtPos(new Vector2(grid.x -1 + xOffset, grid.y +1));
+    	if (neighbor != null) neighbors.add(neighbor);
+        neighbor = getCellAtPos(new Vector2(grid.x + xOffset, grid.y +1));
+    	if (neighbor != null) neighbors.add(neighbor);
+    	
+    	return neighbors;
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-
+    	batch.setColor(.3f,.3f,.3f,1);
+    	batch.draw(Assets.squareTex, gameBounds.x, gameBounds.y, gameBounds.width, gameBounds.height);
+    	batch.setColor(Color.WHITE);
+    	for (int i = 0; i < cells.size(); i++){
+    		cells.get(i).draw(batch);
+    	}
+    	if (!cellsMoving()){
+    		spawnCell.draw(batch);
+    	}
     }
 }

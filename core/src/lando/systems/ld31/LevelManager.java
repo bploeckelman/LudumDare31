@@ -36,7 +36,7 @@ public class LevelManager implements InputProcessor{
     	camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
     	camera.update();
         levels[0] = new IntraCellularLevel();
-        levels[1] = new DemoLevel();
+        levels[1] = new IntercellularLevel();
         levels[2] = new Insects();
         levels[3] = new HumanLevel();
         levels[4] = new CityLevel();
