@@ -3,6 +3,8 @@ package levels.citylevel;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import javax.xml.soap.Text;
+
 /**
  * Brian Ploeckelman created on 12/6/2014.
  */
@@ -31,6 +33,11 @@ public class CityAssets {
     public static TextureRegion power_line_corner_rt;
     public static TextureRegion power_line_corner_lb;
     public static TextureRegion power_line_corner_rb;
+    public static TextureRegion power_line_up_t;
+    public static TextureRegion power_line_down_t;
+    public static TextureRegion power_line_left_t;
+    public static TextureRegion power_line_right_t;
+    public static TextureRegion empty;
 
 
     public static void load() {
@@ -56,11 +63,18 @@ public class CityAssets {
         power_line_h         = regions[1][5];
         power_line_v         = regions[1][6];
         power_line_x         = regions[1][7];
+
         power_line_corner_lt = regions[2][0];
         power_line_corner_rt = regions[2][1];
         power_line_corner_lb = regions[2][2];
         power_line_corner_rb = regions[2][3];
 
+        power_line_up_t      = regions[2][4];
+        power_line_down_t    = regions[2][5];
+        power_line_left_t    = regions[2][6];
+        power_line_right_t   = regions[2][7];
+
+        empty = regions[7][7];
 
 
     }
