@@ -16,6 +16,7 @@ public abstract class Enemies {
     protected Sprite enemySprite;
     protected float speed;
     protected ArrayList<Vector2> checkPoints = new ArrayList<Vector2>();
+    protected boolean alive;
 
     protected Vector2 currentPosition;
 
@@ -24,7 +25,13 @@ public abstract class Enemies {
 
         this.checkPoints.add(new Vector2((float) 4.5 * 32, (pathYStart * 32) + 16));
         this.checkPoints.add(new Vector2((float) 4.5 * 32, (pathYStart * 32) + (5*32) + 16));
-
+        this.checkPoints.add(new Vector2((float) 7.5 * 32, (pathYStart * 32) + (5*32) + 16));
+        this.checkPoints.add(new Vector2((float) 7.5 * 32, (pathYStart * 32) - (4*32) + 16));
+        this.checkPoints.add(new Vector2((float) 14.5 * 32, (pathYStart * 32) - (4*32) + 16));
+        this.checkPoints.add(new Vector2((float) 14.5 * 32, (pathYStart * 32) - (7*32) + 16));
+        this.checkPoints.add(new Vector2((float) 18.5 * 32, (pathYStart * 32) - (7*32) + 16));
+        this.checkPoints.add(new Vector2((float) 18.5 * 32, (pathYStart * 32) + 16));
+        this.checkPoints.add(new Vector2((float) 30.5 * 32, (pathYStart * 32) + 16));
 
     }
 
@@ -39,6 +46,8 @@ public abstract class Enemies {
     public void drawSprite(SpriteBatch batch){
         this.enemySprite.draw(batch);
     }
+
+    public boolean alive(){ return this.alive; }
 
     public abstract void updateSprite(float dt);
 }

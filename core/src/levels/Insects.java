@@ -10,6 +10,7 @@ import levels.InsectUtils.MapTiles;
 
 import levels.InsectUtils.Enemies;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -56,11 +57,20 @@ public class Insects extends GameLevel {
             this.enemyDeltaTime = this.enemyDeltaTime + dt;
         }
 
+
+        ArrayList<Enemies> tempEnemies = new ArrayList<Enemies>();
         if(this.enemies != null){
             for(int x = 0; x < this.enemies.size(); x++){
                 this.enemies.get(x).updateSprite(dt);
+                if(this.enemies.get(x).alive()){
+                    tempEnemies.add(this.enemies.get(x));
+                }
             }
+            this.enemies = tempEnemies;
+
         }
+
+
 
 
     }

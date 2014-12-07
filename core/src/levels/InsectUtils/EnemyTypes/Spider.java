@@ -23,14 +23,23 @@ public class Spider extends Enemies {
         this.currentPosition = new Vector2(16, (pathYStart*32) + 16);
         this.enemySprite.setCenter(this.currentPosition.x, this.currentPosition.y);
 
-        this.speed = 20;
+        this.speed = 30;
+        this.alive = true;
 
     }
 
     public void updateSprite(float dt){
 
+        if(this.checkPoints.size() == 0){
+            this.alive = false;
+            return;
+        }
+
         Vector2 target = this.checkPoints.get(0).cpy();
         Vector2 direction = target.sub(currentPosition);
+
+        float rotation = direction.angle();
+        this.enemySprite.setRotation(rotation);
 
         float distance = direction.len();
 
