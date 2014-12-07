@@ -3,6 +3,8 @@ package levels.human;
 import java.util.ArrayList;
 
 import lando.systems.ld31.Score;
+import lando.systems.ld31.ThreatLevel;
+import levels.HumanLevel;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -60,12 +62,16 @@ public class Patron extends MovementImage {
 		boolean puked = false;
 		
 		if (!hasPuked) {
+			ThreatLevel.addThreat(HumanLevel.Title,  10);
 			flipImage = hasPuked = true;
 			_pukeTime = 1f;
 			Score.PukingPatrons++;
 			shouldUpdate = false;
 			puked = true;
-			_vomitSound.play();
+			
+			if (HumanLevel.hasFocus) {
+				_vomitSound.play();
+			}
 		}
 		
 		return puked;

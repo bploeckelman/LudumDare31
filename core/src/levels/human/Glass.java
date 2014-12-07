@@ -2,6 +2,8 @@ package levels.human;
 
 import lando.systems.ld31.GameConstants;
 import lando.systems.ld31.Score;
+import lando.systems.ld31.ThreatLevel;
+import levels.HumanLevel;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,11 +37,16 @@ public class Glass extends MovementImage {
 		boolean crash = (isFull) ? x < -width : x > GameConstants.GameWidth - width;
 		
 		if (crash) {
-			_crashSound.play();
+			if (HumanLevel.hasFocus) { 
+				_crashSound.play();
+			}
+			
 			Score.BrokenGlasses++;
 			if (!isFull) {
 				Score.MissedGlasses++;
 			}
+			
+			ThreatLevel.addThreat(HumanLevel.Title, 5);
 		}
 		
 		return crash;

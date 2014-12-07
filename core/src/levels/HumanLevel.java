@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import lando.systems.ld31.GameConstants;
 import lando.systems.ld31.Score;
+import lando.systems.ld31.ThreatLevel;
 import levels.human.*;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +14,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class HumanLevel extends GameLevel {
 
+	public static final String Title = "HumanLevel";
+	public static boolean hasFocus;
+	
 	public int GlassHeight = 36;
 	
 	// time a glass is invisible from being served
@@ -66,7 +70,7 @@ public class HumanLevel extends GameLevel {
 	
 	@Override
 	public int hasThreat() {
-		return 0;
+		return ThreatLevel.getThreatLevel(HumanLevel.Title);
 	}
 
 	@Override
@@ -103,6 +107,8 @@ public class HumanLevel extends GameLevel {
 
 	@Override
 	public void update(float dt) {
+		hasFocus = top;
+		
 		_bartender.update(dt);
 		for (int i = 0; i < BarCount; i++) {
 			_tappers[i].update(dt);

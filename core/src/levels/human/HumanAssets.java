@@ -1,6 +1,6 @@
 package levels.human;
 
-public class HumanAssets {
+public class HumanAssets {	
 	public static final String Bartender = "tapper/guy.png";
 	public static final String BartenderMove = "tapper/move.wav";
 	
