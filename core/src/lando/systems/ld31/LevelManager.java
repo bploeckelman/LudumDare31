@@ -33,7 +33,7 @@ public class LevelManager implements InputProcessor{
     public void update(float dt){
         for (int i = 0; i < levels.length; i++){
             if (levels[i] == null) continue;
-            levels[i].update(dt);
+            levels[i].update(i == currentLevel ? dt : dt/100.0f);
             if (i == currentLevel){
                 levels[i].handleInput(dt);
             }

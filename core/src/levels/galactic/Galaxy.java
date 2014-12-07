@@ -42,12 +42,12 @@ public class Galaxy {
 			Vector2 galPos = gal.getPos();
 			Vector2 angle = galPos.cpy().sub(pos);
 			float dist2 = MathUtils.clamp(angle.len2(), 1, 10000);
-			float g = 10 * this.mass * gal.mass / dist2;
+			float g = 200 * this.mass * gal.mass / dist2;
 			angle.nor().scl(g);
 			accel.add(angle);
 			
 		}
-		vel.add(accel);
+		vel.add(accel.scl(dt));
 		pos.x += vel.x * dt;
 		pos.y += vel.y * dt;
 	}
