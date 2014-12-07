@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -79,9 +80,9 @@ public abstract class GameLevel {
 		batch.setColor(1, 1, 1, 1);
 		
 		hPad += thickness;
-		vPad += thickness;
+		vPad += (thickness * 4);
 		width -= (thickness*2);
-		Assets.gameFont.drawWrapped(batch, tutorialText, hPad, GameConstants.GameHeight - vPad, width);		
+		Assets.gameFont.drawWrapped(batch, tutorialText, hPad, GameConstants.GameHeight - vPad, width, HAlignment.CENTER);	
 	}
 	
 	public boolean startNext(){
