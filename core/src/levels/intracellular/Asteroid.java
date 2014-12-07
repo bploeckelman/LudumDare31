@@ -40,7 +40,7 @@ public class Asteroid {
 
     public Asteroid(float x, float y) {
         this(x, y, Size.values()[Assets.rand.nextInt(3)],
-                (new Vector2(0, 1)).setAngle(Assets.rand.nextInt(360)).scl(Assets.rand.nextFloat() * 500));
+                (new Vector2(0, 1)).setAngle(Assets.rand.nextInt(360)).scl(Assets.rand.nextFloat() * 300));
     }
 
     public void setPosition(float x, float y) {
