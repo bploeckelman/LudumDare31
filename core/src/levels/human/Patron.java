@@ -14,19 +14,26 @@ public class Patron extends MovementImage {
 	
 	private static Texture _vomit = new Texture(HumanAssets.Puke);
 	private static Texture _puddle = new Texture(HumanAssets.PukePuddle);
+	private static Texture _hat = new Texture(HumanAssets.NurseHat);
 	private static Sound _vomitSound = getSound(HumanAssets.PukeSound);
 	
 	public static int maxX;
 	
+	public boolean isNurse;
+	private ScaleImage _nurseHat;
+	
 	private Glass _glass;
 	private float _glassTime = 1.5f;
 	private float _pukeTime = 0;
+	
 	
 	public Patron(Texture image, int height, int x, int y) {
 		super(image, height, 0f);
 		
 		this.x = x;
 		this.y = y;
+		
+		_nurseHat = new ScaleImage(_hat, 20);
 	}
 	
 	@Override 
@@ -111,6 +118,13 @@ public class Patron extends MovementImage {
 	
 	public void draw(SpriteBatch batch) {
 		super.draw(batch);
+		
+		if (isNurse) {
+			_nurseHat.x = x + 5;
+			_nurseHat.y = y + 70;
+			_nurseHat.flipImage = flipImage;
+			_nurseHat.draw(batch);
+		}
 		
 		if (hasPuked) {
 			if ((_pukeTime - 0.7f) > 0) {		

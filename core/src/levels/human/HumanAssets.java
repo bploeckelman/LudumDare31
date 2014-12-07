@@ -20,4 +20,5 @@ public class HumanAssets {
 	public static final String Puke = "tapper/vomit.png";
 	public static final String PukePuddle = "tapper/puddle.png";
 	public static final String PukeSound = "tapper/vomit.mp3";
+	public static final String NurseHat = "tapper/nurse.png";
 }

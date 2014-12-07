@@ -67,6 +67,7 @@ public class PatronManager {
 		Texture image = _patronGfx[Assets.rand.nextInt(_patronGfx.length)];		
 		Patron patron = new Patron(image, 90, -image.getWidth(), y);
 		patron.speed = 200 + Assets.rand.nextInt(200);
+		patron.isNurse = Assets.rand.nextDouble() < 0.1;
 		return patron;
 	}
 
