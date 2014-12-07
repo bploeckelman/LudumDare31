@@ -8,16 +8,6 @@ import levels.PlanetaryLevel;
 
 public class Earth {
 
-    private static float hW;
-    private static float hH;
-
-    static {
-        hW = PlanetaryLevel.EARTH_WIDTH / 2;
-        hH = PlanetaryLevel.EARTH_HEIGHT / 2;
-    }
-
-    // -----------------------------------------------
-
 
     /** The center position of the object */
     private Vector2 pos = new Vector2();
@@ -32,7 +22,7 @@ public class Earth {
     public Earth() {
 
         baseEarth = new Sprite(Assets.planetaryTempEarth, Assets.planetaryTempEarth.getWidth(), Assets.planetaryTempEarth.getHeight());
-        baseEarth.setSize(PlanetaryLevel.EARTH_WIDTH, PlanetaryLevel.EARTH_HEIGHT);
+        baseEarth.setSize(PlanetaryLevel.EARTH_RADIUS * 2, PlanetaryLevel.EARTH_RADIUS * 2);
         baseEarth.setOriginCenter();
 
     }
@@ -52,8 +42,12 @@ public class Earth {
     }
     public void setPosition(Vector2 position) {
         pos.set(position);
-        baseEarth.setX(pos.x - hW);
-        baseEarth.setY(pos.y - hH);
+        baseEarth.setPosition(
+                pos.x - PlanetaryLevel.EARTH_RADIUS,
+                pos.y - PlanetaryLevel.EARTH_RADIUS
+        );
+//        baseEarth.setX(pos.x - PlanetaryLevel.EARTH_RADIUS);
+//        baseEarth.setY(pos.y - PlanetaryLevel.EARTH_RADIUS);
     }
     public void setRotation(float rotation) {
         r = rotation;

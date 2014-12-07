@@ -17,6 +17,8 @@ public class Assets {
 
     // Planetary
     public static Texture planetaryTempEarth;
+    public static Texture planetaryTempExplosion;
+    public static Texture planetaryTempRocket;
 
     // Insects
     public static InsectsAssets insectsAssets;
@@ -34,6 +36,8 @@ public class Assets {
         ludumdare = new Texture("ludumdare.png");
         squareTex = new Texture("square.png");
         planetaryTempEarth = new Texture("planetary/temp-earth.png");
+        planetaryTempExplosion = new Texture("planetary/temp-missle-explosion.png");
+        planetaryTempRocket = new Texture("planetary/temp_rocket.png");
         rand = new Random();
         insectsAssets = new InsectsAssets();
     }
