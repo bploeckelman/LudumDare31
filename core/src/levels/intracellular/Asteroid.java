@@ -23,8 +23,7 @@ public class Asteroid {
     public Sprite sprite;
     public Vector2 velocity;
     public Vector2 position;
-
-    private Size size;
+    public Size size;
 
     public Asteroid(float x, float y, Size size, Vector2 velocity) {
         this.size = size;

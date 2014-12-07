@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
+import lando.systems.ld31.ThreatLevel;
 import levels.intracellular.Asteroid;
 import levels.intracellular.Bullet;
 import levels.intracellular.IntraCellularAssets;
@@ -16,13 +17,15 @@ public class IntraCellularLevel extends GameLevel {
     public static float waveDuration = 10;
     public static float waveTick = 20;
 
+    private static String screenName = "intracellular";
+
     Ship ship;
     ArrayList<Asteroid> asteroids;
     float nextAsteroid;
     ArrayList<Bullet> bullets;
     float lastFired;
-
     float nextWave;
+    int threatLevel;
 
     public IntraCellularLevel() {
         tutorialText = "Use left and right arrow keys (or a and d) to rotate.\n" +
@@ -41,7 +44,7 @@ public class IntraCellularLevel extends GameLevel {
 
     @Override
     public int hasThreat() {
-        return 0;
+        return ThreatLevel.getThreatLevel(screenName);
     }
 
     @Override
@@ -115,6 +118,7 @@ public class IntraCellularLevel extends GameLevel {
             nextAsteroid = Assets.rand.nextInt(4) + 1;
         }
 
+        threatLevel = 0;
         ASTEROIDS: for(int i = 0; i < asteroids.size(); i++) {
             Asteroid asteroid = asteroids.get(i);
 
@@ -144,7 +148,11 @@ public class IntraCellularLevel extends GameLevel {
             if(ship.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + ship.sprite.getWidth()/2) {
                 ship.reset((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
             }
+
+            threatLevel += asteroid.size.scale * 3;
         }
+
+        ThreatLevel.set(screenName, threatLevel);
     }
 
     @Override

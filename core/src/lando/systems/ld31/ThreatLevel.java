@@ -29,7 +29,11 @@ public class ThreatLevel {
 	{
 		getThreat(screen).reset();
 	}	
-	
+
+	public static void set(String screen, int i) {
+		getThreat(screen).set(i);
+	}
+
 	private int _level;
 	
 	private void reset() {
@@ -42,5 +46,9 @@ public class ThreatLevel {
 	
 	private int getThreatLevel() {
 		return MathUtils.clamp(_level / 25, 0, 3);
+	}
+
+	private void set(int i) {
+		_level = i;
 	}
 }
