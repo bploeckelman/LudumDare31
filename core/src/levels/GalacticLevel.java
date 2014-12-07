@@ -13,10 +13,13 @@ import com.badlogic.gdx.math.Vector2;
 public class GalacticLevel extends GameLevel {
 	MilkyWay home;
 	List<Galaxy> galaxies = new ArrayList<Galaxy>();
+	float spawnTimer = 0;
 	
 	public GalacticLevel(){
-		home = new MilkyWay(camera.viewportWidth/2.0f, camera.viewportHeight/2.0f);
-		galaxies.add(new Galaxy(new Vector2(0, 0), new Vector2(0,0)));
+		home = new MilkyWay(new Vector2(camera.viewportWidth/2.0f, camera.viewportHeight/2.0f));
+		galaxies.add(home);
+		galaxies.add(new Galaxy(new Vector2(camera.viewportWidth/2.0f, 0)));
+		galaxies.add(new Galaxy(new Vector2(0, camera.viewportHeight/2.0f)));
 	}
 	
 	@Override
@@ -35,7 +38,7 @@ public class GalacticLevel extends GameLevel {
 	@Override
 	public void update(float dt) {
 		for (int i = 0; i < galaxies.size(); i++){
-			galaxies.get(i).update(dt);
+			galaxies.get(i).update(dt, galaxies);
 		}
 
 	}
@@ -43,7 +46,7 @@ public class GalacticLevel extends GameLevel {
 	@Override
 	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stub
-		home.draw(batch);
+		
 		for (int i = 0; i < galaxies.size(); i++){
 			galaxies.get(i).draw(batch);
 		}

@@ -116,6 +116,51 @@ public abstract class GameLevel {
 	}
 	
 	/**
+	 * This method is called whenever the mouse is clicked. Make sure you call getGamePos
+	 * so it is in game coords
+	 * @param screenX
+	 * @param screenY
+	 * @param button
+	 * @return
+	 */
+	protected boolean touchDown(int screenX, int screenY, int button) {
+		return false;
+	}
+	
+	/**
+	 * This is a method that is called whenever the mouse is let go. Make sure you
+	 * call getGamePos so it is in game coords
+	 * @param screenX
+	 * @param screenY
+	 * @param button
+	 * @return
+	 */
+	protected boolean touchUp(int screenX, int screenY, int button) {
+		return false;
+	}
+	
+	/**
+	 * This will only be called when the mouse moves and a button is down.
+	 * Make sure you call getGamePos so it is in game coords.
+	 * @param screenX
+	 * @param screenY
+	 * @return
+	 */
+	public boolean touchDragged(int screenX, int screenY) {
+		return false;
+	}
+	
+	/**
+	 * This is called whenever the mouse is moved, even if it isn't clicked. Make
+	 * @param screenX
+	 * @param screenY
+	 * @return
+	 */
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+	
+	/**
 	 * 0 - no Threat
 	 * 1 - Mild
 	 * 2 - Medium

@@ -1,27 +1,31 @@
 package levels.galactic;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import lando.systems.ld31.Assets;
-import lando.systems.ld31.GameObject;
 
-public class MilkyWay extends GameObject{
+public class MilkyWay extends Galaxy{
 
-	Sprite sprite;
+
 	
-	public MilkyWay(float x, float y){
+	public MilkyWay(Vector2 pos){
+		super(pos);
 		sprite = new Sprite(Assets.squareTex);
 		sprite.setOriginCenter();
-		sprite.setPosition(x, y);
 		sprite.setSize(40, 40);
+		sprite.setCenter(pos.x, pos.y);
+		mass = 20;
 
 	}
 	
 	@Override
-	public void draw(SpriteBatch batch) {
-		sprite.draw(batch);
+	public void update(float dt, List<Galaxy> gals){
+		//TODO check for destruction
 	}
+
 
 }
