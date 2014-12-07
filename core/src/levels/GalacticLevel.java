@@ -39,8 +39,14 @@ public class GalacticLevel extends GameLevel {
 	
 	@Override
 	public boolean touchDown(int screenX, int screenY, int button) {
+		Vector2 gamePos = getGamePos(new Vector2(screenX, screenY));
 		for (int i = 0; i < galaxies.size(); i++){
-			System.out.println("Down");
+			Galaxy gal = galaxies.get(i);
+			if (gamePos.cpy().dst(gal.getPos()) < gal.width){
+				touchedGalaxy = gal;
+				touchedGalaxy.path.clear();
+				break;
+			}
 		}
 		return false;
 	};
@@ -53,6 +59,10 @@ public class GalacticLevel extends GameLevel {
 	
 	@Override
 	public boolean touchDragged(int screenX, int screenY) {
+		if (touchedGalaxy != null){
+			Vector2 gamePos = getGamePos(new Vector2(screenX, screenY));
+			touchedGalaxy.path.add(gamePos);
+		}
 		return false;
 	};
 
