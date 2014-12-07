@@ -48,6 +48,12 @@ public class IntraCellularLevel extends GameLevel {
     }
 
     @Override
+    public void reset() {
+        asteroids.clear();
+        ThreatLevel.reset(screenName);
+    }
+
+    @Override
     public void handleInput(float dt) {
         if(isLeftPressed()) {
             ship.setRotation(ship.getRotation() + 7);
