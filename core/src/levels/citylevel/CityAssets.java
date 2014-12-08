@@ -47,6 +47,8 @@ public class CityAssets {
 
     public static TextureRegion empty;
 
+    public static Texture clouds_texture;
+    public static TextureRegion clouds;
 
     public static void load() {
         city_background = new Texture("city/city_map.png");
@@ -91,7 +93,9 @@ public class CityAssets {
 
         empty = regions[7][7];
 
-
+        clouds_texture = new Texture("city/clouds.png");
+        clouds_texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        clouds = new TextureRegion(clouds_texture);
     }
 
 }

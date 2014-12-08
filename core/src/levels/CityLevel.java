@@ -1,6 +1,8 @@
 package levels;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.equations.*;
 import aurelienribon.tweenengine.primitives.MutableFloat;
 import com.badlogic.gdx.Gdx;
@@ -42,6 +44,7 @@ public class CityLevel extends GameLevel {
     float disasterThreshold = 3f;
 
     MutableFloat glowAlpha = new MutableFloat(0);
+    MutableFloat cloudAlpha = new MutableFloat(0);
 
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
@@ -65,6 +68,13 @@ public class CityLevel extends GameLevel {
         glowAlpha = new MutableFloat(0.025f);
         Tween.to(glowAlpha, 0, 1.33f)
                 .target(0.125f)
+                .ease(Quad.INOUT)
+                .repeatYoyo(Tween.INFINITY, 0)
+                .start(LudumDare31.tweens);
+
+        cloudAlpha = new MutableFloat(0.3f);
+        Tween.to(cloudAlpha, 0, 5)
+                .target(0.2f)
                 .ease(Quad.INOUT)
                 .repeatYoyo(Tween.INFINITY, 0)
                 .start(LudumDare31.tweens);
@@ -92,7 +102,6 @@ public class CityLevel extends GameLevel {
                 powerGrid[y][x].visited = false;
             }
         }
-//        powerGrid[bary][barx].energized = true;
         powerGrid[bary][barx].isBar = true;
 
         // Figure out which powerlines are energized
@@ -111,7 +120,14 @@ public class CityLevel extends GameLevel {
 //            Gdx.app.log("THRESHOLD", "disaster threshold achieved, new threshold: " + disasterThreshold);
             disasterStrike();
         }
+
+        scrollAccum += dt;
+        if (scrollAccum > 0.1f) {
+            scrollAccum -= 0.1f;
+            CityAssets.clouds.scroll(dt * -0.2f, dt * 0.2f);
+        }
     }
+    float scrollAccum = 0;
 
     @Override
     public void draw(SpriteBatch batch) {
@@ -133,7 +149,11 @@ public class CityLevel extends GameLevel {
             }
         }
 
+        batch.setColor(1.0f, 1.0f, 1.0f, cloudAlpha.floatValue());
+        batch.draw(CityAssets.clouds, 0, margin_bottom, camera.viewportWidth, camera.viewportHeight - margin_bottom);
+
         // HUD type stuff ---------------------
+        batch.setColor(Color.WHITE);
         powerBar.draw(batch);
 
         // Draw the currently active power grid type
