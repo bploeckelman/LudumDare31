@@ -15,7 +15,7 @@ public class Spider extends Enemies {
         super(pathYStart);
 
         this.name = "Spider";
-        this.health = 3;
+        this.health = 3f;
         this.value = 1;
         Texture spiderTexture = Assets.insectsAssets.Spider;
         this.enemySprite = new Sprite(spiderTexture);
@@ -25,7 +25,8 @@ public class Spider extends Enemies {
         this.currentPosition = new Vector2(16, (pathYStart*32) + 16);
         this.enemySprite.setCenter(this.currentPosition.x, this.currentPosition.y);
 
-        this.speed = 10;
+        this.currentSpeed = 20;
+        this.originalSpeed = 20;
         this.alive = true;
 
     }
@@ -37,6 +38,18 @@ public class Spider extends Enemies {
             return;
         }
 
+        if(this.slowEnemyFor != 0){
+            if(this.slowDelta > this.slowEnemyFor){
+                // if our delta is bigger, meaning that we've gone the amount of time for slow, then reset
+                this.currentSpeed = this.originalSpeed;
+                this.slowEnemyFor = 0;
+                this.slowDelta = 0;
+            }else{
+                this.slowDelta = this.slowDelta + dt;
+            }
+        }
+
+
         Vector2 target = this.checkPoints.get(0).cpy();
         Vector2 direction = target.sub(currentPosition);
 
@@ -45,11 +58,11 @@ public class Spider extends Enemies {
 
         float distance = direction.len();
 
-        if(distance < (dt * this.speed)){
+        if(distance < (dt * this.currentSpeed)){
             this.currentPosition = this.checkPoints.get(0);
             this.checkPoints.remove(0);
         }else{
-            direction.nor().scl(dt*this.speed);
+            direction.nor().scl(dt*this.currentSpeed);
             this.currentPosition.add(direction);
         }
 

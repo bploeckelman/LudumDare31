@@ -13,7 +13,7 @@ public abstract class Bullet {
     protected Sprite bulletSprite;
     protected float  shotSpeed;
     protected Vector2 currentPosition;
-    protected int damage;
+    protected float damage;
     protected Enemies target;
     protected boolean onScreen;
 

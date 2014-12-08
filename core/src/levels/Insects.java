@@ -1,5 +1,6 @@
 package levels;
 
+import aurelienribon.tweenengine.equations.Quad;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +16,8 @@ import levels.InsectUtils.MapTileTypes.Path;
 import levels.InsectUtils.MapTileTypes.Beer;
 
 import levels.InsectUtils.TowerTypes.Dart;
+import levels.InsectUtils.TowerTypes.Poison;
+import levels.InsectUtils.TowerTypes.Slow;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -129,12 +132,34 @@ public class Insects extends GameLevel {
         }
 
         // don't add towers to path
-        if(this.baseMap[cellXNum][cellYNum] instanceof Path || this.baseMap[cellXNum][cellYNum] instanceof Beer ||
-                                                                            this.baseMap[cellXNum][cellYNum].hasTower()){
+        if(this.baseMap[cellXNum][cellYNum] instanceof Beer || this.baseMap[cellXNum][cellYNum].hasTower()){
             return false;
         }
 
-        Tower newTower = new Dart(new Vector2(cellXNum * 32, cellYNum * 32));
+        // get newTower based on current tower type
+        Tower newTower;
+
+        // first check if the cell num is an instance of path, if so and our current tower type is slow, then add it
+
+        if(this.baseMap[cellXNum][cellYNum] instanceof Path && this.currentTowerType == "Slow"){
+
+            newTower = new Slow(new Vector2(cellXNum * 32, cellYNum * 32));
+
+        }else if(this.baseMap[cellXNum][cellYNum] instanceof Path) {
+            // don't allow other towers to be created
+
+            return false;
+
+        }else{
+            if(this.currentTowerType == "Dart"){
+                newTower = new Dart(new Vector2(cellXNum * 32, cellYNum * 32));
+            }else if(this.currentTowerType == "Poison"){
+                newTower = new Poison(new Vector2(cellXNum * 32, cellYNum * 32));
+            }else{
+                return false; // if we haven't found a tower yet return false
+            }
+        }
+
 
         if(this.money >= newTower.getCost()){
             this.money = this.money - newTower.getCost();
@@ -179,18 +204,14 @@ public class Insects extends GameLevel {
         }
 
 
-        ArrayList<Enemies> tempEnemies = new ArrayList<Enemies>();
+
         if(this.enemies != null){
             for(int x = 0; x < this.enemies.size(); x++){
                 this.enemies.get(x).updateSprite(dt);
                 if(this.enemies.get(x).alive()) {
-                    tempEnemies.add(this.enemies.get(x));
                     this.updateThreat(this.enemies.get(x).pathsLeft());
-                }else{
-                    this.money = this.money + this.enemies.get(x).getValue();
                 }
             }
-            this.enemies = tempEnemies;
         }
 
         if(this.towers != null){
@@ -246,7 +267,18 @@ public class Insects extends GameLevel {
 
         if(this.enemies != null){
             for(int x = 0; x < this.enemies.size(); x++){
-                this.enemies.get(x).drawSprite(batch);
+                if(this.enemies.get(x).alive()){
+                    this.enemies.get(x).drawSprite(batch);
+                }else{
+                    for(int j = 0; j < 40; j++){
+                        Vector2 cellCenter = this.enemies.get(x).getCurrentPosition();
+                        Vector2 dest = new Vector2(1, 0).rotate(Assets.rand.nextInt(360)).scl(Assets.rand.nextFloat() * 15)
+                                .add(cellCenter);
+                        particles.addParticle(cellCenter, dest, Color.WHITE, Color.YELLOW, 1f, Quad.OUT);
+                    }
+                    this.money = this.money + this.enemies.get(x).getValue();
+                    this.enemies.remove(x);
+                }
             }
         }
 
