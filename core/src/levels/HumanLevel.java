@@ -249,6 +249,10 @@ public class HumanLevel extends GameLevel {
 		
 	@Override
 	public void draw(SpriteBatch batch) {
+		batch.setColor(0.5f, 0.5f, 0.5f, 1.0f);
+		batch.draw(Assets.barFloor, 0, 0, camera.viewportWidth, camera.viewportHeight);
+
+		batch.setColor(Color.WHITE);
 		_patronManager.draw(batch);
 		
 		for (int i = 0; i < BarCount; i++) {

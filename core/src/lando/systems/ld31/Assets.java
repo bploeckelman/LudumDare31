@@ -26,6 +26,7 @@ public class Assets {
     public static Texture bloodVessel;
     public static Texture galaxyBackground;
     public static Texture galaxy;
+    public static Texture barFloor;
 
     // Planetary
     public static Texture planetaryTempExplosion;
@@ -72,6 +73,8 @@ public class Assets {
         galaxyBackground = new Texture("galactic/background.png");
         galaxy = new Texture("galactic/galaxy.png");
         galaxy.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+        barFloor = new Texture("tapper/floor.jpg");
 
         // Planetary
         plAsteroids = new ArrayList<Texture>();
