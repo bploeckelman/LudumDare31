@@ -2,7 +2,6 @@ package levels;
 
 import java.util.ArrayList;
 
-import sun.org.mozilla.javascript.internal.ast.NewExpression;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.equations.Linear;
 import aurelienribon.tweenengine.equations.Quad;
