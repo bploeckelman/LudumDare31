@@ -17,6 +17,7 @@ public class GalacticLevel extends GameLevel {
 	float spawnTimer = 0;
 	
 	public GalacticLevel(){
+		tutorialText = "Our Galaxy is in trouble, drag paths to keep the galaxies from colliding with ours";
 		home = new MilkyWay(new Vector2(camera.viewportWidth/2.0f, camera.viewportHeight/2.0f));
 		galaxies.add(home);
 		galaxies.add(new Galaxy(new Vector2(camera.viewportWidth/2.0f, 0)));
