@@ -7,6 +7,8 @@ import lando.systems.ld31.LevelManager;
 import lando.systems.ld31.Score;
 import lando.systems.ld31.SoundManager;
 import lando.systems.ld31.ThreatLevel;
+import lando.systems.ld31.TransitionManager;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -160,6 +162,7 @@ public class Patron extends MovementImage {
 				batch.draw(_vomit, x + width/2, y - 70);
 			} else {
 				batch.draw(_puddle,  x,  y - 63);
+				TransitionManager.Instance.handleVomit(x, y - 63, _puddle.getWidth(), _puddle.getHeight());		
 			}
 		}
 	}

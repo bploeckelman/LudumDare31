@@ -2,6 +2,8 @@ package levels;
 
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.LevelManager;
+import lando.systems.ld31.LudumDare31;
 import lando.systems.ld31.ParticleSystem;
 import lando.systems.ld31.TutorialManager;
 
@@ -227,6 +229,37 @@ public abstract class GameLevel {
 				tutorialText = null;
 			}
 		}
+		
+		//temp
+		debugLevelJump();
+	}
+	
+	private void debugLevelJump() {
+		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
+		{		
+			LevelManager lm = LudumDare31.levelMgr;
+			
+			if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) {
+				lm.addLevel(0);
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
+				lm.addLevel(1);
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_2)){
+				lm.addLevel(2);
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_3)){
+				lm.addLevel(3);
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_4)){
+				lm.addLevel(4);
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_5)){
+				lm.addLevel(5);
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_6)){
+				lm.addLevel(6);;
+			} else if (Gdx.input.isKeyJustPressed(Keys.NUM_7)){
+				lm.addLevel(7);
+			} 
+		}
+		
+		
+		
 	}
 		
 	protected void gotFocus(boolean hasFocus) { }

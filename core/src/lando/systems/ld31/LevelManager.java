@@ -45,19 +45,54 @@ public class LevelManager implements InputProcessor{
     	camera = new OrthographicCamera(GameConstants.ScreenWidth, GameConstants.ScreenHeight);
     	camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
     	camera.update();
-        levels[0] = new IntraCellularLevel();
-        levels[1] = new IntercellularLevel();
-        levels[2] = new Insects();
+        //levels[0] = new IntraCellularLevel();
+        //levels[1] = new IntercellularLevel();
+        //levels[2] = new Insects();
         levels[3] = new HumanLevel();
-        levels[4] = new CityLevel();
-        levels[5] = new PlanetaryLevel();
-        levels[6] = new GalacticLevel();
-        levels[7] = new Snowman();
+        //levels[4] = new CityLevel();
+        //levels[5] = new PlanetaryLevel();
+        //levels[6] = new GalacticLevel();
+        //levels[7] = new Snowman();
         currentLevel = 3;
         lastLevel = -1;
         Gdx.input.setInputProcessor(this);
         currentFBO = new FrameBuffer(Pixmap.Format.RGB888, GameConstants.ScreenWidth, GameConstants.ScreenHeight, false);
         lastFBO = new FrameBuffer(Pixmap.Format.RGB888, GameConstants.ScreenWidth, GameConstants.ScreenHeight, false);
+    }
+    
+    public void addLevel(int index) {
+    	
+    	if (index < 0 || index >= levels.length || levels[index] != null) return;
+    	
+    	switch (index) {
+    		case 0:
+    			levels[0] = new IntraCellularLevel();
+    			break;
+    		case 1:
+    			levels[1] = new IntercellularLevel();
+    			break;
+    		case 2:
+    			levels[2] = new Insects();
+    			break;
+    			// starts on 3
+    		case 3:
+    			levels[3] = new HumanLevel();
+    			break;
+    		case 4:
+    			levels[4] = new CityLevel();
+    			break;
+    		case 5:
+	    		levels[5] = new PlanetaryLevel();
+	    		break;
+    		case 6:
+    			levels[6] = new GalacticLevel();
+	        	break;
+    		case 7:
+    			levels[7] = new Snowman();
+    			break;
+    	}
+
+    	setLevel(index);
     }
    
     private final float transitionLength = 1f;
@@ -68,12 +103,15 @@ public class LevelManager implements InputProcessor{
     	targetLevel = index;
     	
     	lastLevel = currentLevel;
-    	if (currentLevel < targetLevel)
-    	{
-    		currentLevel ++;
-    	} else {
-    		currentLevel --;
-    	}
+    	do {
+	    	if (currentLevel < targetLevel)
+	    	{
+	    		currentLevel ++;
+	    	} else {
+	    		currentLevel --;
+	    	}
+    	} while (levels[currentLevel] == null);
+    	
         
         
         transition.setValue(1f);

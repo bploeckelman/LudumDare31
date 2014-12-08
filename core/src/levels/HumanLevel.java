@@ -144,7 +144,7 @@ public class HumanLevel extends GameLevel {
 		}
 	}
 	
-	float _glassRegen = 2f;
+	float _glassRegen = 4f;
 
 	@Override
 	public void update(float dt) {
