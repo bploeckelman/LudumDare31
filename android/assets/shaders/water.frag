@@ -14,9 +14,8 @@ uniform float time;
 
 void main()
 {
-
-  vec2 offset = vec2(sin(time * 2.5 * v_texCoords.x), cos(time * 1.5 * v_texCoords.y))* .01;
-  vec4 color = texture2D(u_texture, offset + v_texCoords);
+  vec2 offset = vec2(sin(time + 20.5 * v_texCoords.x), cos(time + 16.5 * v_texCoords.y))* .01;
+  vec4 color = texture2D(u_texture, offset + v_texCoords) * v_color;
 
   gl_FragColor = color;
 }
