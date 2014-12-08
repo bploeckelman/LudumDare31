@@ -14,7 +14,7 @@ public class Dart extends Bullet {
     public Dart(Vector2 origin, Enemies target, int towerDamage){
 
         this.name = "Dart";
-        this.shotSpeed = 20;
+        this.shotSpeed = 40;
         this.damage = 1;
         Sprite  newBullet = new Sprite(Assets.insectsAssets.DartBullet);
         newBullet.setSize(4, 4);

@@ -5,10 +5,15 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
 
 public class Ship {
+    public static float invulnerabilityTime = 2;
+
     public Sprite sprite;
     public Vector2 velocity;
     public Vector2 acceleration = new Vector2(0,1);
     public Vector2 position;
+    public boolean isThrusting;
+    public float invulnerabilityTimeLeft;
+
 
     public Ship(float x, float y) {
         sprite = new Sprite(IntraCellularAssets.ship);
@@ -17,6 +22,8 @@ public class Ship {
 
         velocity = new Vector2(0, 0);
         position = new Vector2(x, y);
+
+        invulnerabilityTimeLeft = invulnerabilityTime;
     }
 
     public void setRotation(float d) {
@@ -58,6 +65,7 @@ public class Ship {
     public void reset(float x, float y) {
         setPosition(x, y);
         velocity.set(0, 0);
+        invulnerabilityTimeLeft = invulnerabilityTime;
     }
 
     public void accelerate(float dt) {
@@ -75,5 +83,14 @@ public class Ship {
 
     public Bullet shoot() {
         return new Bullet(position.x, position.y, sprite.getRotation() + 90, velocity);
+    }
+
+    public void thrust(boolean t) {
+        isThrusting = t;
+        if(isThrusting) {
+            sprite.setTexture(IntraCellularAssets.shipThrusting);
+        } else {
+            sprite.setTexture(IntraCellularAssets.ship);
+        }
     }
 }

@@ -2,6 +2,7 @@ package levels;
 
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.ParticleSystem;
 import lando.systems.ld31.TutorialManager;
 
 import com.badlogic.gdx.Gdx;
@@ -22,6 +23,7 @@ public abstract class GameLevel {
 	public String tutorialText;
 	protected boolean startNext;
 	public boolean top;
+	protected ParticleSystem particles;
 	
 	private static TutorialManager _tutorialManager = new TutorialManager();
 	
@@ -30,6 +32,7 @@ public abstract class GameLevel {
 	 * level is ready to be handled.
 	 */
 	public GameLevel(){
+		particles = new ParticleSystem();
 		camera = new OrthographicCamera(GameConstants.ScreenWidth, GameConstants.ScreenHeight);
 		camera.translate(camera.viewportWidth/2, camera.viewportHeight/2, 0);
 		camera.update();
@@ -57,8 +60,11 @@ public abstract class GameLevel {
 		batch.setColor(0,0,0,1);
 		batch.draw(Assets.squareTex, 0, 0, camera.viewportWidth, camera.viewportHeight);
 		batch.setColor(1,1,1,1);
-				
+			
+		
 		draw(batch);
+		
+		particles.draw(batch);
 		
 		_tutorialManager.draw(batch, tutorialText);
 	}
@@ -202,7 +208,7 @@ public abstract class GameLevel {
 	public void update(float dt, boolean isTop)
 	{
 		top = isTop;
-		
+		particles.update(dt);
 		if (!isTop) {
 			dt /= 2;
 		}
@@ -234,8 +240,11 @@ public abstract class GameLevel {
 	public abstract void draw(SpriteBatch batch);
 	
 	public void playSound(Sound sound) {
+		playSound(sound, 1);
+	}
+	public void playSound(Sound sound, float volume) {
 		if (top) {
-			sound.play();
+			sound.play(volume);
 		}
 	}
 }

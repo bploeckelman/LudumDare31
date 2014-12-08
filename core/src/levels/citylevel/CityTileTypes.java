@@ -80,8 +80,8 @@ public enum CityTileTypes {
              || a == power_line_corner_lt || a == power_line_corner_rt);
     }
     public static boolean connectsDown(CityTileTypes a) {
-        return (a == power_line_x         || a == power_line_h
-             || a == power_line_up_t      || a == power_line_left_t     || a == power_line_right_t
+        return (a == power_line_x         || a == power_line_v
+             || a == power_line_down_t    || a == power_line_left_t     || a == power_line_right_t
              || a == power_line_corner_lb || a == power_line_corner_rb);
     }
     public static boolean connectsLeft(CityTileTypes a) {

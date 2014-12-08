@@ -9,6 +9,8 @@ import javax.xml.soap.Text;
  */
 public class InsectsAssets {
 
+
+    public static Texture HUDTile;
     public static Texture Bar;
     public static Texture Path;
     public static Texture Beer;
@@ -19,8 +21,12 @@ public class InsectsAssets {
 
     public static Texture DartBullet;
 
+    public static Texture TowerSelectBG;
+    public static Texture TowerSelectBGSelected;
+
     public InsectsAssets(){
 
+        HUDTile = new Texture("insects/HUDTile.png");
         Bar = new Texture("insects/Bar.png");
         Beer = new Texture("insects/Beer.png");
         Path = new Texture("insects/Path.png");
@@ -30,6 +36,9 @@ public class InsectsAssets {
         DartTower = new Texture("insects/DartTower.png");
 
         DartBullet = new Texture("insects/DartBullet.png");
+
+        TowerSelectBG = new Texture("insects/TowerSelectBG.png");
+        TowerSelectBGSelected = new Texture("insects/TowerSelectBG-selected.png");
     }
 
     public void dispose(){
