@@ -13,10 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-import lando.systems.ld31.Assets;
-import lando.systems.ld31.GameConstants;
-import lando.systems.ld31.LudumDare31;
-import lando.systems.ld31.TransitionManager;
+import lando.systems.ld31.*;
 import levels.citylevel.*;
 
 import java.util.HashMap;
@@ -274,6 +271,7 @@ public class CityLevel extends GameLevel {
             if (!tile.isBar && tile.powerGridType != CityTileTypes.empty)  {
 //                Gdx.app.log("DISASTER", "disaster struck at " + x + ", " + y);
                 placePowerGridTile(x, y, CityTileTypes.empty);
+                LevelManager.powerLevel = numBarConnections;
                 break;
             }
         }
