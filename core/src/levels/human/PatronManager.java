@@ -80,7 +80,7 @@ public class PatronManager {
 	private Patron createPatron(int y) {
 		Texture image = _patronGfx[Assets.rand.nextInt(_patronGfx.length)];	
 		Patron patron = new Patron(image, 90, -image.getWidth(), y);
-		patron.speed = 200 + Assets.rand.nextInt(200);
+		patron.speed = 30 + Assets.rand.nextInt(200);
 		
 		if (Assets.rand.nextDouble() < 0.15) {
 			patron.setPatronType(Assets.rand.nextBoolean() ? Patron.PatronType.nurse : PatronType.exterminator);

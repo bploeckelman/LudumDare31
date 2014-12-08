@@ -137,7 +137,6 @@ public class LevelManager implements InputProcessor{
         	batch.draw(tex, GameConstants.GameWidth + 48, GameConstants.ScreenHeight - 196 - (i * 75), 32, 75);
         	
         	batch.draw(Assets.sidebarLabels[i], GameConstants.GameWidth + 2, GameConstants.ScreenHeight - 196 - (i * 75), 78, 75);
-
         }
         
         float trans = 0;

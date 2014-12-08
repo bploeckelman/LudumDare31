@@ -2,6 +2,7 @@ package levels;
 
 import java.util.ArrayList;
 
+import sun.org.mozilla.javascript.internal.ast.NewExpression;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.equations.Linear;
 import aurelienribon.tweenengine.equations.Quad;
@@ -10,6 +11,7 @@ import aurelienribon.tweenengine.equations.Quart;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer.Random;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -32,7 +34,7 @@ public class IntercellularLevel extends GameLevel {
     public final int tile_size  = 32;
     private final int tiles_wide = 320 + 16;
     private final int tiles_high = GameConstants.ScreenHeight / tile_size;
-    public Vector2 spawnPoint = new Vector2(GameConstants.GameWidth/2.0f, 40);
+    public Vector2 spawnPoint = new Vector2(GameConstants.GameWidth/2.0f, 30);
     public BloodCell spawnCell;
 
     public float nextSpawn = 0;
@@ -47,6 +49,7 @@ public class IntercellularLevel extends GameLevel {
     	cells = new ArrayList<BloodCell>();
     	gameBounds = new Rectangle((GameConstants.GameWidth - (tile_size * 10 + 16)) / 2.0f, 0, tile_size * 10 + 16, GameConstants.ScreenHeight);
     	spawnCell = new BloodCell(spawnPoint.x, spawnPoint.y, this, false);
+
     }
     
 
@@ -66,7 +69,19 @@ public class IntercellularLevel extends GameLevel {
 
     @Override
     public int hasThreat() {
-        return 0;
+        int highestRow = 0;
+        for (int i = 0; i < cells.size(); i++){
+        	BloodCell cell = cells.get(i);
+        	if (highestRow < cell.gridPos.y){
+        		highestRow = (int)cell.gridPos.y;
+        	}
+        }
+        if (highestRow < 10){
+        	return 0;
+        } 
+        if (highestRow < 14) return 1;
+        if (highestRow < 18) return 2;
+        return 3;
     }
 
     @Override
@@ -98,16 +113,16 @@ public class IntercellularLevel extends GameLevel {
     	for (int y = 1; y < 3; y++){
 	    	for (int x = 0; x < 10; x++){
 	    		Vector2 gamePos = BloodCell.gridPosToGame(new Vector2(x,y), this);
-	    		BloodCell cell = new BloodCell(gamePos.x, gamePos.y, this, true);
+	    		BloodCell cell = new BloodCell(gamePos.x, gamePos.y + 64, this, true);
 	    		cell.gridPos = new Vector2(x,y);
 	    		cell.alive = true;
 	    		cell.settled = true;
 	    		cells.add(cell);
-	    		cell.color.set(cell.color.r, cell.color.g, cell.color.b, 0);
-	            Tween.to(cell.color, ColorAccessor.COLOR_A, .5f)
-	            .target(1)
-	            .ease(Quart.IN)
+	            Tween.to(cell.pos, Vector2Accessor.POSITION_Y, .5f)
+	            .target(cell.pos.y - 64)
+	            .ease(Linear.INOUT)
 	            .start(LudumDare31.tweens);
+
 	    	}
     	}
     }
@@ -150,7 +165,7 @@ public class IntercellularLevel extends GameLevel {
     	}
     	if (nextSpawn <= 0 && !cellsMoving()){
     		addChains();
-    		nextSpawn += 10;
+    		nextSpawn += 20 + Assets.rand.nextInt(20);
     	}
     	nextSpawn = Math.max(nextSpawn - dt, 0);
     	fixHangers();
@@ -162,6 +177,14 @@ public class IntercellularLevel extends GameLevel {
     	}
     	return null;
     }
+    
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+    	Vector2 dir = getGamePos(new Vector2(screenX, screenY)).sub(spawnPoint).nor();
+    	Vector2 shootPos = new Vector2(0, 1).setAngle(dir.angle()).scl(40).add(spawnPoint);
+    	spawnCell.pos = shootPos;
+    	return true;
+    };
     
     public void fixHangers(){
     	ArrayList<BloodCell> chain = new ArrayList<BloodCell>();
