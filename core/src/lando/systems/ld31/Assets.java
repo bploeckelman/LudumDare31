@@ -3,12 +3,9 @@ package lando.systems.ld31;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-<<<<<<< Updated upstream
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-=======
->>>>>>> Stashed changes
 import levels.InsectUtils.InsectsAssets;
 
 import java.util.ArrayList;
