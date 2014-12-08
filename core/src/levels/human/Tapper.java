@@ -28,6 +28,6 @@ public class Tapper {
 	
 	public void serve() {
 		_serveTime = 1f;
-		SoundManager.play(LevelManager.Levels.Human, HumanAssets.Sounds.Pour);
+		SoundManager.play(LevelManager.Levels.Human, HumanAssets.Sounds.Pour, 0.3f);
 	}
 }
