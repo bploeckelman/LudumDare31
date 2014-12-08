@@ -46,6 +46,7 @@ public class CityLevel extends GameLevel {
     float disasterThreshold = 3f;
     float levelTimer = 30f;
 
+    MutableFloat cursorPulse = new MutableFloat(1);
     MutableFloat glowAlpha = new MutableFloat(0);
     MutableFloat cloudAlpha = new MutableFloat(0);
     MutableFloat lightningBoltTimer = new MutableFloat(0);
@@ -72,6 +73,13 @@ public class CityLevel extends GameLevel {
         generatePowerGrid();
         generateTiles();
         enableGenerators();
+
+        cursorPulse.setValue(0.9f);
+        Tween.to(cursorPulse, 0, 1)
+                .target(1.1f)
+                .ease(Circ.INOUT)
+                .repeatYoyo(Tween.INFINITY, 0)
+                .start(LudumDare31.tweens);
 
         glowAlpha = new MutableFloat(0.025f);
         Tween.to(glowAlpha, 0, 1.33f)
@@ -168,7 +176,7 @@ public class CityLevel extends GameLevel {
             batch.draw(CityAssets.lightningBoltAnim.getKeyFrame(lightningBoltTimer.floatValue()),
                     lastLightningTileX * tile_size - 16, lastLightningTileY * tile_size + margin_bottom);
             batch.draw(CityAssets.lightningFlashAnim.getKeyFrame(lightningBoltTimer.floatValue()),
-                    0, margin_bottom, camera.viewportWidth, camera.viewportHeight - 100);
+                    0, margin_bottom, camera.viewportWidth, camera.viewportHeight);
         }
 
         batch.setColor(1.0f, 1.0f, 1.0f, cloudAlpha.floatValue());
@@ -176,15 +184,19 @@ public class CityLevel extends GameLevel {
 
         // HUD type stuff ---------------------
         batch.setColor(Color.WHITE);
-        powerBar.draw(batch);
+        powerBar.draw(batch, cursorPulse.floatValue());
 
         // Draw the currently active power grid type
+        final float pulse_offset = 1.6f;
         batch.setColor(Color.DARK_GRAY);
         batch.draw(Assets.squareTex,
-                tilePos.x * tile_size, tilePos.y * tile_size + margin_bottom, tile_size, tile_size);
+                tilePos.x * tile_size - pulse_offset, tilePos.y * tile_size + margin_bottom - pulse_offset,
+                tile_size * cursorPulse.floatValue(), tile_size * cursorPulse.floatValue());
+
         batch.setColor(Color.WHITE);
         batch.draw(textures.get(powerBar.currentPowerLineType),
-                tilePos.x * tile_size, tilePos.y * tile_size + margin_bottom, tile_size, tile_size);
+                tilePos.x * tile_size - pulse_offset, tilePos.y * tile_size + margin_bottom - pulse_offset,
+                tile_size * cursorPulse.floatValue(), tile_size * cursorPulse.floatValue());
 
         // Draw the number of connections to the bar
         batch.draw((stationConnections[0] ? CityAssets.fuse_on : CityAssets.fuse_off), 32 * 0 + 2, 0);

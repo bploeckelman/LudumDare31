@@ -15,7 +15,9 @@ public class PowerConnectionBar {
 
     final float grid_width = CityLevel.tiles_wide * CityLevel.tile_size;
     final float queue_width = tile_size * queue_tiles_wide;
-    final float margin_left = grid_width / 2f - queue_width / 2f;
+
+    // push bar to the right so current tile is centered under map
+    final float margin_left = grid_width / 2f - queue_width / 2f + tile_size * 2;
 
     CityTileTypes[] powerLineQueue;
 
@@ -30,26 +32,27 @@ public class PowerConnectionBar {
         // ...
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch, float pulseScale) {
+        pulseScale -= 0.1f;
+
+        // Draw the power line grid type in each cell along with its border
         batch.setColor(0.4f, 0.4f, 0.4f, 1.0f);
-
-        // Draw the power line grid type in each cell
         batch.draw(CityLevel.textures.get(powerLineQueue[0]), margin_left + tile_size * 0, 4, tile_size - 8, tile_size - 8);
-        batch.draw(CityLevel.textures.get(powerLineQueue[1]), margin_left + tile_size * 1, 4, tile_size - 8, tile_size - 8);
-        batch.draw(CityLevel.textures.get(powerLineQueue[2]), margin_left + tile_size * 2, 4, tile_size - 8, tile_size - 8);
-        batch.draw(CityLevel.textures.get(powerLineQueue[3]), margin_left + tile_size * 3, 4, tile_size - 8, tile_size - 8);
-
-        // Draw cell borders
         batch.draw(CityAssets.empty, margin_left + tile_size * 0, 4, tile_size - 8, tile_size - 8);
+        batch.setColor(0.3f, 0.3f, 0.3f, 1.0f);
+        batch.draw(CityLevel.textures.get(powerLineQueue[1]), margin_left + tile_size * 1, 4, tile_size - 8, tile_size - 8);
         batch.draw(CityAssets.empty, margin_left + tile_size * 1, 4, tile_size - 8, tile_size - 8);
+        batch.setColor(0.2f, 0.2f, 0.2f, 1.0f);
+        batch.draw(CityLevel.textures.get(powerLineQueue[2]), margin_left + tile_size * 2, 4, tile_size - 8, tile_size - 8);
         batch.draw(CityAssets.empty, margin_left + tile_size * 2, 4, tile_size - 8, tile_size - 8);
+        batch.setColor(0.1f, 0.1f, 0.1f, 1.0f);
+        batch.draw(CityLevel.textures.get(powerLineQueue[3]), margin_left + tile_size * 3, 4, tile_size - 8, tile_size - 8);
         batch.draw(CityAssets.empty, margin_left + tile_size * 3, 4, tile_size - 8, tile_size - 8);
 
-        batch.setColor(Color.WHITE);
-
         // Draw the current power line grid type and cell border
-        batch.draw(CityLevel.textures.get(currentPowerLineType), margin_left + tile_size * -1, 0, tile_size, tile_size);
-        batch.draw(CityAssets.empty, margin_left + tile_size * -1, 0, tile_size, tile_size);
+        batch.setColor(Color.WHITE);
+        batch.draw(CityLevel.textures.get(currentPowerLineType), margin_left + tile_size * -1, 0, tile_size * pulseScale, tile_size * pulseScale);
+        batch.draw(CityAssets.empty, margin_left + tile_size * -1, 0, tile_size * pulseScale, tile_size * pulseScale);
     }
 
     // -------------------------------------------------------------------------
