@@ -38,6 +38,8 @@ public class LevelManager implements InputProcessor{
     public int lastLevel;
     public int targetLevel;
     public MutableFloat transition = new MutableFloat(0);
+    private final float transitionLength = .5f;
+    
     private final FrameBuffer currentFBO;
     private final FrameBuffer lastFBO;
     private OrthographicCamera camera;
@@ -96,7 +98,7 @@ public class LevelManager implements InputProcessor{
     	setLevel(index);
     }
    
-    private final float transitionLength = 1f;
+
     public void setLevel(int index){
     	if (index < 0 || index >= levels.length) return;
     	if (lastLevel != -1 || index == currentLevel) return;
@@ -187,17 +189,10 @@ public class LevelManager implements InputProcessor{
         	batch.draw(Assets.sidebarLabels[i], GameConstants.GameWidth + 2, GameConstants.ScreenHeight - 196 - (i * 75), 78, 75);
         }
         
-        float trans = 0;
-        if (lastLevel == -1) {
-        	trans = 0;
+        if (currentLevel < 7){
+        	float trans = transition.floatValue() * Math.signum(lastLevel - currentLevel);
+	        batch.draw(Assets.sidebarSelection, GameConstants.GameWidth + 46, GameConstants.ScreenHeight - 199 - ((currentLevel + trans) * 75.0f));
         }
-        else if (lastLevel < currentLevel){
-        	trans = -transition.floatValue();
-        } else {
-        	trans =  transition.floatValue();
-        }
-        batch.draw(Assets.sidebarSelection, GameConstants.GameWidth + 46, GameConstants.ScreenHeight - 199 - ((currentLevel + trans) * 75.0f));
-        
         batch.end();
     }
 

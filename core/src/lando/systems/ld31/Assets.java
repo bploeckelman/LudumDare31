@@ -2,6 +2,7 @@ package lando.systems.ld31;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -23,6 +24,8 @@ public class Assets {
     public static Random rand;
     public static Texture milkyWay;
     public static Texture bloodVessel;
+    public static Texture galaxyBackground;
+    public static Texture galaxy;
 
     // Planetary
     public static Texture planetaryTempExplosion;
@@ -66,6 +69,9 @@ public class Assets {
         ludumdare = new Texture("ludumdare.png");
         squareTex = new Texture("square.png");
         milkyWay = new Texture("galactic/milkyway.png");
+        galaxyBackground = new Texture("galactic/background.png");
+        galaxy = new Texture("galactic/galaxy.png");
+        galaxy.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         // Planetary
         plAsteroids = new ArrayList<Texture>();
@@ -105,6 +111,7 @@ public class Assets {
         bloodRegions = TextureRegion.split(new Texture("intercellular/a_final_blood.png"), 32, 32);
         rand = new Random();
         insectsAssets = new InsectsAssets();
+        
         
         //ShaderProgram.pedantic = false;
         

@@ -31,14 +31,14 @@ public class Galaxy {
 		isMilkyWay = false;
 		alive = true;
 		this.vel = new Vector2(0,0); // head towards the center
-		sprite = new Sprite(Assets.milkyWay);
+		sprite = new Sprite(Assets.galaxy);
 
 		
-		sprite.setSize(40, 40);
+		sprite.setSize(60, 60);
 		sprite.setCenter(pos.x, pos.y);
 		sprite.setOriginCenter();
 		mass = 5;
-		width = 40;
+		width = 60;
 
 
 	}
@@ -48,6 +48,7 @@ public class Galaxy {
 	}
 	
 	public void update(float dt, List<Galaxy> gals){
+		sprite.rotate(mass * 4 * dt);
 		for (int i = 0; i < gals.size(); i++){
 			Galaxy gal = gals.get(i);
 			if (gal == this) continue;
@@ -101,8 +102,10 @@ public class Galaxy {
 		sprite.setCenter(pos.x, pos.y);
 		sprite.setOriginCenter();
 		sprite.draw(batch);
-		Vector2 lastPoint = pos.cpy();
-		for (int i = 0; i < path.size(); i++){
+		Vector2 lastPoint = new Vector2();
+		if (!path.isEmpty())
+			lastPoint = path.get(0);
+		for (int i = 1; i < path.size(); i++){
 		
 			Vector2 point = path.get(i);
 			Vector2 dir = point.cpy().sub(lastPoint);

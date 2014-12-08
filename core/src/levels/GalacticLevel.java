@@ -114,6 +114,7 @@ public class GalacticLevel extends GameLevel {
 	@Override
 	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stub
+		batch.draw(Assets.galaxyBackground, 0, 0, camera.viewportWidth, camera.viewportHeight);
 		
 		for (int i = 0; i < galaxies.size(); i++){
 			galaxies.get(i).draw(batch);
