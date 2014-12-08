@@ -48,8 +48,11 @@ public class IntraCellularLevel extends GameLevel {
         nextAsteroid = 0;
         bullets = new ArrayList<Bullet>();
         lastFired = Bullet.fireRate;
-        nextWave = 3;
-        timeAccum = 0;
+        nextWave = 5;
+        timeAccum = 0;        	
+        for (int i = 0; i < 3; i ++){
+            asteroids.add(new Asteroid(camera.viewportWidth - 100, camera.viewportHeight));           
+        }
     }
 
     @Override
@@ -120,7 +123,7 @@ public class IntraCellularLevel extends GameLevel {
     @Override
     public void update(float dt) {
     	levelTimer -= dt;
-    	if (levelTimer < 0){
+    	if (levelTimer < 0 || asteroids.isEmpty()){
     		TransitionManager.Instance.defendGalaxy();
     		levelTimer = 10000;
     	}
@@ -169,9 +172,7 @@ public class IntraCellularLevel extends GameLevel {
             nextWave = (Assets.rand.nextFloat() * waveDuration) + waveTick;
         }
         if(nextAsteroid <= 0 && nextWave <= waveDuration) {
-        	for (int i = 0; i < 3; i ++){
             asteroids.add(new Asteroid(camera.viewportWidth - 100, camera.viewportHeight));           
-        	}
         	nextAsteroid = Assets.rand.nextInt(4) + 1;
         }
 
