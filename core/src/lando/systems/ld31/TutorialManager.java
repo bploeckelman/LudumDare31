@@ -15,9 +15,9 @@ public class TutorialManager {
 			float width = GameConstants.ScreenWidth- (_hPad*2);
 			float height = GameConstants.GameHeight - (_vPad*2);
 						
-			Box.draw(batch,  _hPad,  _vPad,  width,  height,  Color.BLACK);
+			Box.draw(batch,  64,  _vPad,  width,  height,  Color.BLACK);
 			Assets.gameFont.drawWrapped(batch, tutorialText, 
-					_hPad, GameConstants.GameHeight - (_vPad + _thickness + 18),
+					   64, GameConstants.GameHeight - (_vPad + _thickness + 18),
 					width, HAlignment.CENTER);	
 		}
 	}
