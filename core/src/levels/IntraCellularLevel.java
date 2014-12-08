@@ -242,7 +242,7 @@ public class IntraCellularLevel extends GameLevel {
     public void draw(SpriteBatch batch) {
     	batch.setShader(Assets.waterProgram);
     	Assets.waterProgram.setUniformf("time", timeAccum);
-        batch.draw(IntraCellularAssets.background, 0, 0, camera.viewportWidth - 100, camera.viewportHeight);
+        batch.draw(Assets.cellbackground, 0, 0, camera.viewportWidth - 100, camera.viewportHeight);
         batch.setShader(null);
 
         for(int i = 0; i < bullets.size(); i++) {

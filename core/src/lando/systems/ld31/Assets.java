@@ -27,6 +27,7 @@ public class Assets {
     public static Texture galaxyBackground;
     public static Texture galaxy;
     public static Texture barFloor;
+    public static Texture cellbackground;
 
     // Planetary
     public static Texture planetaryTempExplosion;
@@ -75,6 +76,8 @@ public class Assets {
         galaxy.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         barFloor = new Texture("tapper/floor.jpg");
+        cellbackground = new Texture("intracellular/background_924x768.png");
+        cellbackground.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         // Planetary
         plAsteroids = new ArrayList<Texture>();
