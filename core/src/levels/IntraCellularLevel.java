@@ -10,6 +10,7 @@ import lando.systems.ld31.Assets;
 import lando.systems.ld31.LevelManager;
 import lando.systems.ld31.SoundManager;
 import lando.systems.ld31.ThreatLevel;
+import lando.systems.ld31.TransitionManager;
 import levels.intracellular.Asteroid;
 import levels.intracellular.Bullet;
 import levels.intracellular.IntraCellularAssets;
@@ -31,6 +32,7 @@ public class IntraCellularLevel extends GameLevel {
     float nextWave;
     int threatLevel;
     float timeAccum;
+    float levelTimer = 30;
 
     public IntraCellularLevel() {
         tutorialText = "Use mouse to rotate.\n" +
@@ -109,6 +111,11 @@ public class IntraCellularLevel extends GameLevel {
 
     @Override
     public void update(float dt) {
+    	levelTimer -= dt;
+    	if (levelTimer < 0){
+    		TransitionManager.Instance.defendGalaxy();
+    		levelTimer = 10000;
+    	}
     	timeAccum += dt;
         ship.invulnerabilityTimeLeft = ship.invulnerabilityTimeLeft <= 0 ? 0 : ship.invulnerabilityTimeLeft - dt;
 
@@ -154,8 +161,10 @@ public class IntraCellularLevel extends GameLevel {
             nextWave = (Assets.rand.nextFloat() * waveDuration) + waveTick;
         }
         if(nextAsteroid <= 0 && nextWave <= waveDuration) {
-            asteroids.add(new Asteroid(camera.viewportWidth - 100, camera.viewportHeight));
-            nextAsteroid = Assets.rand.nextInt(4) + 1;
+        	for (int i = 0; i < 3; i ++){
+            asteroids.add(new Asteroid(camera.viewportWidth - 100, camera.viewportHeight));           
+        	}
+        	nextAsteroid = Assets.rand.nextInt(4) + 1;
         }
 
         threatLevel = 0;

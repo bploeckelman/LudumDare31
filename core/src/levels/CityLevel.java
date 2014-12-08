@@ -55,6 +55,7 @@ public class CityLevel extends GameLevel {
     Vector2 tilePos = new Vector2();
 
     public CityLevel() {
+    	tutorialText = "The bugs are under control for now. Looks like power to your bar is under threat.  Reconnect it to the power stations";
         CityAssets.load();
 
         textures = new HashMap<CityTileTypes, TextureRegion>();

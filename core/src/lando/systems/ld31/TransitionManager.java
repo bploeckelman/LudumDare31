@@ -54,4 +54,12 @@ public class TransitionManager {
 		LevelManager lm = LudumDare31.levelMgr;
 		lm.addLevel(0); // lets asteroids
 	}
+	
+	public boolean galaxies;
+	public void defendGalaxy(){
+		if (galaxies) return;
+		galaxies = true;
+		LevelManager lm = LudumDare31.levelMgr;
+		lm.addLevel(6); // lets ATC
+	}
 }
