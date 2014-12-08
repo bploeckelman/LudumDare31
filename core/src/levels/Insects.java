@@ -55,8 +55,7 @@ public class Insects extends GameLevel {
 
     public Insects(){
         super();
-        tutorialText = "Looks like some insects are getting into your dirty bar.  Kill them with towers";
-
+        tutorialText = "Bugs are in your dirty bar!\nSelect and place bug killing tech with your mouse.\n\nDon't forget about your partons\n\nZoom back by clicking on the green bar on the left";
         this.currentThreat = 0;
         this.enemyDeltaTime = 0;
         this.money = 15;
@@ -96,13 +95,15 @@ public class Insects extends GameLevel {
 
     }
 
-
     public boolean touchUp(int screenX, int screenY, int button) {
-
-        // first check for selecting tower type
-        this.selectTower(getGamePos(new Vector2(screenX, screenY)));
-
-        return this.addTower(getGamePos(new Vector2(screenX, screenY)));
+    	boolean handled = false;
+    	if (tutorialText == null) {
+    		Vector2 pos = getGamePos(new Vector2(screenX, screenY));
+    		selectTower(pos);
+    		handled = addTower(pos);
+    	}
+    	super.touchUp(screenX, screenY, button);
+    	return handled;
     }
 
     protected void selectTower(Vector2 pointClicked){
