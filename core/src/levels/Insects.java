@@ -173,6 +173,8 @@ public class Insects extends GameLevel {
     @Override
     public void update(float dt) {
 
+
+
         if(this.currentWave != null){
             if(!this.currentWave.isComplete()){
 
@@ -204,6 +206,9 @@ public class Insects extends GameLevel {
         }
 
 
+
+        // reset current threat to nothing before updating all enemies
+        this.currentThreat = 0;
 
         if(this.enemies != null){
             for(int x = 0; x < this.enemies.size(); x++){
