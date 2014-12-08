@@ -12,13 +12,13 @@ import lando.systems.ld31.GameConstants;
  * Teaching and Research Application Development
  * Copyright 2014 Board of Regents of the University of Wisconsin System
  */
-public class Astroid extends DestroyableObject {
+public class Asteroid extends DestroyableObject {
 
-    private static final String TAG = "Astroid";
+    private static final String TAG = "Asteroid";
 
     private static final float STAGING_TIME = 4;
 
-    private Sprite astroid;
+    private Sprite asteroid;
 
     private Vector2 pos;
     private Vector2 trajectory;
@@ -30,7 +30,7 @@ public class Astroid extends DestroyableObject {
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    public Astroid(Vector2 origin, Vector2 trajectory, float radius, float rotationalVelocity) {
+    public Asteroid(Vector2 origin, Vector2 trajectory, float radius, float rotationalVelocity) {
 
         this.timer = 0;
 
@@ -40,9 +40,9 @@ public class Astroid extends DestroyableObject {
         this.rotationalVelocity = rotationalVelocity;
         this.radius = radius;
 
-        astroid = new Sprite(Assets.plAsteroids.get(Assets.rand.nextInt(Assets.plAsteroids.size())));
-        astroid.setSize(this.radius * 2, this.radius * 2);
-        astroid.setOriginCenter();
+        asteroid = new Sprite(Assets.plAsteroids.get(Assets.rand.nextInt(Assets.plAsteroids.size())));
+        asteroid.setSize(this.radius * 2, this.radius * 2);
+        asteroid.setOriginCenter();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -50,11 +50,11 @@ public class Astroid extends DestroyableObject {
     @Override
     public void draw(SpriteBatch batch) {
 
-        if (destroyable) {
+        if (destroyable || timer <= STAGING_TIME) {
             return;
         }
 
-        astroid.draw(batch);
+        asteroid.draw(batch);
 
     }
 
@@ -74,14 +74,14 @@ public class Astroid extends DestroyableObject {
             if (pos.x < -radius || pos.x > GameConstants.GameWidth + radius ||
                     pos.y < -radius || pos.y > GameConstants.GameHeight + radius) {
                 // It's gone, destroy it.
-                Gdx.app.log(TAG, "we've destroyed an off-screen astroid");
+                Gdx.app.log(TAG, "we've destroyed an off-screen asteroid");
                 setDestroyable(true);
             }
             // Position it.
-            astroid.setCenter(pos.x, pos.y);
+            asteroid.setCenter(pos.x, pos.y);
 
             // Update the rotation
-            astroid.setRotation((astroid.getRotation() + (rotationalVelocity * dt)) % 360);
+            asteroid.setRotation((asteroid.getRotation() + (rotationalVelocity * dt)) % 360);
 
         }
 
