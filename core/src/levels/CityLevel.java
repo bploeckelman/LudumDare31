@@ -1,5 +1,8 @@
 package levels;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.equations.*;
+import aurelienribon.tweenengine.primitives.MutableFloat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.LudumDare31;
 import levels.citylevel.*;
 
 import java.util.HashMap;
@@ -37,6 +41,8 @@ public class CityLevel extends GameLevel {
     float disasterTimer = 0f;
     float disasterThreshold = 3f;
 
+    MutableFloat glowAlpha = new MutableFloat(0);
+
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
     Vector2 tilePos = new Vector2();
@@ -55,6 +61,13 @@ public class CityLevel extends GameLevel {
         generatePowerGrid();
         generateTiles();
         enableGenerators();
+
+        glowAlpha = new MutableFloat(0.025f);
+        Tween.to(glowAlpha, 0, 1.33f)
+                .target(0.125f)
+                .ease(Quad.INOUT)
+                .repeatYoyo(Tween.INFINITY, 0)
+                .start(LudumDare31.tweens);
     }
 
     @Override
@@ -103,7 +116,7 @@ public class CityLevel extends GameLevel {
     @Override
     public void draw(SpriteBatch batch) {
         batch.setProjectionMatrix(camera.combined);
-        batch.setColor(0.4f, 0.4f, 0.4f, 1.0f);
+        batch.setColor(0.7f, 0.7f, 0.7f, 1.0f);
         batch.draw(CityAssets.city_background, 0, margin_bottom);
 
         batch.setColor(Color.WHITE);
@@ -112,7 +125,7 @@ public class CityLevel extends GameLevel {
                 batch.draw(textures.get(powerGrid[y][x].powerGridType),
                         x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
                 if (powerGrid[y][x].energized) {
-                    batch.setColor(1, 0.78f, 0, 0.2f);
+                    batch.setColor(1, 1, 0, glowAlpha.floatValue());
                     batch.draw(Assets.squareTex,
                             x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
                     batch.setColor(Color.WHITE);
@@ -234,7 +247,7 @@ public class CityLevel extends GameLevel {
                 break;
             }
         }
-        Gdx.app.log("DISASTER", "got off safe this time...");
+//        Gdx.app.log("DISASTER", "got off safe this time...");
     }
 
     LinkedList<PowerTile> connectionQueue = new LinkedList<PowerTile>();

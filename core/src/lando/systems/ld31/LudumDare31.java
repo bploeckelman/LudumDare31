@@ -21,14 +21,12 @@ public class LudumDare31 extends ApplicationAdapter {
     public void create () {
     	
     	Assets.load();
-    	
-    	levelMgr = new LevelManager();
-    	
-    	tweens = new TweenManager();       
+
+    	tweens = new TweenManager();
         Tween.setCombinedAttributesLimit(4);
 		Tween.registerAccessor(Vector2.class, new Vector2Accessor());
 		Tween.registerAccessor(Color.class, new ColorAccessor());
-        
+
 		levelMgr = new LevelManager();
         batch = new SpriteBatch();
     }
