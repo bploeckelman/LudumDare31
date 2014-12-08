@@ -9,7 +9,7 @@ public class Rocket extends DestroyableObject {
 
     private static final String TAG = "Rocket";
     public static final float LENGTH = 28f;
-    public static final float ACCELERATION = 180f; // per second
+    public static final float ACCELERATION = 512f; // per second
     public static final float TOP_SPEED = 1024f;
 
 
