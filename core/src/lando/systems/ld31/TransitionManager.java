@@ -9,6 +9,7 @@ public class TransitionManager {
 	public static final TransitionManager Instance = new TransitionManager();
 	
 	public boolean vomitHandled;
+	public boolean antsHandled;
 	
 	public void handleVomit(float x, float y, float width, float height)
 	{
@@ -21,5 +22,12 @@ public class TransitionManager {
 		level.zoomOutPoint = new Vector2(x + width/2, y + height/2);
 
 		lm.addLevel(2);
+	}
+	
+	public void finishedAnts(){
+		if (antsHandled) return;
+		antsHandled = true;
+		LevelManager lm = LudumDare31.levelMgr;
+		lm.addLevel(4); // lets do power
 	}
 }

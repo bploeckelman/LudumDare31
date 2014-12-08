@@ -30,7 +30,7 @@ public class Galaxy {
 		isMilkyWay = false;
 		alive = true;
 		this.vel = new Vector2(0,0); // head towards the center
-		sprite = new Sprite(Assets.squareTex);
+		sprite = new Sprite(Assets.milkyWay);
 
 		
 		sprite.setSize(40, 40);
