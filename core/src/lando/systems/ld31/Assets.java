@@ -96,7 +96,8 @@ public class Assets {
         planetaryTempRocket = new Texture("planetary/temp_rocket.png");
 
 
-        sidebarBackground = new Texture("sidebar/side_meter_backdrop.png");
+//        sidebarBackground = new Texture("sidebar/side_meter_backdrop.png");
+        sidebarBackground = new Texture("level_meter_bg2.jpg");
         sidebarBlack= new Texture("sidebar/side_meter_fill_black.png");
         sidebarStatus[0] = new Texture("sidebar/side_meter_fill_green.png");
         sidebarStatus[1] = new Texture("sidebar/side_meter_fill_yellow.png");
