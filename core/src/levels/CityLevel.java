@@ -10,10 +10,9 @@ import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
 import levels.citylevel.*;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 /**
  * Brian Ploeckelman created on 12/6/2014.
@@ -212,7 +211,7 @@ public class CityLevel extends GameLevel {
         }
     }
 
-    Queue<PowerTile> connectionQueue = new ArrayDeque<PowerTile>();
+    LinkedList<PowerTile> connectionQueue = new LinkedList<PowerTile>();
     private void updateBarPowerConnections() {
         numBarConnections = 0;
         // TODO (brian): do

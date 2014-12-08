@@ -29,7 +29,7 @@ public class InsectsAssets {
 
     public InsectsAssets(){
 
-        HUDTile = new Texture("insects/HUDTile.png");
+        HUDTile = new Texture("insects/HUDtile.png");
         Bar = new Texture("insects/Bar.png");
         Beer = new Texture("insects/Beer.png");
         Path = new Texture("insects/Path.png");
