@@ -2,11 +2,15 @@ package levels.human;
 
 import java.util.ArrayList;
 
+import sun.util.logging.resources.logging;
 import lando.systems.ld31.Assets;
+import lando.systems.ld31.TransitionManager;
 import levels.human.Patron.PatronType;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Logger;
 
 public class PatronManager {
 	
@@ -22,6 +26,8 @@ public class PatronManager {
 	float _patronAddTime = 1f;
 	float _addReset = 3f;
 	
+	boolean _isResetting;
+	
 	public PatronManager(int[] barlocations) {
 		_barlocations = barlocations;
 		reset();
@@ -30,51 +36,65 @@ public class PatronManager {
 	public void reset() {
 		_patronAddTime = 1f;
 		_addReset = 3f;
-		_patrons.clear();
+		_isResetting = true;
+		
+		for (Patron p : _patrons) {
+			p.runaway();
+		}
 	}
 	
 	public void update(ArrayList<Glass> glasses, ArrayList<TimedImage> items, float dt) {
-		_patronAddTime -= dt;
-			
+		
 		for (int i = 0; i < _patrons.size(); i++) {
 			_patrons.get(i).check(glasses);
 		}
-	
+		
 		// update
 		for (int i = _patrons.size() - 1; i >= 0; i--) {
+			if (i < 0) continue; // on a reset - this could be 0
+			
 			Patron patron = _patrons.get(i);
 			patron.update(dt);
 			if (patron.remove) {
-				Texture drop = patron.getDrop();
-				
-				if (drop != null && items.size() < 4) {
-					TimedImage item = new TimedImage(drop, 40);
-					item.tag = patron.patronType;
-					item.level = patron.level;
-					item.x = patron.x;
-					item.y = patron.y - 4;
+				if (patron.hasPuked) {
+					TransitionManager.Instance.handleVomit(patron.getPukeSpot());	
+				} else {
+					Texture drop = patron.getDrop();
 					
-					items.add(item);
+					if (drop != null && items.size() < 4) {
+						TimedImage item = new TimedImage(drop, 40);
+						item.tag = patron.patronType;
+						item.level = patron.level;
+						item.x = patron.x;
+						item.y = patron.y - 4;
+						
+						items.add(item);
+					}
 				}
-				
 				_patrons.remove(patron);
 			}
 		}
 		
-		// add
-		if (_patronAddTime < 0) {
-			if (_addReset > 1f) { 
-				_addReset -= 0.2f;
-			}
-			
-			_patronAddTime = _addReset;
-			
-			int barLevel = Assets.rand.nextInt(_barlocations.length);
-			int y = _barlocations[barLevel] + 60;		
-			Patron patron = createPatron(y);			
-			patron.level = barLevel;
-			_patrons.add(patron);			
-		}		
+		if (_isResetting) {
+			_isResetting = _patrons.size() > 0;
+		} else {
+			_patronAddTime -= dt;
+				
+			// add
+			if (_patronAddTime < 0) {
+				if (_addReset > 1f) { 
+					_addReset -= 0.2f;
+				}
+				
+				_patronAddTime = _addReset;
+				
+				int barLevel = Assets.rand.nextInt(_barlocations.length);
+				int y = _barlocations[barLevel] + 60;		
+				Patron patron = createPatron(y);			
+				patron.level = barLevel;
+				_patrons.add(patron);			
+			}	
+		}
 	}
 	
 	private Patron createPatron(int y) {

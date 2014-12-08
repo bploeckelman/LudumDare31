@@ -1,6 +1,7 @@
 package lando.systems.ld31;
 
 public class Score {
+	public static int CashMoneyYo;
 	
 	public static int Total;
 	

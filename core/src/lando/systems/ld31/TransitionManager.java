@@ -13,7 +13,7 @@ public class TransitionManager {
 	public boolean heartAttackStarted;
 	public boolean defendPlanet;
 	
-	public void handleVomit(float x, float y, float width, float height)
+	public void handleVomit(Vector2 pukeSpot)
 	{
 		if (vomitHandled) return;
 		vomitHandled = true;
@@ -21,8 +21,7 @@ public class TransitionManager {
 		LevelManager lm = LudumDare31.levelMgr;
 		
 		GameLevel level = lm.levels[lm.currentLevel];
-		level.zoomOutPoint = new Vector2(x + width/2, y + height/2);
-
+		level.zoomOutPoint = pukeSpot;
 		lm.addLevel(2);
 	}
 	

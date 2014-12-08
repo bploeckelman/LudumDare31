@@ -47,10 +47,11 @@ public class HumanLevel extends GameLevel {
 	
 	int _glassCount = 20;
 	GlassWidget _glassWidget = new GlassWidget();
+	ScoreWidget _cashWidget = new ScoreWidget();
 	
 	public HumanLevel()
 	{
-		tutorialText = "Keep the thirsty patrons satisfied and keep your tavern clean, or you might get sick...\n\n\nMove: Up, Down, Left\nServe: Right";
+		tutorialText = "Living the dream. Keep it clean and keep them coming.\n\n\nMove: Up, Down, Left\nServe: Right";
 		_barTexture = new Texture(HumanAssets.Bar);
 		
 		Patron.maxX = _barTexture.getWidth();
@@ -191,6 +192,7 @@ public class HumanLevel extends GameLevel {
 	
 		_patronManager.update(_glasses, _items, dt);
 		_glassWidget.update(_glassCount, dt);
+		_cashWidget.update(dt);
 		
 		_glassRegen -= dt;
 		if (_glassRegen < 0) {
@@ -225,8 +227,9 @@ public class HumanLevel extends GameLevel {
 		
 		_bartender.draw(batch);
 		
-		if (top) {
+		if (tutorialText == null) {
 			_glassWidget.draw(batch);
+			_cashWidget.draw(batch);
 		}
 
 	
@@ -239,7 +242,5 @@ public class HumanLevel extends GameLevel {
 	@Override
 	public void reset() {
 		_patronManager.reset();
-		_glasses.clear();
-		_items.clear();
 	}
 }

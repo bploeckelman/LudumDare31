@@ -41,8 +41,6 @@ public class Glass extends MovementImage {
 			if (!isFull) {
 				Score.MissedGlasses++;
 			}
-			
-			ThreatLevel.addThreat(LevelManager.Levels.Human, 5);
 		}
 		
 		return crash;

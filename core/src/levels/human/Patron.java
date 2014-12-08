@@ -11,6 +11,7 @@ import lando.systems.ld31.TransitionManager;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 
 public class Patron extends MovementImage {
@@ -38,6 +39,9 @@ public class Patron extends MovementImage {
 	private float _glassTime = 1.5f;
 	private float _pukeTime = 0;
 	
+	private boolean runningAway;
+	// point patrons 'run' to before coming back for more
+	private int _runawayCheck = -400;
 	
 	public Patron(Texture image, int height, int x, int y) {
 		super(image, height, 0f);
@@ -84,26 +88,31 @@ public class Patron extends MovementImage {
 		boolean isMax = x > (maxX - width);
 		
 		if (isMax && puke()) {
-			return false;			
+			isMax = false;			
+		} else {
+			isMax = checkGlass() || (runningAway && (x < _runawayCheck));
 		}
 		
-		return isMax || checkGlass();
+		return isMax;
 	}
 	
 	public boolean hasPuked;
+	private float _pukeX;
+	private float _pukeY;
 	
 	private boolean puke() {
 		boolean puked = false;
 		
 		if (!hasPuked) {
-			ThreatLevel.addThreat(LevelManager.Levels.Human,  10);
 			flipImage = hasPuked = true;
 			_pukeTime = 1f;
 			Score.PukingPatrons++;
 			shouldUpdate = false;
-			puked = true;
-			
+			puked = true;			
 			SoundManager.play(LevelManager.Levels.Human,  HumanAssets.Sounds.Puke);
+			_pukeX = x;
+			_pukeY = y - 63;
+			LevelManager.resetPatrons();
 		}
 		
 		return puked;
@@ -125,8 +134,12 @@ public class Patron extends MovementImage {
 			}
 		} else {
 			_glass.remove = true;
-			Score.Total += 200;
 			remove = true;
+		}
+		
+		if (remove) {
+			Score.Total += 200;
+			Score.CashMoneyYo += 5;
 		}
 		
 		return remove;
@@ -161,8 +174,7 @@ public class Patron extends MovementImage {
 			if ((_pukeTime - 0.7f) > 0) {		
 				batch.draw(_vomit, x + width/2, y - 70);
 			} else {
-				batch.draw(_puddle,  x,  y - 63);
-				TransitionManager.Instance.handleVomit(x, y - 63, _puddle.getWidth(), _puddle.getHeight());		
+				batch.draw(_puddle,  _pukeX,  _pukeY);	
 			}
 		}
 	}
@@ -185,5 +197,15 @@ public class Patron extends MovementImage {
 		}
 		
 		return dropImage;
+	}
+
+	public void runaway() {
+		// scream?
+		runningAway = true;
+		speed = -300 + Assets.rand.nextInt(150);
+	}
+
+	public Vector2 getPukeSpot() {
+		return new Vector2(_pukeX + _puddle.getWidth()/2, _pukeY + _puddle.getHeight()/2);
 	}
 }
