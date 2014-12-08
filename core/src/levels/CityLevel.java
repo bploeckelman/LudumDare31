@@ -24,21 +24,15 @@ public class CityLevel extends GameLevel {
     public static final int tiles_high = GameConstants.ScreenHeight / tile_size - 2;
     public static final float margin_bottom = tile_size * 2;
 
-    // ------- OLD SHIT vvvvvv --------------------------
-
-    CityTileTypes tiles[][];
-
-    CityPowerSource[] powerSources;
-    int barx, bary;
-
-    // ------- OLD SHIT ^^^^^^ --------------------------
-
     public static Map<CityTileTypes, TextureRegion> textures;
 
-    PowerTile powerGrid[][];
+    CityTileTypes tiles[][];
+    PowerTile[][] powerGrid;
+    CityPowerSource[] powerSources;
     PowerConnectionBar powerBar;
 
     int numBarConnections = 0;
+    int barx, bary;
 
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
@@ -56,7 +50,7 @@ public class CityLevel extends GameLevel {
         powerBar = new PowerConnectionBar();
 
         generatePowerGrid();
-        populateTiles();
+        generateTiles();
         enableGenerators();
     }
 
@@ -72,8 +66,8 @@ public class CityLevel extends GameLevel {
         // Update mouse positions
         screenPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         worldPos = camera.unproject(screenPos);
-        tilePos.set((int)  (worldPos.x / tile_size),
-                    (int) ((worldPos.y - margin_bottom) / tile_size));
+        tilePos.set((int) (worldPos.x / tile_size),
+                (int) ((worldPos.y - margin_bottom) / tile_size));
 
         // Reset energized state of all powerlines
         for (int y = 0; y < tiles_high; ++y) {
@@ -82,10 +76,12 @@ public class CityLevel extends GameLevel {
                 powerGrid[y][x].visited = false;
             }
         }
+//        powerGrid[bary][barx].energized = true;
+        powerGrid[bary][barx].isBar = true;
 
         // Figure out which powerlines are energized
-        for (int i = 0; i < powerSources.length; ++i) {
-            powerSources[i].energizeConnections(powerGrid);
+        for (CityPowerSource powerSource : powerSources) {
+            powerSource.energizeConnections(powerGrid);
         }
 
         // Figure out how many powers are connected to the bar
@@ -144,25 +140,19 @@ public class CityLevel extends GameLevel {
     }
 
     // ------------------------------------------------------------------------
-    private void generatePowerGrid() {
-        powerGrid = new PowerTile[tiles_high][tiles_wide];
-        for (int y = 0; y < tiles_high; ++y) {
-            for (int x = 0; x < tiles_wide; ++x) {
-                powerGrid[y][x] = new PowerTile(x, y);
-            }
-        }
+    private void placePowerGridTile(int x, int y) {
+        placePowerGridTile(x, y, powerBar.currentPowerLineType);
     }
 
-    private void placePowerGridTile(int x, int y) {
+    private void placePowerGridTile(int x, int y, CityTileTypes powerLineType) {
         if (x < 0 || y < 0 || x >= tiles_wide || y >= tiles_high) {
-            // TODO (brian): removeme
-            Gdx.app.log("GAH!", "attempted to place power grid tile out of bounds: " + x + ", " + y);
+//            Gdx.app.log("GAH!", "attempted to place power grid tile out of bounds: " + x + ", " + y);
             return;
         }
 
         // Place the current power tile grid at the tile under the mouse
         PowerTile thisTile = powerGrid[y][x];
-        thisTile.powerGridType = powerBar.currentPowerLineType;
+        thisTile.powerGridType = powerLineType;
 
         // Update the power bar
         powerBar.dequeueCurrentType();
@@ -214,7 +204,6 @@ public class CityLevel extends GameLevel {
     LinkedList<PowerTile> connectionQueue = new LinkedList<PowerTile>();
     private void updateBarPowerConnections() {
         numBarConnections = 0;
-        // TODO (brian): do
 
         // Reset energized state of all powerlines
         for (int y = 0; y < tiles_high; ++y) {
@@ -225,7 +214,7 @@ public class CityLevel extends GameLevel {
 
         // Arbitrarily set the barTile to be one of the tiles from the new map
         // TODO (brian): handle the 4 tile version?
-        barx = 14;
+        barx = 15;
         bary = 10;
         PowerTile barTile = powerGrid[bary][barx];
         if (CityTileTypes.connectsDown (powerGrid[bary - 1][barx    ].powerGridType))
@@ -241,7 +230,7 @@ public class CityLevel extends GameLevel {
             barTile.left  = powerGrid[bary    ][barx + 1];
         else barTile.left = null;
 
-        boolean[] stationConnection = new boolean[] { false, false, false, false };
+        boolean[] stationConnections = new boolean[] { false, false, false, false };
 
         connectionQueue.clear();
         connectionQueue.add(barTile);
@@ -253,7 +242,7 @@ public class CityLevel extends GameLevel {
             // if we've hit a power station tile, set it as connected
             for (int i = 0; i < powerSources.length; ++i) {
                 if (powerTile.x == powerSources[i].x && powerTile.y == powerSources[i].y) {
-                    stationConnection[i] = true;
+                    stationConnections[i] = true;
                 }
             }
 
@@ -277,14 +266,13 @@ public class CityLevel extends GameLevel {
         }
 
         // how many connections did we find?
-        for (int i = 0; i < stationConnection.length; ++i) {
-            if (stationConnection[i]) ++numBarConnections;
+        for (boolean isConnected : stationConnections) {
+            if (isConnected) ++numBarConnections;
         }
     }
 
     private void enableGenerators() {
-        for (int i = 0; i < powerSources.length; ++i) {
-            CityPowerSource powerSource = powerSources[i];
+        for (CityPowerSource powerSource : powerSources) {
             int x = powerSource.x;
             int y = powerSource.y;
 
@@ -329,7 +317,48 @@ public class CityLevel extends GameLevel {
         textures.put(CityTileTypes.empty,   CityAssets.empty);
     }
 
-    private void populateTiles() {
+    private void generatePowerGrid() {
+        int[][] layout = new int[][] {
+                { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 19, 15, 20 },
+                { 20, 17, 13, 18, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 14, 20, 20 },
+                { 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 19, 13, 13, 13, 13, 13, 13, 13, 13, 13, 16, 20, 20 },
+                { 20, 20, 20, 17, 13, 13, 13, 18, 20, 20, 20, 20, 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 19, 13, 13, 16, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 17, 13, 13, 13, 13, 18, 20, 17, 18, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 14, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 18, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 13, 20, 13, 18, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 14, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 19, 13, 13, 13, 13, 13, 18, 20, 20, 20, 14, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 17, 13, 13, 13, 16, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 19, 13, 13, 16, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 13, 13, 13, 13, 18, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 14, 20, 20, 20, 20, 20, 20, 20 },
+                { 20, 20, 14, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 13, 13, 13, 18, 20, 20, 20 },
+                { 20, 19, 16, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 18, 20, 20 },
+                { 20, 15, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 15, 20 },
+                { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
+        };
+
+        // Initialize the power grid tiles
+        powerGrid = new PowerTile[tiles_high][tiles_wide];
+        for (int y = 0; y < tiles_high; ++y) {
+            for (int x = 0; x < tiles_wide; ++x) {
+                powerGrid[y][x] = new PowerTile(x, y);
+            }
+        }
+        // Place the initial power line connections
+        for (int y = 0; y < tiles_high; ++y) {
+            for (int x = 0; x < tiles_wide; ++x) {
+                placePowerGridTile(x, y, CityTileTypes.getTile(layout[tiles_high - y - 1][x]));
+            }
+        }
+    }
+
+    private void generateTiles() {
         int[][] layout = new int[][] {
                 { 6,  4,  4,  4,  4,  6,  4,  4,  4,  4,  4,  4,  4,  4,  4,  6,  4,  4,  4,  4,  4,  4,  4,  4,  6,  4,  4,  4,  4,  6 },
                 { 5, 11,  2,  2,  1,  5,  1,  2,  1,  2,  1,  2,  1,  2,  2,  5,  1,  2,  1,  2,  1,  2,  1,  1,  5,  2,  1,  2, 11,  5 },
@@ -362,11 +391,11 @@ public class CityLevel extends GameLevel {
                 if (tiles[y][x] == CityTileTypes.power_station) {
                     powerSources[i++] = new CityPowerSource(x,y);
                 }
-                else if (tiles[y][x] == CityTileTypes.bar) {
-                    barx = x;
-                    bary = y;
-                    powerGrid[y][x].isBar = true;
-                }
+//                else if (tiles[y][x] == CityTileTypes.bar) {
+//                    barx = x;
+//                    bary = y;
+//                    powerGrid[y][x].isBar = true;
+//                }
             }
         }
     }
