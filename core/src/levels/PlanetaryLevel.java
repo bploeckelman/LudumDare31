@@ -1,5 +1,6 @@
 package levels;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -22,11 +23,12 @@ public class PlanetaryLevel extends GameLevel {
     public static final float ASTEROID_RADIUS_MAX = 24f;
     public static final float ASTEROID_RADIUS_POW = 1.6f; // Higher values make large less common
     public static final float ASTEROID_ROTATIONAL_VELOCITY_MAX = 256f;
-    public static final float ASTEROID_SPEED_MIN = 164f; //16f;
-    public static final float ASTEROID_SPEED_MAX = 164f;
-    public static final float ASTEROID_SPEED_POW = 2; // Higher makes fast less likely
-    public static final float ASTEROID_TRAJECTORY_SPREAD = 4f; // max angle off-target to start (either dir)
-    public static final float ASTEROID_TRAJECTORY_SPREAD_POW = 2.2f; // Higher values make aiming more accurate
+    public static final float ASTEROID_SPEED_MIN = 32f;
+    public static final float ASTEROID_SPEED_MAX = 82f;
+    public static final float ASTEROID_SPEED_POW = 2.5f; // Higher makes fast less likely
+    public static final float ASTEROID_TRAJECTORY_SPREAD = 40f; // max angle off-target to start (either dir)
+    public static final float ASTEROID_TRAJECTORY_SPREAD_POW = 1.8f; // Higher values make aiming more accurate
+    public static final int ASTEROID_MAX_COUNT = 16;
     public static final float DAY_LENGTH = 4f;
     public static final int DIST_TO_MOON = 220;
     public static final int EARTH_RADIUS = 32;
@@ -78,8 +80,10 @@ public class PlanetaryLevel extends GameLevel {
     private float dayTimer = 0;
     private float levelTimer = 60f;
 
+
     private Sprite background;
 
+    private int threatLevel = 0;
 
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -122,6 +126,9 @@ public class PlanetaryLevel extends GameLevel {
         background.setSize(background.getWidth() * bgScale, background.getHeight() * bgScale);
         background.setCenter(centerPos.x, centerPos.y);
 
+        // Set the initial cooldown countdown to create a shower
+        showerCooldownCountdown = SHOWER_COOLDOWN + SHOWER_COOLDOWN_DEVIATION - (SHOWER_DURATION_DEVIATION * 2 * Assets.rand.nextFloat());
+
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -130,7 +137,7 @@ public class PlanetaryLevel extends GameLevel {
     @Override
     public int hasThreat() {
         // TODO Auto-generated method stub
-        return 0;
+        return threatLevel;
     }
 
     @Override
@@ -173,12 +180,11 @@ public class PlanetaryLevel extends GameLevel {
         updateRockets(dt);
         updateRocketExplosions(dt);
         updateAsteroids(dt);
+        updateShower(dt);
 
-        if (asteroids.size() < 1) {
-            generateAsteroid();
-        }
-
-
+        // Set the threat level
+        double threatPercent = (double) asteroids.size() / ASTEROID_MAX_COUNT;
+        threatLevel = (int) Math.ceil(4 * threatPercent);
 
     }
 
@@ -205,6 +211,10 @@ public class PlanetaryLevel extends GameLevel {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int button) {
+
+        if (tutorialText != null) {
+            return false;
+        }
 
         Vector2 gameTouchPos = getGamePos(new Vector2(screenX, screenY));
 
@@ -372,6 +382,17 @@ public class PlanetaryLevel extends GameLevel {
                 asteroids.remove(i);
                 continue astroidLoop;
             }
+            // Check for Moon collision
+            if (checkForCircleCollision(
+                    thisAstroid.getPosition(), thisAstroid.getRadius(),
+                    moonPos, MOON_RADIUS)) {
+                // There's been a collision
+                moon.processThreatObjectCollision(thisAstroid);
+                // Remove the astroid
+                asteroids.remove(i);
+                continue astroidLoop;
+            }
+
         }
     }
     /**
@@ -393,6 +414,8 @@ public class PlanetaryLevel extends GameLevel {
         // Moon rotation
         float moonRotation = (moonOrbitAngle + MOON_TEXTURE_ROTATION) % 360;
         moon.setRotation(moonRotation);
+        // Moon update
+        moon.update(dt);
 
     }
 
@@ -438,6 +461,43 @@ public class PlanetaryLevel extends GameLevel {
                 rockets.remove(i);
             }
         }
+    }
+
+    //----------------------------------------------------------------------------------------------------------
+
+    private static final float SHOWER_COOLDOWN = 20;
+    private static final float SHOWER_COOLDOWN_DEVIATION = 5;
+    private static final float SHOWER_DURATION = 5f;
+    private static final float SHOWER_DURATION_DEVIATION = 2f;
+
+    private float showerCooldownCountdown = 0;
+    private float showerDurationCountdown = 0;
+
+    private void updateShower(float dt) {
+        // Update the countdowns
+        showerCooldownCountdown -= dt;
+        showerDurationCountdown -= dt;
+
+        // Have we reached the end of a cooldown?
+        if (showerCooldownCountdown <= 0) {
+            startShower();
+        }
+
+        // Are we in a shower?
+        if (showerDurationCountdown > 0) {
+            // Yes.
+            if (asteroids.size() < 10) {
+                generateAsteroid();
+            }
+        }
+    }
+    private void startShower() {
+        // Reset the cooldown
+        showerCooldownCountdown = SHOWER_COOLDOWN + SHOWER_COOLDOWN_DEVIATION - (SHOWER_DURATION_DEVIATION * 2 * Assets.rand.nextFloat());
+        // Set a new duration
+        showerDurationCountdown = SHOWER_DURATION + SHOWER_DURATION_DEVIATION - (SHOWER_DURATION_DEVIATION * 2 * Assets.rand.nextFloat());
+
+        Gdx.app.log(TAG, "startShower | sCC="+showerCooldownCountdown+", sDC="+showerDurationCountdown);
     }
 
 

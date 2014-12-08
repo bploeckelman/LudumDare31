@@ -13,11 +13,11 @@ public class RocketExplosion extends DestroyableObject {
         EXPLODE, IMPLODE
     }
 
-    private final static float EXPLOSION_DURATION = 0.2f;
-    private final static double EXPLOSION_EASING_POWER = 1;
-    private final static float IMPLOSION_DURATION = 0.8f;
+    private final static float EXPLOSION_DURATION = 0.4f;
+    private final static double EXPLOSION_EASING_POWER = 2;
+    private final static float IMPLOSION_DURATION = 0.2f;
     private final static double IMPLOSION_EASING_POWER = 6;
-    private final static float EXPLOSION_RADIUS = 28f;
+    private final static float EXPLOSION_RADIUS = 40f;
 
     private Vector2 pos;
     private float timer;
