@@ -12,6 +12,7 @@ import lando.systems.ld31.SoundManager;
 import lando.systems.ld31.ThreatLevel;
 import levels.human.*;
 import levels.human.Patron.PatronType;
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
@@ -116,15 +117,32 @@ public class HumanLevel extends GameLevel {
 	}
 	
 	private Color _powerColor = new Color(0, 0, 0, 0);
+	
+	private boolean _powerFailing = false;
 		
 	public void powerFailure() {
+		_powerFailing = true;
 		_powerColor = new Color(0, 0, 0, 1);
+	
 		Tween.to(_powerColor, ColorAccessor.COLOR_A, 2f)      
 	        .target(0, 0, 0, 0)
 	        .ease(TweenEquations.easeOutBounce)
 	        .setCallbackTriggers(TweenCallback.END)
+	        .setCallback(callbackAtEnd)
 	        .start(LudumDare31.tweens);
 	}
+	
+	private TweenCallback callbackAtEnd = new TweenCallback()
+	{
+		
+		@Override
+		public void onEvent(int type, BaseTween<?> source)
+		{
+			if(type == TweenCallback.END){
+				_powerFailing = false;
+			}
+		}
+	};
 	
 	private float _serveTime = 0;
 	private void serveBeer(boolean serve, float dt) {
@@ -202,8 +220,29 @@ public class HumanLevel extends GameLevel {
 			}
 			_glassRegen = 2f;
 		}
+		
+		updatePowerLevel();
 	}
 	
+	private void updatePowerLevel() {
+		if (_powerFailing) return;
+		
+		switch (LevelManager.powerLevel) {
+			case 0:
+				_powerColor.a = 1;
+				break;
+			case 1:
+				_powerColor.a = 0.3f;
+				break;
+			case 3:
+				_powerColor.a = 0.1f;
+				break;
+			default:
+				_powerColor.a = 0;
+				break;
+		}
+	}
+		
 	private boolean catchGlass(Glass glass) {
 		return !glass.isFull && _bartender.intersects(glass);
 	}
