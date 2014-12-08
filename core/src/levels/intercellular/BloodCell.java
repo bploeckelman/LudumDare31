@@ -7,9 +7,12 @@ import lando.systems.ld31.GameConstants;
 import levels.IntercellularLevel;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer.Random;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by vandillen on 12/6/14.
@@ -28,8 +31,9 @@ public class BloodCell {
     public Vector2 gridPos;
     public Color color;
 
-    private final float speed = 10;
     private IntercellularLevel level;
+    Animation anim;
+    private float animationTimer;
 
     // Constructor
     public BloodCell(float x, float y, IntercellularLevel level, boolean enemy) {
@@ -41,20 +45,49 @@ public class BloodCell {
     	else if (typeRand < 6) this.type = TileType.badYellow;
     	else this.type = TileType.goodWhite;
     	
+    	animationTimer = Assets.rand.nextFloat();
     	switch (type){
     	case goodWhite:
     		color = Color.WHITE.cpy();
+    		Array<TextureRegion> keyframes = new Array<TextureRegion>();
+    		keyframes.add(Assets.bloodRegions[2][4]);
+    		anim = new Animation(1/30f, keyframes, PlayMode.LOOP);
     		break;
     	case badBlue:
     		color = Color.BLUE.cpy();
+    		keyframes = new Array<TextureRegion>();
+    		for (int i = 0; i < 20; i++){
+    			keyframes.add(Assets.bloodRegions[i/8][i%8]);
+    		}
+    		
+    		anim = new Animation(1/30f, keyframes, PlayMode.LOOP);
     		break;
     	case badGreen:
     		color = Color.GREEN.cpy();
+    		keyframes = new Array<TextureRegion>();
+    		for (int i = 0; i < 20; i++){
+    			keyframes.add(Assets.bloodRegions[i/8+3][i%8]);
+    		}
+    		
+    		anim = new Animation(1/30f, keyframes, PlayMode.LOOP);
     		break;
     	case badYellow:
     		color = Color.YELLOW.cpy();
-    		break;
+    		keyframes = new Array<TextureRegion>();
+    		for (int i = 0; i < 20; i++){
+    			keyframes.add(Assets.bloodRegions[i/8+6][i%8]);
+    		}
     		
+    		anim = new Animation(1/30f, keyframes, PlayMode.LOOP);
+    		break;
+    	default:
+    		color = Color.WHITE.cpy();	
+    		keyframes = new Array<TextureRegion>();
+    		for (int i = 0; i < 20; i++){
+    			keyframes.add(Assets.bloodRegions[i/8+3][i%8]);
+    		}
+    		
+    		anim = new Animation(1/30f, keyframes, PlayMode.LOOP);
     	}
     	
 
@@ -118,12 +151,11 @@ public class BloodCell {
     {
         vel = new Vector2(1, 0).setAngle(rotation).scl(400);
         alive = true;
-        settled = false;
-        
-        
+        settled = false;        
     }
     
     public void update(float dt){
+    	animationTimer += dt;
     	if (settled) return;
     	
     	float tempY = pos.y + vel.y * dt;
@@ -149,9 +181,9 @@ public class BloodCell {
     
     public void draw(SpriteBatch batch){
 
-    	batch.setColor(color);
-    	batch.draw(Assets.milkyWay, pos.x, pos.y, 32, 32);
-    	batch.setColor(Color.WHITE);
+    	//batch.setColor(color);
+    	batch.draw(anim.getKeyFrame(animationTimer), pos.x, pos.y, 32, 32);
+    	//batch.setColor(Color.WHITE);
     }
 
     // return true if collision with other cells or bulge

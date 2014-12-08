@@ -3,6 +3,8 @@ package lando.systems.ld31;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import levels.InsectUtils.InsectsAssets;
 
@@ -35,6 +37,8 @@ public class Assets {
     public static Texture sidebarSelection;
     public static BitmapFont gameFont;
     public static BitmapFont smallFont;
+    
+    public static TextureRegion bloodRegions[][];
 
 
 
@@ -69,6 +73,7 @@ public class Assets {
         sidebarLabels[6] = new Texture("sidebar/side_meter_1000x.png");
         sidebarSelection = new Texture("sidebar/selection.png");
         bloodVessel = new Texture("intercellular/blood_vessel_01.png");
+        bloodRegions = TextureRegion.split(new Texture("intercellular/a_final_blood.png"), 32, 32);
         rand = new Random();
         insectsAssets = new InsectsAssets();
     }

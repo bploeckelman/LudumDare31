@@ -144,7 +144,7 @@ public class IntercellularLevel extends GameLevel {
     				Vector2 cellCenter = new Vector2(16,16).add(cell.pos);
     				Vector2 dest = new Vector2(1,0).rotate(Assets.rand.nextInt(360)).scl(Assets.rand.nextFloat() * 40)
     						.add(cellCenter);
-    				particles.addParticle(cellCenter, dest, Color.WHITE, Color.RED, 1f, Quad.OUT);
+    				particles.addParticle(cellCenter, dest, cell.color, Color.RED, 1f, Quad.OUT);
     			}
     		}
     	}
