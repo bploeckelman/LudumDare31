@@ -30,6 +30,7 @@ public class IntraCellularLevel extends GameLevel {
     float lastFired;
     float nextWave;
     int threatLevel;
+    float timeAccum;
 
     public IntraCellularLevel() {
         tutorialText = "Use mouse to rotate.\n" +
@@ -44,6 +45,7 @@ public class IntraCellularLevel extends GameLevel {
         bullets = new ArrayList<Bullet>();
         lastFired = Bullet.fireRate;
         nextWave = 3;
+        timeAccum = 0;
     }
 
     @Override
@@ -107,6 +109,7 @@ public class IntraCellularLevel extends GameLevel {
 
     @Override
     public void update(float dt) {
+    	timeAccum += dt;
         ship.invulnerabilityTimeLeft = ship.invulnerabilityTimeLeft <= 0 ? 0 : ship.invulnerabilityTimeLeft - dt;
 
         ship.setPosition(ship.getX() + ship.velocity.x * dt, ship.getY() + ship.velocity.y * dt);
@@ -198,7 +201,10 @@ public class IntraCellularLevel extends GameLevel {
 
     @Override
     public void draw(SpriteBatch batch) {
+    	batch.setShader(Assets.waterProgram);
+    	Assets.waterProgram.setUniformf("time", timeAccum);
         batch.draw(IntraCellularAssets.background, 0, 0, camera.viewportWidth - 100, camera.viewportHeight);
+        batch.setShader(null);
 
         for(int i = 0; i < bullets.size(); i++) {
             bullets.get(i).sprite.draw(batch);

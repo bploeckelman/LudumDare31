@@ -1,6 +1,7 @@
 package levels.intracellular;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
 public class IntraCellularAssets {
     public static Texture background;
@@ -16,6 +17,7 @@ public class IntraCellularAssets {
 
     public static void init() {
         background = new Texture("intracellular/background_924x768.png");
+        background.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         ship = new Texture("intracellular/ship.png");
         shipThrusting = new Texture("intracellular/shipThrusting.png");
         asteroid = new Texture("intracellular/virus_128x128.png");
