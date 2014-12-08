@@ -81,11 +81,31 @@ public class IntraCellularLevel extends GameLevel {
             	SoundManager.getSound(IntraCellularAssets.shipThrust).loop();
                 ship.thrust(true);
             }
-            Vector2 start = new Vector2(0, -(ship.sprite.getWidth()/2)).rotate(ship.sprite.getRotation()).add(ship.position);
+            Vector2 start1 = new Vector2(-8, 10 -(ship.sprite.getWidth()/2)).rotate(ship.sprite.getRotation()).add(ship.position);
+            Vector2 start2 = new Vector2(0, 10 -(ship.sprite.getWidth()/2)).rotate(ship.sprite.getRotation()).add(ship.position);
+            Vector2 start3 = new Vector2(8, 10 -(ship.sprite.getWidth()/2)).rotate(ship.sprite.getRotation()).add(ship.position);
+
             for(int i = 0; i < 5; i++) {
-                particles.addParticle(start,
-                        ship.position.cpy().add(Assets.rand.nextFloat() * 10, Assets.rand.nextFloat() * 10),
-                        Color.RED, new Color(1f, 1f, 1f, 0), 1f, Linear.INOUT);
+            	Vector2 end = new Vector2(-10 + Assets.rand.nextFloat() * 20, -10 - Assets.rand.nextFloat() * 50).rotate(ship.sprite.getRotation());
+                particles.addParticle(start1,
+                        //ship.position.cpy().add(Assets.rand.nextFloat() * 10, Assets.rand.nextFloat() * 10),
+                		start1.cpy().add(end),
+                        Assets.rand.nextFloat() > .9 ? Color.ORANGE : Color.RED,
+                        new Color(1f, 1f, 1f, 0), 1f, Linear.INOUT);
+                
+                end = new Vector2(-10 + Assets.rand.nextFloat() * 20, -10 - Assets.rand.nextFloat() * 50).rotate(ship.sprite.getRotation());
+                particles.addParticle(start2,
+                        //ship.position.cpy().add(Assets.rand.nextFloat() * 10, Assets.rand.nextFloat() * 10),
+                		start1.cpy().add(end),
+                		Assets.rand.nextFloat() > .9 ? Color.ORANGE : Color.RED,
+                        new Color(1f, 1f, 1f, 0), 1f, Linear.INOUT);
+                
+                end = new Vector2(-10 + Assets.rand.nextFloat() * 20, -10 - Assets.rand.nextFloat() * 50).rotate(ship.sprite.getRotation());
+                particles.addParticle(start3,
+                        //ship.position.cpy().add(Assets.rand.nextFloat() * 10, Assets.rand.nextFloat() * 10),
+                		start1.cpy().add(end),
+                		Assets.rand.nextFloat() > .9 ? Color.ORANGE : Color.RED,
+                        new Color(1f, 1f, 1f, 0), 1f, Linear.INOUT);
             }
         } else {
             ship.slowDown(dt);

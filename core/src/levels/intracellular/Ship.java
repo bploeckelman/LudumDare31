@@ -18,8 +18,9 @@ public class Ship {
     public Ship(float x, float y) {
         sprite = new Sprite(IntraCellularAssets.ship);
         sprite.setPosition(x, y);
+        
+        sprite.setSize(32, 32);
         sprite.setOriginCenter();
-
         velocity = new Vector2(0, 0);
         position = new Vector2(x, y);
 
