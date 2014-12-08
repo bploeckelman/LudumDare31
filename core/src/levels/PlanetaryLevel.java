@@ -22,8 +22,8 @@ public class PlanetaryLevel extends GameLevel {
     public static final float ASTEROID_RADIUS_MAX = 24f;
     public static final float ASTEROID_RADIUS_POW = 1.6f; // Higher values make large less common
     public static final float ASTEROID_ROTATIONAL_VELOCITY_MAX = 256f;
-    public static final float ASTEROID_SPEED_MIN = 16f;
-    public static final float ASTEROID_SPEED_MAX = 64f;
+    public static final float ASTEROID_SPEED_MIN = 164f; //16f;
+    public static final float ASTEROID_SPEED_MAX = 164f;
     public static final float ASTEROID_SPEED_POW = 2; // Higher makes fast less likely
     public static final float ASTEROID_TRAJECTORY_SPREAD = 4f; // max angle off-target to start (either dir)
     public static final float ASTEROID_TRAJECTORY_SPREAD_POW = 2.2f; // Higher values make aiming more accurate
@@ -174,7 +174,7 @@ public class PlanetaryLevel extends GameLevel {
         updateRocketExplosions(dt);
         updateAsteroids(dt);
 
-        if (asteroids.size() < 11) {
+        if (asteroids.size() < 1) {
             generateAsteroid();
         }
 
@@ -331,6 +331,11 @@ public class PlanetaryLevel extends GameLevel {
         launchRocketFromHeavenlyBody(moonPos, MOON_RADIUS, target);
     }
 
+    private void processEarthCollision(Asteroid asteroid) {
+        Vector2 strikePos = earthPos.cpy().sub(asteroid.getPosition()).nor().scl(EARTH_RADIUS);
+
+    }
+
     /**
      * Update the Asteroids
      * @param dt
@@ -338,25 +343,34 @@ public class PlanetaryLevel extends GameLevel {
     private void updateAsteroids(float dt) {
         Asteroid thisAstroid;
         // Reverse for loop, as we might be removing some
-        for (int i = asteroids.size() - 1; i >= 0; i--) {
+        astroidLoop: for (int i = asteroids.size() - 1; i >= 0; i--) {
             thisAstroid = asteroids.get(i);
             // Update
             thisAstroid.update(dt);
             // Remove/process destroyed
             if (thisAstroid.isDestroyable()) {
                 asteroids.remove(i);
-                continue;
+                continue astroidLoop;
             }
             // Check for explosion collision
             for (RocketExplosion rocketExplosion : rocketExplosionsExploding) {
-
                 if (checkForCircleCollision(
                         rocketExplosion.getPos(), rocketExplosion.getRadius(),
-                        thisAstroid.getPos(), thisAstroid.getRadius())) {
+                        thisAstroid.getPosition(), thisAstroid.getRadius())) {
                     // Collision! Destroy it.
                     asteroids.remove(i);
-                    continue;
+                    continue astroidLoop;
                 }
+            }
+            // Check for Earth collision
+            if (checkForCircleCollision(
+                    thisAstroid.getPosition(), thisAstroid.getRadius(),
+                    earthPos, EARTH_RADIUS)) {
+                // There's been a collision
+                earth.processThreatObjectCollision(thisAstroid);
+                // Remove the astroid
+                asteroids.remove(i);
+                continue astroidLoop;
             }
         }
     }
@@ -370,6 +384,7 @@ public class PlanetaryLevel extends GameLevel {
         // Update the Earth
         float earthRotation = (dayTimer % 1f) * 360;
         earth.setRotation(earthRotation);
+        earth.update(dt);
 
         // Moon Orbit Angle
         moonOrbitAngle = (((dayTimer / MOON_ORBIT_PERIOD) % 1) * 360 + MOON_INITIAL_ORBIT_ANGLE);

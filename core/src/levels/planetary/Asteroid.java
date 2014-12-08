@@ -12,18 +12,13 @@ import lando.systems.ld31.GameConstants;
  * Teaching and Research Application Development
  * Copyright 2014 Board of Regents of the University of Wisconsin System
  */
-public class Asteroid extends DestroyableObject {
+public class Asteroid extends ThreatObject {
 
     private static final String TAG = "Asteroid";
 
-    private static final float STAGING_TIME = 4;
+    private static final float STAGING_TIME = 0;
 
-    private Sprite asteroid;
 
-    private Vector2 pos;
-    private Vector2 trajectory;
-    private Vector2 scaledTrajectory;
-    private float radius;
     private float rotationalVelocity;
 
     private float timer;
@@ -34,15 +29,15 @@ public class Asteroid extends DestroyableObject {
 
         this.timer = 0;
 
-        this.pos = origin.cpy();
+        this.position = origin.cpy();
         this.trajectory = trajectory.cpy();
         this.scaledTrajectory = new Vector2();
         this.rotationalVelocity = rotationalVelocity;
         this.radius = radius;
 
-        asteroid = new Sprite(Assets.plAsteroids.get(Assets.rand.nextInt(Assets.plAsteroids.size())));
-        asteroid.setSize(this.radius * 2, this.radius * 2);
-        asteroid.setOriginCenter();
+        sprite = new Sprite(Assets.plAsteroids.get(Assets.rand.nextInt(Assets.plAsteroids.size())));
+        sprite.setSize(this.radius * 2, this.radius * 2);
+        sprite.setOriginCenter();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -54,7 +49,7 @@ public class Asteroid extends DestroyableObject {
             return;
         }
 
-        asteroid.draw(batch);
+        sprite.draw(batch);
 
     }
 
@@ -69,19 +64,19 @@ public class Asteroid extends DestroyableObject {
         if (timer > STAGING_TIME) {
             // Update the position
             scaledTrajectory.set(trajectory).scl(dt);
-            pos.add(scaledTrajectory);
+            position.add(scaledTrajectory);
             // Check for offscreen.
-            if (pos.x < -radius || pos.x > GameConstants.GameWidth + radius ||
-                    pos.y < -radius || pos.y > GameConstants.GameHeight + radius) {
+            if (position.x < -radius || position.x > GameConstants.GameWidth + radius ||
+                    position.y < -radius || position.y > GameConstants.GameHeight + radius) {
                 // It's gone, destroy it.
-                Gdx.app.log(TAG, "we've destroyed an off-screen asteroid");
+                Gdx.app.log(TAG, "we've destroyed an off-screen sprite");
                 setDestroyable(true);
             }
             // Position it.
-            asteroid.setCenter(pos.x, pos.y);
+            sprite.setCenter(position.x, position.y);
 
             // Update the rotation
-            asteroid.setRotation((asteroid.getRotation() + (rotationalVelocity * dt)) % 360);
+            sprite.setRotation((sprite.getRotation() + (rotationalVelocity * dt)) % 360);
 
         }
 
@@ -89,12 +84,6 @@ public class Asteroid extends DestroyableObject {
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    public Vector2 getPos() {
-        return pos;
-    }
-    public float getRadius() {
-        return radius;
-    }
 
 
 }

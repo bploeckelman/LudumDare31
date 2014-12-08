@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-
 import levels.InsectUtils.InsectsAssets;
 
 import java.util.ArrayList;
@@ -40,6 +39,8 @@ public class Assets {
     public static Texture plMoon;
     public static Texture plMoonShadow;
     public static Texture plStarBackdrop;
+    public static TextureAtlas plSmallStrikeExplosion;
+    public static TextureAtlas plLargeStrikeExplosion;
 
     // Insects
     public static InsectsAssets insectsAssets;
@@ -91,8 +92,10 @@ public class Assets {
         plEarth = new Texture("planetary/earth_texture.png");
         plEarthNightLights = new Texture("planetary/earth_night_lights.png");
         plEarthShadowMask = new Texture("planetary/earth_shadow_mask.png");
+        plLargeStrikeExplosion = new TextureAtlas("planetary/large_strike_explosion.atlas");
         plMoon = new Texture("planetary/moon_texture.png");
         plMoonShadow = new Texture("planetary/moon_shadow.png");
+        plSmallStrikeExplosion = new TextureAtlas("planetary/small_strike_explosion.atlas");
         plStarBackdrop = new Texture("planetary/star_backdrop.png");
 
         planetaryTempExplosion = new Texture("planetary/temp-missle-explosion.png");

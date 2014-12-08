@@ -42,8 +42,8 @@ public class Moon {
     public void setPosition(Vector2 position) {
         pos.set(position);
         baseMoon.setPosition(pos.x - PlanetaryLevel.MOON_RADIUS, pos.y - PlanetaryLevel.MOON_RADIUS);
-//        baseMoon.setX(pos.x - PlanetaryLevel.MOON_RADIUS);
-//        baseMoon.setY(pos.y - PlanetaryLevel.MOON_RADIUS);
+//        baseMoon.setX(position.x - PlanetaryLevel.MOON_RADIUS);
+//        baseMoon.setY(position.y - PlanetaryLevel.MOON_RADIUS);
     }
     public void setRotation(float rotation) {
         r = rotation;
