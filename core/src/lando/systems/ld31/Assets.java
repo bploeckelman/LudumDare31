@@ -3,11 +3,15 @@ package lando.systems.ld31;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+<<<<<<< Updated upstream
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+=======
+>>>>>>> Stashed changes
 import levels.InsectUtils.InsectsAssets;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -23,9 +27,16 @@ public class Assets {
     public static Texture bloodVessel;
 
     // Planetary
-    public static Texture planetaryTempEarth;
     public static Texture planetaryTempExplosion;
     public static Texture planetaryTempRocket;
+    public static ArrayList<Texture> plAsteroids;
+    public static ArrayList<Texture> plComets;
+    public static Texture plEarth;
+    public static Texture plEarthNightLights;
+    public static Texture plEarthShadowMask;
+    public static Texture plMoon;
+    public static Texture plMoonShadow;
+    public static Texture plStarBackdrop;
 
     // Insects
     public static InsectsAssets insectsAssets;
@@ -55,9 +66,27 @@ public class Assets {
         ludumdare = new Texture("ludumdare.png");
         squareTex = new Texture("square.png");
         milkyWay = new Texture("galactic/milkyway.png");
-        planetaryTempEarth = new Texture("planetary/temp-earth.png");
+
+        // Planetary
+        plAsteroids = new ArrayList<Texture>();
+        plAsteroids.add(new Texture("planetary/asteroid_1.png"));
+        plAsteroids.add(new Texture("planetary/asteroid_2.png"));
+        plAsteroids.add(new Texture("planetary/asteroid_3.png"));
+        plComets = new ArrayList<Texture>();
+        plComets.add(new Texture("planetary/comet_1.png"));
+        plComets.add(new Texture("planetary/comet_2.png"));
+        plComets.add(new Texture("planetary/comet_3.png"));
+        plEarth = new Texture("planetary/earth_texture.png");
+        plEarthNightLights = new Texture("planetary/earth_night_lights.png");
+        plEarthShadowMask = new Texture("planetary/earth_shadow_mask.png");
+        plMoon = new Texture("planetary/moon_texture.png");
+        plMoonShadow = new Texture("planetary/moon_shadow.png");
+        plStarBackdrop = new Texture("planetary/star_backdrop.png");
+
         planetaryTempExplosion = new Texture("planetary/temp-missle-explosion.png");
         planetaryTempRocket = new Texture("planetary/temp_rocket.png");
+
+
         sidebarBackground = new Texture("sidebar/side_meter_backdrop.png");
         sidebarBlack= new Texture("sidebar/side_meter_fill_black.png");
         sidebarStatus[0] = new Texture("sidebar/side_meter_fill_green.png");

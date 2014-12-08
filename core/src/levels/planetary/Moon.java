@@ -20,7 +20,7 @@ public class Moon {
 
     public Moon() {
 
-        baseMoon = new Sprite(Assets.planetaryTempEarth, Assets.planetaryTempEarth.getWidth(), Assets.planetaryTempEarth.getHeight());
+        baseMoon = new Sprite(Assets.plMoon);
         baseMoon.setSize(PlanetaryLevel.MOON_RADIUS * 2, PlanetaryLevel.MOON_RADIUS * 2);
         baseMoon.setOriginCenter();
 

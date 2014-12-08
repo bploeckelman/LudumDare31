@@ -42,7 +42,7 @@ public class LevelManager implements InputProcessor{
         levels[4] = new CityLevel();
         levels[5] = new PlanetaryLevel();
         levels[6] = new GalacticLevel();
-        currentLevel = 3;
+        currentLevel = 5;
         lastLevel = -1;
         Gdx.input.setInputProcessor(this);
         currentFBO = new FrameBuffer(Pixmap.Format.RGB888, GameConstants.ScreenWidth, GameConstants.ScreenHeight, false);
