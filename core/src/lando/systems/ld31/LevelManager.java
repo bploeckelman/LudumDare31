@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
@@ -38,7 +39,7 @@ public class LevelManager implements InputProcessor{
     public int lastLevel;
     public int targetLevel;
     public MutableFloat transition = new MutableFloat(0);
-    private final float transitionLength = .5f;
+    private final float transitionLength = 1f;
     
     private final FrameBuffer currentFBO;
     private final FrameBuffer lastFBO;
@@ -119,7 +120,7 @@ public class LevelManager implements InputProcessor{
         
         transition.setValue(1f);
         
-        Tween.to(transition, 0, transitionLength)
+        Tween.to(transition, 0, transitionLength /( 1 + Math.abs(currentLevel - targetLevel)))
         .target(0f)
         .setCallback(callbackAtEnd)
         .setCallbackTriggers(TweenCallback.END)
@@ -149,7 +150,9 @@ public class LevelManager implements InputProcessor{
         currentFBO.end();
         
         Texture lastTexture = lastFBO.getColorBufferTexture();
+        lastTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         Texture currentTexture = currentFBO.getColorBufferTexture();
+        currentTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         
         batch.begin();
         if (lastLevel == -1){	        
@@ -157,7 +160,7 @@ public class LevelManager implements InputProcessor{
         } else {
         	if (lastLevel < currentLevel){ // Zooming out
         		float alpha = transition.floatValue();
-        		float currentAlpha = 1 + alpha;
+        		float currentAlpha = 1 + 20f* alpha;
         		float lastAlpha = alpha;
         		Vector2 zoomPoint = levels[currentLevel].zoomOutPoint;
     	        batch.draw(currentTexture, zoomPoint.x * (1 - currentAlpha), currentFBO.getHeight() - (zoomPoint.y * ( 1- currentAlpha)), currentFBO.getWidth() * currentAlpha, -currentFBO.getHeight() * currentAlpha);
@@ -167,7 +170,7 @@ public class LevelManager implements InputProcessor{
         	} else { // zooming in
         		float alpha =  1 - transition.floatValue();
         		float currentAlpha = alpha;
-        		float lastAlpha = 1 + alpha;
+        		float lastAlpha = 1 + 20f * alpha;
         		Vector2 zoomPoint = levels[lastLevel].zoomOutPoint;
     	        batch.draw(lastTexture, zoomPoint.x  * (1 - lastAlpha), currentFBO.getHeight() - (zoomPoint.y * ( 1- lastAlpha)), currentFBO.getWidth()* lastAlpha, -currentFBO.getHeight()* lastAlpha);
     	        batch.setColor(1, 1, 1, alpha);
