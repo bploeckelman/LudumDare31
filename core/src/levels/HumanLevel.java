@@ -35,6 +35,9 @@ public class HumanLevel extends GameLevel {
 	Bartender _bartender;
 	PatronManager _patronManager;
 	
+	int _glassCount = 20;
+	GlassWidget _glassWidget = new GlassWidget();
+	
 	public HumanLevel()
 	{
 		tutorialText = "Keep the thirsty patrons satisfied and keep your tavern clean, or you might get sick...\n\n\nMove: Up, Down, Left\nServe: Right";
@@ -101,8 +104,10 @@ public class HumanLevel extends GameLevel {
 	private void serveBeer(boolean serve, float dt) {
 		_serveTime -= dt;
 		
-		if (serve && _serveTime < 0) {
+		if (serve && _serveTime < 0 && _glassCount > 0) {
 			_bartender.serve();
+			_glassCount--;
+			
 			_tappers[_bartender.level].serve();
 			
 			Glass glass = new Glass(GlassHeight, _barTexture.getWidth(), 
@@ -113,6 +118,8 @@ public class HumanLevel extends GameLevel {
 			_serveTime  = ServeTime;
 		}
 	}
+	
+	float _glassRegen = 2f;
 
 	@Override
 	public void update(float dt) {
@@ -128,6 +135,7 @@ public class HumanLevel extends GameLevel {
 			if (catchGlass(glass)) {
 				Score.Total += 100;
 				glass.remove = true;
+				_glassCount++;
 			}
 			
 			if (glass.remove) {
@@ -155,8 +163,18 @@ public class HumanLevel extends GameLevel {
 				_items.remove(item);
 			}
 		}
-		
+	
 		_patronManager.update(_glasses, _items, dt);
+		_glassWidget.update(_glassCount, dt);
+		
+		_glassRegen -= dt;
+		if (_glassRegen < 0) {
+			_glassCount += 2;
+			if (_glassCount > 99) {
+				_glassCount = 99;
+			}
+			_glassRegen = 2f;
+		}
 	}
 	
 	private boolean catchGlass(Glass glass) {
@@ -181,6 +199,10 @@ public class HumanLevel extends GameLevel {
 		}
 		
 		_bartender.draw(batch);
+		
+		if (top) {
+			_glassWidget.draw(batch);
+		}
 	}
 	
 	@Override

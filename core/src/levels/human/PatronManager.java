@@ -63,7 +63,7 @@ public class PatronManager {
 		
 		// add
 		if (_patronAddTime < 0) {
-			if (_addReset > 0.5f) { 
+			if (_addReset > 1f) { 
 				_addReset -= 0.2f;
 			}
 			
