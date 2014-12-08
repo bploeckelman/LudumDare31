@@ -101,6 +101,7 @@ public class LevelManager implements InputProcessor{
    
 
     public void setLevel(int index){
+    	if (currentLevel == 7) return; // Don't leave the snowman
     	if (index < 0 || index >= levels.length) return;
     	if (lastLevel != -1 || index == currentLevel) return;
     	if (levels[index] == null) return; // Not ready for this one yet
