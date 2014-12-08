@@ -81,9 +81,11 @@ public class CityLevel extends GameLevel {
                 .repeatYoyo(Tween.INFINITY, 0)
                 .start(LudumDare31.tweens);
 
-        glowAlpha = new MutableFloat(0.025f);
+        final float min_glow = 0.05f;
+        final float max_glow = 0.2f;
+        glowAlpha = new MutableFloat(min_glow);
         Tween.to(glowAlpha, 0, 1.33f)
-                .target(0.125f)
+                .target(max_glow)
                 .ease(Quad.INOUT)
                 .repeatYoyo(Tween.INFINITY, 0)
                 .start(LudumDare31.tweens);
@@ -153,14 +155,27 @@ public class CityLevel extends GameLevel {
     @Override
     public void draw(SpriteBatch batch) {
         batch.setProjectionMatrix(camera.combined);
+
+        // Draw city background
         batch.setColor(0.7f, 0.7f, 0.7f, 1.0f);
         batch.draw(CityAssets.city_background, 0, margin_bottom);
 
+        // Draw power lines
         batch.setColor(Color.WHITE);
         for (int y = 0; y < tiles_high; ++y) {
             for (int x = 0; x < tiles_wide; ++x) {
-                batch.draw(textures.get(powerGrid[y][x].powerGridType),
-                        x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
+                // Which texture to use? on or off (or empty)
+                CityTileTypes type = powerGrid[y][x].powerGridType;
+                TextureRegion texture = textures.get(CityTileTypes.empty);
+                if (type != CityTileTypes.empty) {
+                    PowerTexture powerTexture = CityAssets.powerTextures.get(powerGrid[y][x].powerGridType);
+                    texture = (powerGrid[y][x].energized ? powerTexture.on : powerTexture.off);
+                }
+
+                // Draw power line texture
+                batch.draw(texture, x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
+
+                // Draw 'glow' overlay
                 if (powerGrid[y][x].energized) {
                     batch.setColor(1, 1, 0, glowAlpha.floatValue());
                     batch.draw(Assets.squareTex,
@@ -170,6 +185,7 @@ public class CityLevel extends GameLevel {
             }
         }
 
+        // Draw lightning
         if (!lightningBoltDone) {
 //            Gdx.app.log("BOOM", "lighting strike");
             // TODO (brian): make noise
@@ -179,6 +195,7 @@ public class CityLevel extends GameLevel {
                     0, margin_bottom, camera.viewportWidth, camera.viewportHeight);
         }
 
+        // Draw cloud layer
         batch.setColor(1.0f, 1.0f, 1.0f, cloudAlpha.floatValue());
         batch.draw(CityAssets.clouds, 0, margin_bottom, camera.viewportWidth, camera.viewportHeight - margin_bottom);
 
@@ -186,13 +203,14 @@ public class CityLevel extends GameLevel {
         batch.setColor(Color.WHITE);
         powerBar.draw(batch, cursorPulse.floatValue());
 
-        // Draw the currently active power grid type
+        // Draw an underneath layer for the currently active power grid type
         final float pulse_offset = 1.6f;
         batch.setColor(Color.DARK_GRAY);
         batch.draw(Assets.squareTex,
                 tilePos.x * tile_size - pulse_offset, tilePos.y * tile_size + margin_bottom - pulse_offset,
                 tile_size * cursorPulse.floatValue(), tile_size * cursorPulse.floatValue());
 
+        // Draw the currently active power grid type
         batch.setColor(Color.WHITE);
         batch.draw(textures.get(powerBar.currentPowerLineType),
                 tilePos.x * tile_size - pulse_offset, tilePos.y * tile_size + margin_bottom - pulse_offset,
@@ -419,19 +437,19 @@ public class CityLevel extends GameLevel {
         textures.put(CityTileTypes.power_station,        CityAssets.power_station);
         textures.put(CityTileTypes.power_pole,           CityAssets.power_pole);
 
-        textures.put(CityTileTypes.power_line_h,         CityAssets.power_line_h);
-        textures.put(CityTileTypes.power_line_v,         CityAssets.power_line_v);
-        textures.put(CityTileTypes.power_line_x,         CityAssets.power_line_x);
+        textures.put(CityTileTypes.power_line_h,         CityAssets.power_line_h_off);
+        textures.put(CityTileTypes.power_line_v,         CityAssets.power_line_v_off);
+        textures.put(CityTileTypes.power_line_x,         CityAssets.power_line_x_off);
 
-        textures.put(CityTileTypes.power_line_corner_lt, CityAssets.power_line_corner_lt);
-        textures.put(CityTileTypes.power_line_corner_rt, CityAssets.power_line_corner_rt);
-        textures.put(CityTileTypes.power_line_corner_lb, CityAssets.power_line_corner_lb);
-        textures.put(CityTileTypes.power_line_corner_rb, CityAssets.power_line_corner_rb);
+        textures.put(CityTileTypes.power_line_corner_lt, CityAssets.power_line_corner_lt_off);
+        textures.put(CityTileTypes.power_line_corner_rt, CityAssets.power_line_corner_rt_off);
+        textures.put(CityTileTypes.power_line_corner_lb, CityAssets.power_line_corner_lb_off);
+        textures.put(CityTileTypes.power_line_corner_rb, CityAssets.power_line_corner_rb_off);
 
-        textures.put(CityTileTypes.power_line_up_t,      CityAssets.power_line_up_t);
-        textures.put(CityTileTypes.power_line_down_t,    CityAssets.power_line_down_t);
-        textures.put(CityTileTypes.power_line_left_t,    CityAssets.power_line_left_t);
-        textures.put(CityTileTypes.power_line_right_t,   CityAssets.power_line_right_t);
+        textures.put(CityTileTypes.power_line_up_t,      CityAssets.power_line_up_t_off);
+        textures.put(CityTileTypes.power_line_down_t,    CityAssets.power_line_down_t_off);
+        textures.put(CityTileTypes.power_line_left_t,    CityAssets.power_line_left_t_off);
+        textures.put(CityTileTypes.power_line_right_t,   CityAssets.power_line_right_t_off);
 
         textures.put(CityTileTypes.empty,   CityAssets.empty);
     }

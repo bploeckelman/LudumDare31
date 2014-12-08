@@ -5,10 +5,15 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Brian Ploeckelman created on 12/6/2014.
  */
 public class CityAssets {
+
+    public static Map<CityTileTypes, PowerTexture> powerTextures;
 
     public static TextureAtlas lightning_bolt;
     public static Animation lightningBoltAnim;
@@ -34,17 +39,29 @@ public class CityAssets {
     public static TextureRegion power_station;
     public static TextureRegion power_pole;
 
-    public static TextureRegion power_line_h;
-    public static TextureRegion power_line_v;
-    public static TextureRegion power_line_x;
-    public static TextureRegion power_line_corner_lt;
-    public static TextureRegion power_line_corner_rt;
-    public static TextureRegion power_line_corner_lb;
-    public static TextureRegion power_line_corner_rb;
-    public static TextureRegion power_line_up_t;
-    public static TextureRegion power_line_down_t;
-    public static TextureRegion power_line_left_t;
-    public static TextureRegion power_line_right_t;
+    public static TextureRegion power_line_h_on;
+    public static TextureRegion power_line_v_on;
+    public static TextureRegion power_line_x_on;
+    public static TextureRegion power_line_corner_lt_on;
+    public static TextureRegion power_line_corner_rt_on;
+    public static TextureRegion power_line_corner_lb_on;
+    public static TextureRegion power_line_corner_rb_on;
+    public static TextureRegion power_line_up_t_on;
+    public static TextureRegion power_line_down_t_on;
+    public static TextureRegion power_line_left_t_on;
+    public static TextureRegion power_line_right_t_on;
+
+    public static TextureRegion power_line_h_off;
+    public static TextureRegion power_line_v_off;
+    public static TextureRegion power_line_x_off;
+    public static TextureRegion power_line_corner_lt_off;
+    public static TextureRegion power_line_corner_rt_off;
+    public static TextureRegion power_line_corner_lb_off;
+    public static TextureRegion power_line_corner_rb_off;
+    public static TextureRegion power_line_up_t_off;
+    public static TextureRegion power_line_down_t_off;
+    public static TextureRegion power_line_left_t_off;
+    public static TextureRegion power_line_right_t_off;
 
     public static TextureRegion connections0;
     public static TextureRegion connections1;
@@ -89,19 +106,44 @@ public class CityAssets {
 
         power_station        = regions[1][3];
         power_pole           = regions[1][4];
-        power_line_h         = regions[1][5];
-        power_line_v         = regions[1][6];
-        power_line_x         = regions[1][7];
 
-        power_line_corner_lt = regions[2][0];
-        power_line_corner_rt = regions[2][1];
-        power_line_corner_lb = regions[2][2];
-        power_line_corner_rb = regions[2][3];
+        power_line_h_on         = regions[1][5];
+        power_line_v_on         = regions[1][6];
+        power_line_x_on         = regions[1][7];
+        power_line_corner_lt_on = regions[2][0];
+        power_line_corner_rt_on = regions[2][1];
+        power_line_corner_lb_on = regions[2][2];
+        power_line_corner_rb_on = regions[2][3];
+        power_line_up_t_on      = regions[2][4];
+        power_line_down_t_on    = regions[2][5];
+        power_line_left_t_on    = regions[2][6];
+        power_line_right_t_on   = regions[2][7];
 
-        power_line_up_t      = regions[2][4];
-        power_line_down_t    = regions[2][5];
-        power_line_left_t    = regions[2][6];
-        power_line_right_t   = regions[2][7];
+        power_line_h_off         = regions[1][2];
+        power_line_v_off         = regions[1][3];
+        power_line_x_off         = regions[1][4];
+
+        power_line_corner_lt_off = regions[3][0];
+        power_line_corner_rt_off = regions[3][1];
+        power_line_corner_lb_off = regions[3][2];
+        power_line_corner_rb_off = regions[3][3];
+        power_line_up_t_off      = regions[3][4];
+        power_line_down_t_off    = regions[3][5];
+        power_line_left_t_off    = regions[3][6];
+        power_line_right_t_off   = regions[3][7];
+
+        powerTextures = new HashMap<CityTileTypes, PowerTexture>();
+        powerTextures.put(CityTileTypes.power_line_h, new PowerTexture(power_line_h_on, power_line_h_off));
+        powerTextures.put(CityTileTypes.power_line_v, new PowerTexture(power_line_v_on, power_line_v_off));
+        powerTextures.put(CityTileTypes.power_line_x, new PowerTexture(power_line_x_on, power_line_x_off));
+        powerTextures.put(CityTileTypes.power_line_corner_lt, new PowerTexture(power_line_corner_lt_on, power_line_corner_lt_off));
+        powerTextures.put(CityTileTypes.power_line_corner_rt, new PowerTexture(power_line_corner_rt_on, power_line_corner_rt_off));
+        powerTextures.put(CityTileTypes.power_line_corner_lb, new PowerTexture(power_line_corner_lb_on, power_line_corner_lb_off));
+        powerTextures.put(CityTileTypes.power_line_corner_rb, new PowerTexture(power_line_corner_rb_on, power_line_corner_rb_off));
+        powerTextures.put(CityTileTypes.power_line_up_t, new PowerTexture(power_line_up_t_on, power_line_up_t_off));
+        powerTextures.put(CityTileTypes.power_line_down_t, new PowerTexture(power_line_down_t_on, power_line_down_t_off));
+        powerTextures.put(CityTileTypes.power_line_left_t, new PowerTexture(power_line_left_t_on, power_line_left_t_off));
+        powerTextures.put(CityTileTypes.power_line_right_t, new PowerTexture(power_line_right_t_on, power_line_right_t_off));
 
         connections0 = regions[7][0];
         connections1 = regions[7][1];
