@@ -1,20 +1,21 @@
 package levels;
 
 import aurelienribon.tweenengine.equations.Quad;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.TransitionManager;
 import levels.InsectUtils.*;
 import levels.InsectUtils.EnemyTypes.Spider;
 import levels.InsectUtils.MapTileTypes.Bar;
 import levels.InsectUtils.MapTileTypes.Path;
 import levels.InsectUtils.MapTileTypes.Beer;
-
 import levels.InsectUtils.TowerTypes.Dart;
 import levels.InsectUtils.TowerTypes.Poison;
 import levels.InsectUtils.TowerTypes.Slow;
@@ -54,6 +55,7 @@ public class Insects extends GameLevel {
 
     public Insects(){
         super();
+        tutorialText = "Looks like some insects are getting into your dirty bar.  Kill them with towers";
 
         this.currentThreat = 0;
         this.enemyDeltaTime = 0;
@@ -189,7 +191,7 @@ public class Insects extends GameLevel {
 
             }else{
                 this.currentWave = null;
-                this.nextWaveTime = (Assets.rand.nextFloat() * 15) + 10;
+                this.nextWaveTime = (Assets.rand.nextFloat() * 10) + 10;
             }
         }else{
             // wait for next wave
@@ -199,6 +201,7 @@ public class Insects extends GameLevel {
                 this.waveDeltaTime = 0;
                 this.nextWaveTime = 0;
                 this.currentWaveNum = this.currentWaveNum + 1;
+                if (currentWaveNum > 2) TransitionManager.Instance.finishedAnts();
             }else{
                 this.waveDeltaTime = this.waveDeltaTime + dt;
             }
@@ -224,7 +227,7 @@ public class Insects extends GameLevel {
                 this.towers.get(x).updateTower(this.enemies, dt);
             }
         }
-
+        startNext = currentWaveNum > 3;
     }
 
     @Override
