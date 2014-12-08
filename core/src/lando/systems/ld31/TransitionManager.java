@@ -61,4 +61,12 @@ public class TransitionManager {
 		LevelManager lm = LudumDare31.levelMgr;
 		lm.addLevel(6); // lets ATC
 	}
+	
+	public boolean snowmanTime;
+	public void snowman(){
+		if (snowmanTime) return;
+		snowmanTime = true;
+		LevelManager lm = LudumDare31.levelMgr;
+		lm.addLevel(7); // lets ATC
+	}
 }

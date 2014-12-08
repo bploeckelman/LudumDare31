@@ -144,11 +144,7 @@ public class IntercellularLevel extends GameLevel {
     
     @Override
     public void update(float dt) {
-    	levelTimer -= dt;
-    	if (cells.isEmpty() || levelTimer < 0){
-    		TransitionManager.Instance.defendPlanet();
-    		levelTimer = 10000;
-    	}
+
     	for (int i = 0; i < cells.size(); i++){
     		cells.get(i).update(dt);
     	}
@@ -169,6 +165,11 @@ public class IntercellularLevel extends GameLevel {
     	}
     	nextSpawn = Math.max(nextSpawn - dt, 0);
     	fixHangers();
+    	levelTimer -= dt;
+    	if (cells.isEmpty() || levelTimer < 0){
+    		TransitionManager.Instance.defendPlanet();
+    		levelTimer = 10000;
+    	}
     }
     
     public BloodCell getCellAtPos(Vector2 pos){
