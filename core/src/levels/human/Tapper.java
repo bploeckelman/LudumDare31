@@ -1,15 +1,12 @@
 package levels.human;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
+import lando.systems.ld31.LevelManager;
+import lando.systems.ld31.SoundManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-
 public class Tapper {
-
-	private static final Sound _pourSound = Gdx.audio.newSound(Gdx.files.internal(HumanAssets.PourSound));
 
 	private static final Texture _tapUp = new Texture(HumanAssets.TapperUp);
 	private static final Texture _tapDown = new Texture(HumanAssets.TapperDown);
@@ -31,6 +28,6 @@ public class Tapper {
 	
 	public void serve() {
 		_serveTime = 1f;
-		_pourSound.play();
+		SoundManager.play(LevelManager.Levels.Human, HumanAssets.Sounds.Pour);
 	}
 }

@@ -3,25 +3,18 @@ package levels;
 import java.util.ArrayList;
 
 import lando.systems.ld31.GameConstants;
-import lando.systems.ld31.GameObject;
 import lando.systems.ld31.LevelManager;
 import lando.systems.ld31.Score;
+import lando.systems.ld31.SoundManager;
 import lando.systems.ld31.ThreatLevel;
 import levels.human.*;
 import levels.human.Patron.PatronType;
-
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class HumanLevel extends GameLevel {
-	
-	private static Sound _ding = GameObject.getSound("tapper/ding.mp3");
-
-	public static final String Title = "HumanLevel";
-	public static boolean hasFocus;
 	
 	public int GlassHeight = 36;
 	
@@ -76,7 +69,7 @@ public class HumanLevel extends GameLevel {
 	
 	@Override
 	public int hasThreat() {
-		return ThreatLevel.getThreatLevel(HumanLevel.Title);
+		return ThreatLevel.getThreatLevel(LevelManager.Levels.Human);
 	}
 
 	@Override
@@ -123,7 +116,6 @@ public class HumanLevel extends GameLevel {
 
 	@Override
 	public void update(float dt) {
-		hasFocus = top;
 		
 		_bartender.update(dt);
 		for (int i = 0; i < BarCount; i++) {
@@ -157,7 +149,7 @@ public class HumanLevel extends GameLevel {
 					LevelManager.killMicrobes();
 				}
 				
-				playSound(_ding);
+				SoundManager.play(LevelManager.Levels.Human, HumanAssets.Sounds.Ding);
 				
 			} else if (item.remove){
 				_items.remove(item);

@@ -3,11 +3,10 @@ package levels.human;
 import java.util.ArrayList;
 
 import lando.systems.ld31.Assets;
+import lando.systems.ld31.LevelManager;
 import lando.systems.ld31.Score;
+import lando.systems.ld31.SoundManager;
 import lando.systems.ld31.ThreatLevel;
-import levels.HumanLevel;
-
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -20,7 +19,6 @@ public class Patron extends MovementImage {
 	private static Texture _puddle = new Texture(HumanAssets.PukePuddle);
 	private static Texture _nurseHat = new Texture(HumanAssets.NurseHat);
 	private static Texture _bugHat = new Texture(HumanAssets.Orkin);
-	private static Sound _vomitSound = getSound(HumanAssets.PukeSound);
 	
 	private static final Texture _pills = new Texture(HumanAssets.Pills);
 	private static final Texture _bugspray = new Texture(HumanAssets.Off);
@@ -96,16 +94,14 @@ public class Patron extends MovementImage {
 		boolean puked = false;
 		
 		if (!hasPuked) {
-			ThreatLevel.addThreat(HumanLevel.Title,  10);
+			ThreatLevel.addThreat(LevelManager.Levels.Human,  10);
 			flipImage = hasPuked = true;
 			_pukeTime = 1f;
 			Score.PukingPatrons++;
 			shouldUpdate = false;
 			puked = true;
 			
-			if (HumanLevel.hasFocus) {
-				_vomitSound.play();
-			}
+			SoundManager.play(LevelManager.Levels.Human,  HumanAssets.Sounds.Puke);
 		}
 		
 		return puked;

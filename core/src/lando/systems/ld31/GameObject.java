@@ -7,8 +7,4 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public abstract class GameObject {
 
     public abstract void draw(SpriteBatch batch);
-    
-    public static Sound getSound(String path) {
-    	return Gdx.audio.newSound(Gdx.files.internal(path));
-    }
 }

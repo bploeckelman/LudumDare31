@@ -5,7 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
 import lando.systems.ld31.Assets;
+import lando.systems.ld31.LevelManager;
+import lando.systems.ld31.SoundManager;
 import lando.systems.ld31.ThreatLevel;
 import levels.intracellular.Asteroid;
 import levels.intracellular.Bullet;
@@ -66,13 +69,13 @@ public class IntraCellularLevel extends GameLevel {
         if(isUpPressed()) {
             ship.accelerate(dt);
             if(!ship.isThrusting) {
-                IntraCellularAssets.shipThrust.loop();
+            	SoundManager.getSound(IntraCellularAssets.shipThrust).loop();
                 ship.thrust(true);
             }
         } else {
             ship.slowDown(dt);
             if(ship.isThrusting) {
-                IntraCellularAssets.shipThrust.stop();
+            	SoundManager.getSound(IntraCellularAssets.shipThrust).stop();
                 ship.thrust(false);
             }
         }
@@ -80,7 +83,7 @@ public class IntraCellularLevel extends GameLevel {
         if((Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) &&
                 lastFired >= Bullet.fireRate) {
             bullets.add(ship.shoot());
-            playSound(IntraCellularAssets.shipShoot, .75f);
+            SoundManager.play(LevelManager.Levels.IntraCellular, IntraCellularAssets.shipShoot, .75f);
             lastFired = 0;
         } else {
             lastFired = lastFired > Bullet.fireRate ? Bullet.fireRate : lastFired + dt;
@@ -92,6 +95,14 @@ public class IntraCellularLevel extends GameLevel {
             Vector2 dir = mousePos2.sub(ship.position).nor();
             ship.sprite.setRotation(dir.angle() - 90);
         }
+    }
+    
+    @Override
+    protected void gotFocus(boolean hasFocus) {
+    	if (!hasFocus) {
+    		// make sure ship stops playing when switching screens
+        	SoundManager.getSound(IntraCellularAssets.shipThrust).stop();
+    	}
     }
 
     @Override
@@ -152,7 +163,7 @@ public class IntraCellularLevel extends GameLevel {
                 Bullet bullet = bullets.get(j);
                 if(bullet.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + bullet.sprite.getWidth()/2) {
                     asteroid.split(asteroids, i, bullet.velocity);
-                    playSound(IntraCellularAssets.asteroidExplode);
+                    SoundManager.play(LevelManager.Levels.IntraCellular, IntraCellularAssets.asteroidExplode);
                     i--;
                     bullets.remove(j);
                     continue ASTEROIDS;
@@ -175,7 +186,7 @@ public class IntraCellularLevel extends GameLevel {
             if(ship.invulnerabilityTimeLeft <= 0 &&
                     ship.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + ship.sprite.getWidth()/2)
             {
-                playSound(IntraCellularAssets.shipExplode, .5f);
+            	SoundManager.play(LevelManager.Levels.IntraCellular, IntraCellularAssets.shipExplode, .5f);
                 ship.reset((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
             }
 

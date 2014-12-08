@@ -1,12 +1,13 @@
 package levels.human;
 
-import com.badlogic.gdx.audio.Sound;
+import lando.systems.ld31.LevelManager;
+import lando.systems.ld31.SoundManager;
+
 import com.badlogic.gdx.graphics.Texture;
 
 public class Bartender extends MovementImage {
 	
 	private static final Texture _bartender = new Texture(HumanAssets.Bartender);
-	private static final Sound _moveSound = getSound(HumanAssets.BartenderMove);
 	
 	float _defaultX;
 	
@@ -32,8 +33,8 @@ public class Bartender extends MovementImage {
 		
 		if (y == yPosition - offset) return;
 		x = _defaultX;
-		y = yPosition - offset;	
-		_moveSound.play();
+		y = yPosition - offset;
+		SoundManager.play(LevelManager.Levels.Human, HumanAssets.Sounds.BartenderMove);
 	}
 
 	public void setRight(float xPosition) {

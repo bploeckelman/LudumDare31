@@ -20,6 +20,23 @@ import com.badlogic.gdx.math.Vector3;
 
 public class LevelManager implements InputProcessor{
 
+	public static LevelManager Instance;
+
+	public static LevelManager initialize() {
+		Instance = new LevelManager();
+		return Instance;
+	}	
+	
+	public class Levels { 
+		public static final String IntraCellular = "Asteroids";
+		public static final String InterCellular = "Bubble Pop";
+		public static final String Insects = "Tower Defense";
+		public static final String Human = "Tapper";
+		public static final String City = "Pipe Dream";
+		public static final String Planetary = "Missle Defense";
+		public static final String Galaxy = "ATC";
+	}
+	
 	public static final int levelCount = 7;
 	
     public GameLevel[] levels = new GameLevel[levelCount + 1];
@@ -48,10 +65,8 @@ public class LevelManager implements InputProcessor{
         Gdx.input.setInputProcessor(this);
         currentFBO = new FrameBuffer(Pixmap.Format.RGB888, GameConstants.ScreenWidth, GameConstants.ScreenHeight, false);
         lastFBO = new FrameBuffer(Pixmap.Format.RGB888, GameConstants.ScreenWidth, GameConstants.ScreenHeight, false);
-
     }
-    
-
+   
     private final float transitionLength = 1f;
     public void setLevel(int index){
     	if (index < 0 || index >= levels.length) return;
@@ -239,6 +254,39 @@ public class LevelManager implements InputProcessor{
 		}
 	};
 	
+	public static boolean isLevelActive(String level) {
+		boolean active = false;
+		
+		switch (Instance.currentLevel){
+			case 0:
+				active = (level == LevelManager.Levels.InterCellular);
+				break;
+			case 1: 
+				active = (level == LevelManager.Levels.IntraCellular);
+				break;
+			case 2:
+				active = (level == LevelManager.Levels.Insects);
+				break;
+			case 3:
+				active = (level == LevelManager.Levels.Human);
+				break;
+			case 4:
+				active = (level == LevelManager.Levels.City);
+				break;
+			case 5:
+				active = (level == LevelManager.Levels.Planetary);
+				break;
+			case 6:
+				active = (level == LevelManager.Levels.Galaxy);
+				break;
+			default:
+				active = false;
+				break;
+		}
+		
+		return active;
+	}
+	
 	public static void killBugs() {
 		resetLevel(2);
 	}
@@ -255,9 +303,9 @@ public class LevelManager implements InputProcessor{
 	{
 		if (levelIndex < 0 || levelIndex >= LevelManager.levelCount) return;
 		
-		GameLevel level = LudumDare31.levelMgr.levels[levelIndex];
+		GameLevel level = Instance.levels[levelIndex];
 		if (level != null) {
 			level.reset();
 		}		
-	}	
+	}
 }

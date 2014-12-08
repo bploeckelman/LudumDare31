@@ -1,8 +1,6 @@
 package levels.intracellular;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import lando.systems.ld31.GameObject;
 
 public class IntraCellularAssets {
     public static Texture background;
@@ -11,10 +9,10 @@ public class IntraCellularAssets {
     public static Texture asteroid;
     public static Texture bullet;
 
-    public static Sound asteroidExplode;
-    public static Sound shipExplode;
-    public static Sound shipThrust;
-    public static Sound shipShoot;
+    public static final String asteroidExplode = "intracellular/virusBreak.mp3";
+    public static final String shipExplode = "intracellular/shipExplode.mp3";
+    public static final String shipThrust = "intracellular/shipThrust.mp3";
+    public static final String shipShoot = "intracellular/shipShoot.mp3";
 
     public static void init() {
         background = new Texture("intracellular/background_924x768.png");
@@ -22,11 +20,6 @@ public class IntraCellularAssets {
         shipThrusting = new Texture("intracellular/shipThrusting.png");
         asteroid = new Texture("intracellular/virus_128x128.png");
         bullet = new Texture("intracellular/bullet.png");
-
-        asteroidExplode = GameObject.getSound("intracellular/virusBreak.mp3");
-        shipExplode = GameObject.getSound("intracellular/shipExplode.mp3");
-        shipThrust = GameObject.getSound("intracellular/shipThrust.mp3");
-        shipShoot = GameObject.getSound("intracellular/shipShoot.mp3");
     }
 
     public static void dispose() {
@@ -35,10 +28,5 @@ public class IntraCellularAssets {
         shipThrusting.dispose();
         asteroid.dispose();
         bullet.dispose();
-
-        asteroidExplode.dispose();
-        shipExplode.dispose();
-        shipThrust.dispose();
-        shipShoot.dispose();
     }
 }

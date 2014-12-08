@@ -7,14 +7,11 @@ import lando.systems.ld31.TutorialManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-
 
 public abstract class GameLevel {
 	
@@ -22,7 +19,7 @@ public abstract class GameLevel {
 	public Vector2 zoomOutPoint;
 	public String tutorialText;
 	protected boolean startNext;
-	public boolean top;
+	protected boolean top;
 	protected ParticleSystem particles;
 	
 	private static TutorialManager _tutorialManager = new TutorialManager();
@@ -207,7 +204,11 @@ public abstract class GameLevel {
 	
 	public void update(float dt, boolean isTop)
 	{
-		top = isTop;
+		if (top != isTop) {
+			gotFocus(isTop);
+			top = isTop;
+		}
+		
 		particles.update(dt);
 		if (!isTop) {
 			dt /= 2;
@@ -227,24 +228,14 @@ public abstract class GameLevel {
 			}
 		}
 	}
-	
-	
+		
+	protected void gotFocus(boolean hasFocus) { }
+
 	/**
 	 * 
 	 * @param dt the update fraction in Seconds
 	 */
 	public abstract void update(float dt);
 	
-
-	
 	public abstract void draw(SpriteBatch batch);
-	
-	public void playSound(Sound sound) {
-		playSound(sound, 1);
-	}
-	public void playSound(Sound sound, float volume) {
-		if (top) {
-			sound.play(volume);
-		}
-	}
 }
