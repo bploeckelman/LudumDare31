@@ -242,6 +242,11 @@ public class CityLevel extends GameLevel {
             return;
         }
 
+        // Update score
+        if (powerLineType != CityTileTypes.empty) {
+            Score.PowerTilesPlaced++;
+        }
+
         // Place the current power tile grid at the tile under the mouse
         PowerTile thisTile = powerGrid[y][x];
         thisTile.powerGridType = powerLineType;
