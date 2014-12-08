@@ -102,6 +102,7 @@ public class Earth {
     private void updatePositions() {
         baseEarth.setCenter(pos.x, pos.y);
     }
+
     private void updateRotations() {
         baseEarth.setRotation(r);
         // Rotating the earth also updates the StrikeExplosions

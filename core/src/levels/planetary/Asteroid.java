@@ -1,6 +1,5 @@
 package levels.planetary;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -16,7 +15,7 @@ public class Asteroid extends ThreatObject {
 
     private static final String TAG = "Asteroid";
 
-    private static final float STAGING_TIME = 0;
+    private static final float STAGING_TIME = 3;
 
 
     private float rotationalVelocity;
@@ -69,7 +68,6 @@ public class Asteroid extends ThreatObject {
             if (position.x < -radius || position.x > GameConstants.GameWidth + radius ||
                     position.y < -radius || position.y > GameConstants.GameHeight + radius) {
                 // It's gone, destroy it.
-                Gdx.app.log(TAG, "we've destroyed an off-screen sprite");
                 setDestroyable(true);
             }
             // Position it.
