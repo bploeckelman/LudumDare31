@@ -8,7 +8,6 @@ import java.util.Stack;
 public class CityPowerSource {
 
     public int x, y;
-    public boolean connected;
 
     private Stack<PowerTile> powerTileStack;
 

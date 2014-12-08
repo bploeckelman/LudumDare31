@@ -70,6 +70,7 @@ public enum CityTileTypes {
     };
     public static CityTileTypes getRandomPowerLineType() {
         return power_line_types[Assets.rand.nextInt(power_line_types.length)];
+//        return power_line_x;
     }
     // -------------------------------------------------------------------------
 
