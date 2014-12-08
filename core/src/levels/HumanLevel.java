@@ -2,13 +2,23 @@ package levels;
 
 import java.util.ArrayList;
 
+import lando.systems.ld31.Assets;
+import lando.systems.ld31.ColorAccessor;
 import lando.systems.ld31.GameConstants;
 import lando.systems.ld31.LevelManager;
+import lando.systems.ld31.LudumDare31;
 import lando.systems.ld31.Score;
 import lando.systems.ld31.SoundManager;
 import lando.systems.ld31.ThreatLevel;
 import levels.human.*;
 import levels.human.Patron.PatronType;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenEquations;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -98,6 +108,21 @@ public class HumanLevel extends GameLevel {
 		if (isLeftPressed()) {
 			_bartender.walk(dt);
 		}
+		
+		if (Gdx.input.isKeyJustPressed(Keys.F)){
+			powerFailure();
+		}
+	}
+	
+	private Color _powerColor = new Color(0, 0, 0, 0);
+		
+	public void powerFailure() {
+		_powerColor = new Color(0, 0, 0, 1);
+		Tween.to(_powerColor, ColorAccessor.COLOR_A, 2f)      
+	        .target(0, 0, 0, 0)
+	        .ease(TweenEquations.easeOutBounce)
+	        .setCallbackTriggers(TweenCallback.END)
+	        .start(LudumDare31.tweens);
 	}
 	
 	private float _serveTime = 0;
@@ -203,7 +228,13 @@ public class HumanLevel extends GameLevel {
 		if (top) {
 			_glassWidget.draw(batch);
 		}
+
+	
+		batch.setColor(_powerColor);
+		batch.draw(Assets.squareTex, 0,  0,  GameConstants.GameWidth,  GameConstants.GameHeight);
+		batch.setColor(Color.WHITE);
 	}
+		
 	
 	@Override
 	public void reset() {
