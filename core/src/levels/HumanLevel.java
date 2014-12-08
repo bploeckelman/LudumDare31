@@ -52,7 +52,7 @@ public class HumanLevel extends GameLevel {
 	
 	public HumanLevel()
 	{
-		tutorialText = "Living the dream. Keep it clean and keep them coming.\n\n\nMove: Up, Down, Left\nServe: Right\n\nClick to exit this screen.";
+		tutorialText = "You are living the dream as a bar owner from Wisconsin.\nKeep it clean and keep them coming.\n\nMove: Up, Down, Left\nServe: Right\n\nClick to exit this screen.";
 		_barTexture = new Texture(HumanAssets.Bar);
 		
 		Patron.maxX = _barTexture.getWidth();
@@ -249,6 +249,10 @@ public class HumanLevel extends GameLevel {
 		
 	@Override
 	public void draw(SpriteBatch batch) {
+		batch.setColor(0.5f, 0.5f, 0.5f, 1.0f);
+		batch.draw(Assets.barFloor, 0, 0, camera.viewportWidth, camera.viewportHeight);
+
+		batch.setColor(Color.WHITE);
 		_patronManager.draw(batch);
 		
 		for (int i = 0; i < BarCount; i++) {

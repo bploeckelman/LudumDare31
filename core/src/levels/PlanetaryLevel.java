@@ -85,6 +85,7 @@ public class PlanetaryLevel extends GameLevel {
 
 
     public PlanetaryLevel() {
+    	tutorialText = "Holy asteroids, Batman!\nSo that's why the @!#?@! power lines keep breaking.\n\nWhat's a bar owner to do?\nDestroy the asteroids.\n\nAnd don't forget about your patrons.";
 
         tempV2 = new Vector2();
 

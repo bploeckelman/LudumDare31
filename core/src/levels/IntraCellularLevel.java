@@ -37,10 +37,11 @@ public class IntraCellularLevel extends GameLevel {
     float levelTimer = 30;
 
     public IntraCellularLevel() {
-        tutorialText = "Use mouse to rotate.\n" +
+        tutorialText = "You are getting sick. Who will serve the patrons?\nUse mouse to rotate.\n" +
                 "Use up arrow (or w) to accelerate.\n" +
                 "Use the space bar or click to fire.\n\n" +
-                "Destroy the viruses invading your cell!";
+                "Destroy the viruses\ninvading your cell!\n" +
+                "Don't forget about your patrons.";
 
         IntraCellularAssets.init();
         ship = new Ship((camera.viewportWidth - 100)/2, camera.viewportHeight/2);

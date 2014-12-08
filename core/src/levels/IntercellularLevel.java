@@ -41,7 +41,7 @@ public class IntercellularLevel extends GameLevel {
     
     // Class constructor
     public IntercellularLevel() {
-    	tutorialText = "Your arteries are clogging up.  Clear them out. Match 3 or more to clear a group.  A white blood cell will bomb all that it touches.";
+    	tutorialText = "All the stress from running this\nbar (and fried food) is\nclogging your arteries.\n\nMatch 3 or more to clear a group.\n\n\nAnd don't forget about your patrons.";
     	cells = new ArrayList<BloodCell>();
     	gameBounds = new Rectangle((GameConstants.GameWidth - (tile_size * 10 + 16)) / 2.0f, 0, tile_size * 10 + 16, GameConstants.ScreenHeight);
     	spawnCell = new BloodCell(spawnPoint.x, spawnPoint.y, this, false);
@@ -125,6 +125,11 @@ public class IntercellularLevel extends GameLevel {
     
     @Override
     public boolean touchUp(int screenX, int screenY, int button) {
+    	if (tutorialText != null) {
+    		super.touchUp(screenX, screenY, button);
+    		return true;
+    	}
+    	
     	if (cellsMoving() || nextSpawn <= 0) return false;
     	Vector2 gamePos = getGamePos(new Vector2(screenX, screenY));
     	float rot = gamePos.sub(16,16).sub(spawnPoint).angle();

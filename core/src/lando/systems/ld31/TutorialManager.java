@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 
 public class TutorialManager {
 
-	float _hPad = 144;
-	float _vPad = 108;
+	float _hPad = 108;
+	float _vPad = 72;
 	float _thickness = 4;
 	
 	public void draw(SpriteBatch batch, String tutorialText) {
