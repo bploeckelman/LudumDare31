@@ -26,6 +26,7 @@ public class BloodCell {
     public boolean alive;
     public boolean settled;
     public Vector2 gridPos;
+    public Color color;
 
     private final float speed = 10;
     private IntercellularLevel level;
@@ -39,6 +40,22 @@ public class BloodCell {
     	else if (typeRand < 4) this.type = TileType.badGreen;
     	else if (typeRand < 6) this.type = TileType.badYellow;
     	else this.type = TileType.goodWhite;
+    	
+    	switch (type){
+    	case goodWhite:
+    		color = Color.WHITE.cpy();
+    		break;
+    	case badBlue:
+    		color = Color.BLUE.cpy();
+    		break;
+    	case badGreen:
+    		color = Color.GREEN.cpy();
+    		break;
+    	case badYellow:
+    		color = Color.YELLOW.cpy();
+    		break;
+    		
+    	}
     	
 
     	this.pos = new Vector2(x, y);
@@ -131,22 +148,8 @@ public class BloodCell {
     }
     
     public void draw(SpriteBatch batch){
-    	Color tint = Color.WHITE;
-    	switch (type){
-    	case goodWhite:
-    		break;
-    	case badBlue:
-    		tint = Color.BLUE;
-    		break;
-    	case badGreen:
-    		tint = Color.GREEN;
-    		break;
-    	case badYellow:
-    		tint = Color.YELLOW;
-    		break;
-    		
-    	}
-    	batch.setColor(tint);
+
+    	batch.setColor(color);
     	batch.draw(Assets.milkyWay, pos.x, pos.y, 32, 32);
     	batch.setColor(Color.WHITE);
     }

@@ -2,7 +2,10 @@ package levels;
 
 import java.util.ArrayList;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.equations.Linear;
 import aurelienribon.tweenengine.equations.Quad;
+import aurelienribon.tweenengine.equations.Quart;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,8 +15,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import lando.systems.ld31.Assets;
+import lando.systems.ld31.ColorAccessor;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.LudumDare31;
 import lando.systems.ld31.ParticleSystem;
+import lando.systems.ld31.Vector2Accessor;
 import levels.intercellular.BloodCell;
 import levels.intercellular.TileType;
 
@@ -80,8 +86,12 @@ public class IntercellularLevel extends GameLevel {
     	for(int i = 0; i < cells.size(); i++){
     		BloodCell cell = cells.get(i);
     		cell.gridPos.y += 2;
-    		cell.pos.y -= 64;
-    		if (cell.pos.y <= 0){
+            Tween.to(cell.pos, Vector2Accessor.POSITION_Y, .5f)
+            .target(cell.pos.y - 64)
+            .ease(Linear.INOUT)
+            .start(LudumDare31.tweens);
+    		
+    		if (cell.gridPos.y >= 21){
     			lose();
     		}
     	}
@@ -93,6 +103,11 @@ public class IntercellularLevel extends GameLevel {
 	    		cell.alive = true;
 	    		cell.settled = true;
 	    		cells.add(cell);
+	    		cell.color.set(cell.color.r, cell.color.g, cell.color.b, 0);
+	            Tween.to(cell.color, ColorAccessor.COLOR_A, .5f)
+	            .target(1)
+	            .ease(Quart.IN)
+	            .start(LudumDare31.tweens);
 	    	}
     	}
     }
@@ -177,9 +192,8 @@ public class IntercellularLevel extends GameLevel {
 
     @Override
     public void draw(SpriteBatch batch) {
-    	batch.setColor(.3f,.3f,.3f,1);
-    	batch.draw(Assets.squareTex, gameBounds.x, gameBounds.y, gameBounds.width, gameBounds.height);
     	batch.setColor(Color.WHITE);
+    	batch.draw(Assets.bloodVessel, gameBounds.x, gameBounds.y, gameBounds.width, gameBounds.height);
     	for (int i = 0; i < cells.size(); i++){
     		cells.get(i).draw(batch);
     	}
