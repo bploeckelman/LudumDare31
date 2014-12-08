@@ -1,15 +1,19 @@
 package levels;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
 import levels.planetary.Earth;
 import levels.planetary.Moon;
+import levels.planetary.Rocket;
 import levels.planetary.RocketExplosion;
 
 import java.util.ArrayList;
 
+
+// TODO: cursor indicating if firing is possible (too close to earth, etc)
 
 public class PlanetaryLevel extends GameLevel {
 
@@ -41,6 +45,7 @@ public class PlanetaryLevel extends GameLevel {
 
     private Earth earth;
     private Moon moon;
+    private ArrayList<Rocket> rockets;
     private ArrayList<RocketExplosion> rocketExplosions;
 
     // -----------------------------------------------
@@ -50,24 +55,23 @@ public class PlanetaryLevel extends GameLevel {
 
     private float dayTimer = 0;
 
+
     // -----------------------------------------------------------------------------------------------------------------
 
-    public PlanetaryLevel() {
 
-        Gdx.app.log(TAG, "it's alive!");
+    public PlanetaryLevel() {
 
         // Get the centers!
         earthPos = new Vector2(
                 GameConstants.GameWidth / 2,
                 GameConstants.GameHeight / 2
         );
+        // This is also the zoom out point
+        zoomOutPoint = earthPos.cpy();
 
         // Make the things!
         // Earth
-        earth = new Earth();
-        // Set the position now.
-        earth.setPosition(earthPos);
-        zoomOutPoint = earthPos.cpy();
+        earth = new Earth(earthPos);
 
         // Moon
         // Where's the moon?
@@ -75,9 +79,12 @@ public class PlanetaryLevel extends GameLevel {
         moon = new Moon();
 
         // Explosions
-        rocketExplosions = new ArrayList<RocketExplosion>(3);
+        rockets = new ArrayList<Rocket>();
+        rocketExplosions = new ArrayList<RocketExplosion>();
 
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
 
     @Override
@@ -109,14 +116,19 @@ public class PlanetaryLevel extends GameLevel {
         float moonRotation = (moonOrbitAngle + MOON_TEXTURE_ROTATION) % 360;
         moon.setRotation(moonRotation);
 
-//        for (RocketExplosion rocketExplosion : rocketExplosions) {
-//            rocketExplosion.update(dt);
-//            if ()
-//        }
+        // Rockets -----------------
+        for (int i = rockets.size() - 1; i >= 0; i--) {
+            rockets.get(i).update(dt);
+            if (rockets.get(i).isDestroyable()) {
+                detonateRocket(rockets.get(i));
+                rockets.remove(i);
+            }
+        }
 
+        // Explosions! ----------------
         for (int i = rocketExplosions.size() - 1; i >= 0; i--) {
             rocketExplosions.get(i).update(dt);
-            if (rocketExplosions.get(i).isComplete == true) {
+            if (rocketExplosions.get(i).isDestroyable()) {
                 rocketExplosions.remove(i);
             }
         }
@@ -130,16 +142,61 @@ public class PlanetaryLevel extends GameLevel {
         for (RocketExplosion rocketExplosion : rocketExplosions) {
             rocketExplosion.draw(batch);
         }
+        for (Rocket rocket : rockets) {
+            rocket.draw(batch);
+        }
+
+        batch.setColor(Color.RED);
+        batch.draw(Assets.squareTex, earthPos.x, earthPos.y, 3, 3);
+        batch.draw(Assets.squareTex, moonPos.x, moonPos.y, 3, 3);
+        batch.setColor(Color.WHITE);
+
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int button) {
 
+        Vector2 gameTouchPos = getGamePos(new Vector2(screenX, screenY));
+
         // New explosions
-        Vector2 explosionPosition = getGamePos(new Vector2(screenX, screenY));
-        rocketExplosions.add(new RocketExplosion(explosionPosition));
+//        Vector2 explosionPosition = getGamePos(new Vector2(screenX, screenY));
+//        rocketExplosions.add(new RocketExplosion(explosionPosition));
+
+        launchRocketFromEarth(gameTouchPos);
+        launchRocketFromMoon(gameTouchPos);
+
+
+//        rockets.add(new Rocket(earthPos.cpy(), getGamePos(new Vector2(screenX, screenY))));
+//        rockets.add(new Rocket(moonPos.cpy(), getGamePos(new Vector2(screenX, screenY))));
 
         return true;
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    private void detonateRocket(Rocket rocket) {
+        // Explosion!
+        rocketExplosions.add(new RocketExplosion(rocket.getTargetPos()));
+    }
+    private void launchRocket(Vector2 origin, Vector2 target) {
+        // Add a launch explosion
+        // Add the rocket
+        rockets.add(new Rocket(origin, target));
+    }
+    private void launchRocketFromEarth(Vector2 target) {
+        launchRocketFromHeavenlyBody(earthPos, EARTH_RADIUS, target);
+    }
+    private void launchRocketFromHeavenlyBody(Vector2 bodyPos, float bodyRadius, Vector2 target) {
+        // Where's the surface of the planet?
+        // Get the normalized vector to target.
+        Vector2 dir = target.cpy().sub(bodyPos).nor();
+        Vector2 origin = bodyPos.cpy().add(dir.scl(bodyRadius));
+        // Fire le missile!
+        launchRocket(origin, target);
+    }
+    private void launchRocketFromMoon(Vector2 target) {
+        launchRocketFromHeavenlyBody(moonPos, MOON_RADIUS, target);
+    }
+
 
 }

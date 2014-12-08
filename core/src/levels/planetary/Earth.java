@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
-import levels.PlanetaryLevel;
 
 public class Earth {
 
@@ -19,11 +18,14 @@ public class Earth {
     // -----------------------------------------------
 
 
-    public Earth() {
+    public Earth(Vector2 position) {
 
-        baseEarth = new Sprite(Assets.planetaryTempEarth, Assets.planetaryTempEarth.getWidth(), Assets.planetaryTempEarth.getHeight());
-        baseEarth.setSize(PlanetaryLevel.EARTH_RADIUS * 2, PlanetaryLevel.EARTH_RADIUS * 2);
+        baseEarth = new Sprite(Assets.planetaryTempEarth);
+//        baseEarth.setSize(PlanetaryLevel.EARTH_RADIUS * 2, PlanetaryLevel.EARTH_RADIUS * 2);
+        setPosition(position);
         baseEarth.setOriginCenter();
+
+
 
     }
 
@@ -42,12 +44,7 @@ public class Earth {
     }
     public void setPosition(Vector2 position) {
         pos.set(position);
-        baseEarth.setPosition(
-                pos.x - PlanetaryLevel.EARTH_RADIUS,
-                pos.y - PlanetaryLevel.EARTH_RADIUS
-        );
-//        baseEarth.setX(pos.x - PlanetaryLevel.EARTH_RADIUS);
-//        baseEarth.setY(pos.y - PlanetaryLevel.EARTH_RADIUS);
+        baseEarth.setCenter(pos.x, pos.y);
     }
     public void setRotation(float rotation) {
         r = rotation;

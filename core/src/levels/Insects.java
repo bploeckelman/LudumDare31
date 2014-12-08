@@ -1,23 +1,25 @@
 package levels;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import levels.InsectUtils.*;
 import levels.InsectUtils.EnemyTypes.Spider;
 import levels.InsectUtils.MapTileTypes.Bar;
 import levels.InsectUtils.MapTileTypes.Path;
 import levels.InsectUtils.MapTileTypes.Beer;
-import levels.InsectUtils.MapTiles;
 
-import levels.InsectUtils.Enemies;
-import levels.InsectUtils.Tower;
 import levels.InsectUtils.TowerTypes.Dart;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by jhoopes on 12/6/14.
@@ -32,11 +34,19 @@ public class Insects extends GameLevel {
     protected int tileWidth;
     protected int tileHeight;
 
+
+    protected wave currentWave;
+    protected int currentWaveNum;
+    protected float nextWaveTime;
+    protected float waveDeltaTime;
     protected float enemyDeltaTime;
     protected float nextEnemyDeltaTime;
     protected int pathYStart;
 
     protected int money; // amount the player has to spend
+
+    protected ArrayList<HashMap<Object, Object>>  towerSelects;
+    protected String currentTowerType;
 
 
     public Insects(){
@@ -45,11 +55,14 @@ public class Insects extends GameLevel {
         this.currentThreat = 0;
         this.enemyDeltaTime = 0;
         this.money = 15;
+        this.currentWaveNum = 0;
         this.enemies = new ArrayList<Enemies>();
         this.towers = new ArrayList<Tower>();
+        this.currentTowerType = "Dart";
         this.getWidthAndHeight();
         this.baseMap = new MapTiles[this.tileWidth][];
         generateMap();
+        generateTowerSelects();
     }
 
 
@@ -80,7 +93,26 @@ public class Insects extends GameLevel {
 
 
     public boolean touchUp(int screenX, int screenY, int button) {
+
+        // first check for selecting tower type
+        this.selectTower(getGamePos(new Vector2(screenX, screenY)));
+
         return this.addTower(getGamePos(new Vector2(screenX, screenY)));
+    }
+
+    protected void selectTower(Vector2 pointClicked){
+
+        int cellXNum = (int) Math.floor(pointClicked.x / 32);
+        int cellYNum = (int) Math.floor(pointClicked.y / 32);
+
+        if(cellXNum == 10 && cellYNum == this.tileHeight + 1){
+            this.currentTowerType = "Dart";
+        }else if(cellXNum == 16 && cellYNum == this.tileHeight + 1){
+            this.currentTowerType = "Slow";
+        }else if(cellXNum == 22 && cellYNum == this.tileHeight + 1){
+            this.currentTowerType = "Poison";
+        }
+
     }
 
     protected boolean addTower(Vector2 clickPos){
@@ -92,6 +124,10 @@ public class Insects extends GameLevel {
             return false;
         }
 
+        if(cellYNum >= this.baseMap[0].length){
+            return false;
+        }
+
         // don't add towers to path
         if(this.baseMap[cellXNum][cellYNum] instanceof Path || this.baseMap[cellXNum][cellYNum] instanceof Beer ||
                                                                             this.baseMap[cellXNum][cellYNum].hasTower()){
@@ -100,7 +136,7 @@ public class Insects extends GameLevel {
 
         Tower newTower = new Dart(new Vector2(cellXNum * 32, cellYNum * 32));
 
-        if(this.money > newTower.getCost()){
+        if(this.money >= newTower.getCost()){
             this.money = this.money - newTower.getCost();
             this.towers.add(newTower);
             this.baseMap[cellXNum][cellYNum].setHasTower(true);
@@ -112,13 +148,34 @@ public class Insects extends GameLevel {
     @Override
     public void update(float dt) {
 
-        if(this.enemyDeltaTime > this.nextEnemyDeltaTime){
-            Spider spider = new Spider(this.pathYStart);
-            this.enemies.add(spider);
-            this.nextEnemyDeltaTime = (Assets.rand.nextFloat() * 4) + 1;
-            this.enemyDeltaTime = 0;
+        if(this.currentWave != null){
+            if(!this.currentWave.isComplete()){
+
+                if(this.enemyDeltaTime > this.nextEnemyDeltaTime){
+
+                    this.enemies.add(this.currentWave.generateNewEnemy(this.pathYStart));
+                    this.nextEnemyDeltaTime = (Assets.rand.nextFloat() * 4) + 1;
+                    this.enemyDeltaTime = 0;
+                }else{
+                    this.enemyDeltaTime = this.enemyDeltaTime + dt;
+                }
+
+            }else{
+                this.currentWave = null;
+                this.nextWaveTime = (Assets.rand.nextFloat() * 15) + 10;
+            }
         }else{
-            this.enemyDeltaTime = this.enemyDeltaTime + dt;
+            // wait for next wave
+            if(this.waveDeltaTime > this.nextWaveTime){
+                // generate wave
+                this.currentWave = new wave(this.currentWaveNum);
+                this.waveDeltaTime = 0;
+                this.nextWaveTime = 0;
+                this.currentWaveNum = this.currentWaveNum + 1;
+            }else{
+                this.waveDeltaTime = this.waveDeltaTime + dt;
+            }
+
         }
 
 
@@ -153,8 +210,31 @@ public class Insects extends GameLevel {
                 batch.draw(this.baseMap[x][y].getTileTexture(), (x)*32, (y)*32);
             }
         }
+        // draw HUD tiles
+        for(int x=0; x < this.tileWidth; x++){
+            batch.draw(Assets.insectsAssets.HUDTile, x * 32, this.tileHeight * 32);
+            batch.draw(Assets.insectsAssets.HUDTile, x * 32, (this.tileHeight + 1) * 32);
+        }
 
-        Assets.smallFont.draw(batch, "Coins: " + Integer.toString(this.money), 0, (this.tileHeight * 32) - 64);
+        // draw tower boxes
+        for(int x=0; x < this.towerSelects.size(); x++){
+            HashMap<Object, Object> towerSelect = this.towerSelects.get(x);
+
+            int CellXNum = (Integer) towerSelect.get("CellXNum");
+            int CellYNum = (Integer) towerSelect.get("CellYNum");
+
+            if(this.currentTowerType == towerSelect.get("Name")){
+                batch.draw(Assets.insectsAssets.TowerSelectBGSelected, CellXNum * 32, CellYNum * 32);
+            }else{
+                batch.draw(Assets.insectsAssets.TowerSelectBG, CellXNum * 32, CellYNum * 32);
+            }
+            Assets.smallFont.draw(batch, towerSelect.get("Name") + " - Cost: " + towerSelect.get("Cost"), (CellXNum * 32) - 50, (CellYNum * 32) - 8);
+        }
+
+
+
+        Assets.smallFont.draw(batch, "Coins: " + Integer.toString(this.money), 0, this.camera.viewportHeight - 6);
+        Assets.smallFont.draw(batch, "Wave: " + Integer.toString(this.currentWaveNum), 0, this.camera.viewportHeight - 32);
 
 
         if(this.towers != null){
@@ -176,7 +256,7 @@ public class Insects extends GameLevel {
     public void getWidthAndHeight(){
 
         float width = GameConstants.GameWidth + 32;
-        float height = this.camera.viewportHeight;
+        float height = InsectConstants.towerGameHeight;
 
         this.tileWidth = (int) Math.floor(width / 32);
         this.tileHeight = (int) Math.floor(height / 32);
@@ -265,6 +345,36 @@ public class Insects extends GameLevel {
 
     }
 
+    protected void generateTowerSelects(){
 
+        this.towerSelects = new ArrayList<HashMap<Object, Object>>();
+
+        //Dart Tower
+        HashMap<Object, Object> dartTower = new HashMap<Object, Object>();
+        dartTower.put("Name", "Dart");
+        dartTower.put("CellXNum", 10);
+        dartTower.put("CellYNum", this.tileHeight + 1);
+        dartTower.put("Cost", "10");
+
+        this.towerSelects.add(dartTower);
+
+        HashMap<Object, Object> slowTower = new HashMap<Object, Object>();
+        slowTower.put("Name", "Slow");
+        slowTower.put("CellXNum", 16);
+        slowTower.put("CellYNum", this.tileHeight + 1);
+        slowTower.put("Cost", "20");
+
+        this.towerSelects.add(slowTower);
+
+        HashMap<Object, Object> poisonTower = new HashMap<Object, Object>();
+        poisonTower.put("Name", "Poison");
+        poisonTower.put("CellXNum", 22);
+        poisonTower.put("CellYNum", this.tileHeight + 1);
+        poisonTower.put("Cost", "30");
+
+        this.towerSelects.add(poisonTower);
+
+
+    }
 
 }

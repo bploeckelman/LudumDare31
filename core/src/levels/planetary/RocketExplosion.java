@@ -4,9 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
-import lando.systems.ld31.GameObject;
 
-public class RocketExplosion extends GameObject {
+public class RocketExplosion extends DestroyableObject {
 
     public static final String TAG = "RocketExplosion";
 
@@ -20,8 +19,6 @@ public class RocketExplosion extends GameObject {
     private float timer;
     private Sprite explosion;
     private float explosionRadius;
-
-    public boolean isComplete = false;
 
     public RocketExplosion(Vector2 position) {
 
@@ -63,7 +60,7 @@ public class RocketExplosion extends GameObject {
 
         } else {
             // We're done!
-            isComplete = true;
+            setDestroyable(true);
         }
 
         explosionRadius = EXPLOSION_RADIUS * percent;

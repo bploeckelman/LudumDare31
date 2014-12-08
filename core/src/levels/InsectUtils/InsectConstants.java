@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class InsectConstants {
 
-    public static List<String> MapTileTypes = Arrays.asList("Bar", "Beer", "Path");
+    public static int towerGameHeight = 704;
 
 
 
