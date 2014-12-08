@@ -1,0 +1,125 @@
+
+lightning_bolt.png
+size: 512,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+lightning_bolt.000
+  rotate: false
+  xy: 2, 262
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.016
+  rotate: false
+  xy: 2, 262
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.001
+  rotate: false
+  xy: 2, 132
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.002
+  rotate: false
+  xy: 68, 262
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.003
+  rotate: false
+  xy: 2, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.004
+  rotate: false
+  xy: 68, 132
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.005
+  rotate: false
+  xy: 134, 262
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.006
+  rotate: false
+  xy: 68, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.007
+  rotate: false
+  xy: 134, 132
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.008
+  rotate: false
+  xy: 200, 262
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.009
+  rotate: false
+  xy: 134, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.010
+  rotate: false
+  xy: 200, 132
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.011
+  rotate: false
+  xy: 266, 262
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.012
+  rotate: false
+  xy: 200, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.013
+  rotate: false
+  xy: 266, 132
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.014
+  rotate: false
+  xy: 332, 262
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_bolt.015
+  rotate: false
+  xy: 266, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1

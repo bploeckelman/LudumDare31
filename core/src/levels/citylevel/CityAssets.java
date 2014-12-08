@@ -1,14 +1,19 @@
 package levels.citylevel;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import javax.xml.soap.Text;
 
 /**
  * Brian Ploeckelman created on 12/6/2014.
  */
 public class CityAssets {
+
+    public static TextureAtlas lightning_bolt;
+    public static Animation lightningBoltAnim;
+    public static TextureAtlas lightning_flash;
+    public static Animation lightningFlashAnim;
 
     public static Texture city_background;
 
@@ -56,6 +61,14 @@ public class CityAssets {
     public static TextureRegion fuse_off;
 
     public static void load() {
+        lightning_bolt = new TextureAtlas("city/lightning_bolt.atlas");
+        lightningBoltAnim = new Animation(0.1f, lightning_bolt.getRegions());
+        lightningBoltAnim.setPlayMode(Animation.PlayMode.NORMAL);
+
+        lightning_flash = new TextureAtlas("city/lightning_flash.atlas");
+        lightningFlashAnim = new Animation(0.1f, lightning_flash.getRegions());
+        lightningFlashAnim.setPlayMode(Animation.PlayMode.NORMAL);
+
         city_background = new Texture("city/city_map.png");
         spritesheet = new Texture("city/city_tiles.png");
 

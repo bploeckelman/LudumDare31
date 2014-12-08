@@ -29,6 +29,7 @@ public class CityLevel extends GameLevel {
     public static final int tiles_wide = GameConstants.ScreenWidth  / tile_size - 3;
     public static final int tiles_high = GameConstants.ScreenHeight / tile_size - 2;
     public static final float margin_bottom = tile_size * 2;
+    public static final float lightning_bolt_duration = 1.7f; // seconds
 
     public static Map<CityTileTypes, TextureRegion> textures;
 
@@ -47,6 +48,10 @@ public class CityLevel extends GameLevel {
 
     MutableFloat glowAlpha = new MutableFloat(0);
     MutableFloat cloudAlpha = new MutableFloat(0);
+    MutableFloat lightningBoltTimer = new MutableFloat(0);
+    boolean lightningBoltDone = true;
+    int lastLightningTileX = -1;
+    int lastLightningTileY = -1;
 
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
@@ -155,6 +160,15 @@ public class CityLevel extends GameLevel {
                     batch.setColor(Color.WHITE);
                 }
             }
+        }
+
+        if (!lightningBoltDone) {
+//            Gdx.app.log("BOOM", "lighting strike");
+            // TODO (brian): make noise
+            batch.draw(CityAssets.lightningBoltAnim.getKeyFrame(lightningBoltTimer.floatValue()),
+                    lastLightningTileX * tile_size - 16, lastLightningTileY * tile_size + margin_bottom);
+            batch.draw(CityAssets.lightningFlashAnim.getKeyFrame(lightningBoltTimer.floatValue()),
+                    0, margin_bottom, camera.viewportWidth, camera.viewportHeight - 100);
         }
 
         batch.setColor(1.0f, 1.0f, 1.0f, cloudAlpha.floatValue());
@@ -269,7 +283,21 @@ public class CityLevel extends GameLevel {
             PowerTile tile = powerGrid[y][x];
             if (!tile.isBar && tile.powerGridType != CityTileTypes.empty)  {
 //                Gdx.app.log("DISASTER", "disaster struck at " + x + ", " + y);
-                placePowerGridTile(x, y, CityTileTypes.empty);
+                lastLightningTileX = x;
+                lastLightningTileY = y;
+                lightningBoltDone = false;
+                lightningBoltTimer.setValue(0);
+                Tween.to(lightningBoltTimer, 0, lightning_bolt_duration)
+                        .target(lightning_bolt_duration)
+                        .setCallback(new TweenCallback() {
+                            @Override
+                            public void onEvent(int type, BaseTween<?> source) {
+                                lightningBoltDone = true;
+                                placePowerGridTile(lastLightningTileX, lastLightningTileY, CityTileTypes.empty);
+                            }
+                        })
+                        .start(LudumDare31.tweens);
+
                 LevelManager.powerLevel = numBarConnections;
                 break;
             }

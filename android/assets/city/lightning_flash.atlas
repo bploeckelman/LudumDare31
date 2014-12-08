@@ -1,0 +1,118 @@
+
+lightning_flash.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+lightning_flash.000
+  rotate: false
+  xy: 2, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.002
+  rotate: false
+  xy: 2, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.005
+  rotate: false
+  xy: 2, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.004
+  rotate: false
+  xy: 2, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.001
+  rotate: false
+  xy: 2, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.003
+  rotate: false
+  xy: 68, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.006
+  rotate: false
+  xy: 134, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.007
+  rotate: false
+  xy: 200, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.008
+  rotate: false
+  xy: 266, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.009
+  rotate: false
+  xy: 332, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.010
+  rotate: false
+  xy: 398, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.011
+  rotate: false
+  xy: 464, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.012
+  rotate: false
+  xy: 530, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.013
+  rotate: false
+  xy: 596, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.014
+  rotate: false
+  xy: 662, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+lightning_flash.015
+  rotate: false
+  xy: 728, 2
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
