@@ -1,6 +1,8 @@
 package levels.InsectUtils;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import javax.xml.soap.Text;
 
@@ -16,6 +18,7 @@ public class InsectsAssets {
     public static Texture Beer;
 
     public static Texture Spider;
+    public static TextureAtlas Ant;
 
     public static Texture DartTower;
 
@@ -39,6 +42,10 @@ public class InsectsAssets {
 
         TowerSelectBG = new Texture("insects/TowerSelectBG.png");
         TowerSelectBGSelected = new Texture("insects/TowerSelectBG-selected.png");
+
+
+         Ant = new TextureAtlas("insects/ant.atlas");
+
     }
 
     public void dispose(){

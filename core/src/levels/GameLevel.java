@@ -211,7 +211,7 @@ public abstract class GameLevel {
 		
 		particles.update(dt);
 		if (!isTop) {
-			dt /= 2;
+			dt *= .1f;
 		}
 		
 		if (tutorialText == null) {

@@ -1,9 +1,13 @@
 package levels.planetary;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+
 import lando.systems.ld31.Assets;
+import levels.PlanetaryLevel;
 
 public class Earth {
 
@@ -20,8 +24,8 @@ public class Earth {
 
     public Earth(Vector2 position) {
 
-        baseEarth = new Sprite(Assets.planetaryTempEarth);
-//        baseEarth.setSize(PlanetaryLevel.EARTH_RADIUS * 2, PlanetaryLevel.EARTH_RADIUS * 2);
+        baseEarth = new Sprite(Assets.plEarth);
+        baseEarth.setSize(PlanetaryLevel.EARTH_RADIUS * 2, PlanetaryLevel.EARTH_RADIUS * 2);
         setPosition(position);
         baseEarth.setOriginCenter();
 
@@ -33,7 +37,25 @@ public class Earth {
 
 
     public void draw(SpriteBatch batch) {
+    	
+//    	batch.setShader(Assets.maskingProgram);
+//    	
+//    	Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE0);
+//    	baseEarth.getTexture().bind(0);
+//    	
+//    	Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE1);
+//		Assets.plEarthNightLights.bind(1);
+//		
+//		Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE2);
+//		Assets.plEarthShadowMask.bind(2);
+//    	
+//		Assets.maskingProgram.setUniformi("u_texture2", 1);
+//		Assets.maskingProgram.setUniformi("u_texture3", 2);
+		
         baseEarth.draw(batch);
+//        
+//        batch.setShader(null);
+//        Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE0);
     }
 
     public Vector2 getPosition() {
