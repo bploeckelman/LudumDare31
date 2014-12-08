@@ -10,6 +10,8 @@ public class TransitionManager {
 	
 	public boolean vomitHandled;
 	public boolean antsHandled;
+	public boolean heartAttackStarted;
+	public boolean defendPlanet;
 	
 	public void handleVomit(float x, float y, float width, float height)
 	{
@@ -29,5 +31,27 @@ public class TransitionManager {
 		antsHandled = true;
 		LevelManager lm = LudumDare31.levelMgr;
 		lm.addLevel(4); // lets do power
+	}
+	
+	public void startHeartAttack(){
+		if (heartAttackStarted)return;
+		heartAttackStarted = true;
+		LevelManager lm = LudumDare31.levelMgr;
+		lm.addLevel(1); // lets bust a move
+	}
+	
+	public void defendPlanet(){
+		if (defendPlanet) return;
+		defendPlanet = true;
+		LevelManager lm = LudumDare31.levelMgr;
+		lm.addLevel(5); // lets missle command
+	}
+	
+	public boolean defendVirii;
+	public void defendVirii(){
+		if (defendVirii) return;
+		defendVirii = true;
+		LevelManager lm = LudumDare31.levelMgr;
+		lm.addLevel(0); // lets asteroids
 	}
 }

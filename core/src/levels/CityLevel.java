@@ -5,15 +5,18 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.equations.*;
 import aurelienribon.tweenengine.primitives.MutableFloat;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
 import lando.systems.ld31.LudumDare31;
+import lando.systems.ld31.TransitionManager;
 import levels.citylevel.*;
 
 import java.util.HashMap;
@@ -42,6 +45,7 @@ public class CityLevel extends GameLevel {
 
     float disasterTimer = 0f;
     float disasterThreshold = 3f;
+    float levelTimer = 30f;
 
     MutableFloat glowAlpha = new MutableFloat(0);
     MutableFloat cloudAlpha = new MutableFloat(0);
@@ -89,6 +93,11 @@ public class CityLevel extends GameLevel {
 
     @Override
     public void update(float dt) {
+    	levelTimer -= dt;
+    	if (levelTimer < 0){
+    		TransitionManager.Instance.startHeartAttack();
+    		levelTimer = 100000;
+    	}
         // Update mouse positions
         screenPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         worldPos = camera.unproject(screenPos);

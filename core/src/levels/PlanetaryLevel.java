@@ -3,8 +3,10 @@ package levels;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.TransitionManager;
 import levels.planetary.*;
 
 import java.util.ArrayList;
@@ -70,6 +72,7 @@ public class PlanetaryLevel extends GameLevel {
     private Vector2 earthPos;
     private Vector2 moonPos;
     private float dayTimer = 0;
+    private float levelTimer = 60f;
 
     private Sprite background;
 
@@ -132,7 +135,11 @@ public class PlanetaryLevel extends GameLevel {
 
     @Override
     public void update(float dt) {
-
+    	levelTimer -= dt;
+    	if (levelTimer < 0){
+    		TransitionManager.Instance.defendVirii();
+    		levelTimer = 10000;
+    	}
         // Update the dayTimer
         dayTimer += dt / DAY_LENGTH;
 

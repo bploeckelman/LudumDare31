@@ -1,16 +1,20 @@
 package levels;
 
 import java.util.ArrayList;
+
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.equations.Linear;
 import aurelienribon.tweenengine.equations.Quad;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
 import lando.systems.ld31.LudumDare31;
+import lando.systems.ld31.TransitionManager;
 import lando.systems.ld31.Vector2Accessor;
 import levels.intercellular.BloodCell;
 
@@ -32,6 +36,7 @@ public class IntercellularLevel extends GameLevel {
 
     public Rectangle gameBounds;
     public ArrayList<BloodCell> cells;
+    public float levelTimer = 30f;
 
     
     // Class constructor
@@ -139,7 +144,11 @@ public class IntercellularLevel extends GameLevel {
     
     @Override
     public void update(float dt) {
-    	
+    	levelTimer -= dt;
+    	if (cells.isEmpty() || levelTimer < 0){
+    		TransitionManager.Instance.defendPlanet();
+    		levelTimer = 10000;
+    	}
     	for (int i = 0; i < cells.size(); i++){
     		cells.get(i).update(dt);
     	}
