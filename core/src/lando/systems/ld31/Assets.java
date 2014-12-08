@@ -3,12 +3,10 @@ package lando.systems.ld31;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-<<<<<<< Updated upstream
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
-=======
->>>>>>> Stashed changes
 import levels.InsectUtils.InsectsAssets;
 
 import java.util.ArrayList;
@@ -51,6 +49,7 @@ public class Assets {
     
     public static TextureRegion bloodRegions[][];
 
+    public static ShaderProgram maskingProgram;
 
 
     // ----- Audio ------------------------------
@@ -105,6 +104,15 @@ public class Assets {
         bloodRegions = TextureRegion.split(new Texture("intercellular/a_final_blood.png"), 32, 32);
         rand = new Random();
         insectsAssets = new InsectsAssets();
+        
+        //ShaderProgram.pedantic = false;
+        
+        final String VERTEX = Gdx.files.internal("shaders/masking.vert").readString();
+        final String FRAG = Gdx.files.internal("shaders/masking.frag").readString();
+        maskingProgram = new ShaderProgram(VERTEX, FRAG);
+        //Good idea to log any warnings if they exist
+        if (maskingProgram.getLog().length() != 0)
+            System.out.println(maskingProgram.getLog());
     }
 
     public static void dispose() {
