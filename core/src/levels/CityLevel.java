@@ -34,6 +34,9 @@ public class CityLevel extends GameLevel {
     int numBarConnections = 0;
     int barx, bary;
 
+    float disasterTimer = 0f;
+    float disasterThreshold = 3f;
+
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
     Vector2 tilePos = new Vector2();
@@ -87,8 +90,14 @@ public class CityLevel extends GameLevel {
         // Figure out how many powers are connected to the bar
         updateBarPowerConnections();
 
-        // TODO (brian): is it time for a power line to break somewhere?
-        // TODO (brian): is there a threat?  how severe?
+        // Is it time for a power line to break somewhere?
+        disasterTimer += dt;
+        if (disasterTimer >= disasterThreshold) {
+            disasterTimer -= disasterThreshold;
+            disasterThreshold = Assets.rand.nextFloat() * 10f + 2f;
+//            Gdx.app.log("THRESHOLD", "disaster threshold achieved, new threshold: " + disasterThreshold);
+            disasterStrike();
+        }
     }
 
     @Override
@@ -155,7 +164,9 @@ public class CityLevel extends GameLevel {
         thisTile.powerGridType = powerLineType;
 
         // Update the power bar
-        powerBar.dequeueCurrentType();
+        if (powerLineType != CityTileTypes.empty) {
+            powerBar.dequeueCurrentType();
+        }
 
         // Connect up neighbors tiles that have a power connection
         PowerTile thatTile;
@@ -199,6 +210,31 @@ public class CityLevel extends GameLevel {
                 thatTile.left = null;
             }
         }
+    }
+
+    private void disasterStrike() {
+        int iterations = 0;
+        while (++iterations <= 20) {
+            int x = Assets.rand.nextInt(tiles_wide);
+            int y = Assets.rand.nextInt(tiles_high);
+
+            // Make sure random x and y isn't a power source coordinate
+            boolean isPowerSource = false;
+            for (CityPowerSource powerSource : powerSources) {
+                if (powerSource.x == x && powerSource.y == y) {
+                    isPowerSource = true;
+                }
+            }
+            if (isPowerSource) continue;
+
+            PowerTile tile = powerGrid[y][x];
+            if (!tile.isBar && tile.powerGridType != CityTileTypes.empty)  {
+//                Gdx.app.log("DISASTER", "disaster struck at " + x + ", " + y);
+                placePowerGridTile(x, y, CityTileTypes.empty);
+                break;
+            }
+        }
+        Gdx.app.log("DISASTER", "got off safe this time...");
     }
 
     LinkedList<PowerTile> connectionQueue = new LinkedList<PowerTile>();
