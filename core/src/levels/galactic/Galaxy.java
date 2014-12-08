@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lando.systems.ld31.Assets;
+import lando.systems.ld31.TransitionManager;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -53,7 +54,7 @@ public class Galaxy {
 			if (!gal.alive) continue;
 			if (pos.dst(gal.pos) < width/2.0 + gal.width/2.0){
 				if (gal.isMilkyWay){
-					
+					TransitionManager.Instance.snowman();
 				}
 				this.alive = false;
 				float newMass = gal.mass + this.mass;

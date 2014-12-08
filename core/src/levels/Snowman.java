@@ -16,6 +16,7 @@ public class Snowman extends GameLevel {
 	private ScaleImage _occulousImage;
 	
 	public Snowman() {
+		tutorialText = "Looks like our home was destroyed by another galaxy.  Good thing this was just a game.";
 		_mainImage = new ScaleImage(_snowman, GameConstants.GameHeight);
 		_mainImage.y = -600;
 		
