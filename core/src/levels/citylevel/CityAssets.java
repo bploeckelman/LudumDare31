@@ -20,6 +20,9 @@ public class CityAssets {
     public static TextureAtlas lightning_flash;
     public static Animation lightningFlashAnim;
 
+    public static Texture cloud1;
+    public static Texture cloud2;
+
     public static Texture city_background;
 
     public static Texture spritesheet;
@@ -85,6 +88,9 @@ public class CityAssets {
         lightning_flash = new TextureAtlas("city/lightning_flash.atlas");
         lightningFlashAnim = new Animation(0.1f, lightning_flash.getRegions());
         lightningFlashAnim.setPlayMode(Animation.PlayMode.NORMAL);
+
+        cloud1 = new Texture("city/cloud1.png");
+        cloud2 = new Texture("city/cloud2.png");
 
         city_background = new Texture("city/city_map.png");
         spritesheet = new Texture("city/city_tiles.png");

@@ -236,11 +236,14 @@ public class Insects extends GameLevel {
 
         batch.draw(Assets.insectsAssets.Background, 0, 0, camera.viewportWidth, camera.viewportHeight - 32);
 
+        batch.setColor(1,1,1,0.8f);
         for(int x = 0; x < this.tileWidth; x++){
             for(int y = 0; y < this.tileHeight; y++){
                 batch.draw(this.baseMap[x][y].getTileTexture(), (x)*32, (y)*32);
             }
         }
+        batch.setColor(1,1,1,1);
+
         // draw HUD tiles
         for(int x=0; x < this.tileWidth; x++){
             batch.draw(Assets.insectsAssets.HUDTile, x * 32, this.tileHeight * 32);

@@ -48,6 +48,13 @@ public class CityLevel extends GameLevel {
     float disasterTimer = 0f;
     float disasterThreshold = 3f;
     float levelTimer = 30f;
+    float scrollAccum = 0;
+
+    float cloudTimer = 0f;
+    float cloudThreshold = 5f;
+    MutableFloat cloudX = new MutableFloat(-260);
+    float cloudY = 0;
+    boolean isClouding = false;
 
     MutableFloat cursorPulse = new MutableFloat(1);
     MutableFloat glowAlpha = new MutableFloat(0);
@@ -150,8 +157,29 @@ public class CityLevel extends GameLevel {
             scrollAccum -= 0.1f;
             CityAssets.clouds.scroll(dt * -0.2f, dt * 0.2f);
         }
+
+        cloudTimer += dt;
+        if (cloudTimer > cloudThreshold) {
+            cloudTimer -= cloudThreshold;
+            cloudThreshold = Assets.rand.nextFloat() * 5 + 3;
+            if (!isClouding) {
+                isClouding = true;
+
+                cloudX.setValue(-256f);
+                cloudY = Assets.rand.nextFloat() * (camera.viewportHeight - 256 - margin_bottom) + margin_bottom;
+                Tween.to(cloudX, 0, 15)//Assets.rand.nextFloat() * 8 + 10)
+                        .target(tiles_wide * tile_size)
+                        .ease(Linear.INOUT)
+                        .setCallback(new TweenCallback() {
+                            @Override
+                            public void onEvent(int type, BaseTween<?> source) {
+                                isClouding = false;
+                            }
+                        })
+                        .start(LudumDare31.tweens);
+            }
+        }
     }
-    float scrollAccum = 0;
 
     @Override
     public void draw(SpriteBatch batch) {
@@ -216,8 +244,9 @@ public class CityLevel extends GameLevel {
         }
 
         // Draw cloud layer
-        batch.setColor(1.0f, 1.0f, 1.0f, cloudAlpha.floatValue());
-        batch.draw(CityAssets.clouds, 0, margin_bottom, camera.viewportWidth, camera.viewportHeight - margin_bottom);
+        batch.setColor(1.0f, 1.0f, 1.0f, 0.9f);//cloudAlpha.floatValue());
+        batch.draw(CityAssets.cloud1, cloudX.floatValue(), cloudY);
+//        batch.draw(CityAssets.clouds, 0, margin_bottom, camera.viewportWidth, camera.viewportHeight - margin_bottom);
 
         // HUD type stuff ---------------------
         batch.setColor(Color.WHITE);
