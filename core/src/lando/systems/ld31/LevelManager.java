@@ -19,13 +19,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class LevelManager implements InputProcessor{
-
-	public static LevelManager Instance;
-
-	public static LevelManager initialize() {
-		Instance = new LevelManager();
-		return Instance;
-	}	
 	
 	public class Levels { 
 		public static final String IntraCellular = "Asteroids";
@@ -266,7 +259,7 @@ public class LevelManager implements InputProcessor{
 	public static boolean isLevelActive(String level) {
 		boolean active = false;
 		
-		switch (Instance.currentLevel){
+		switch (LudumDare31.levelMgr.currentLevel){
 			case 0:
 				active = (level == LevelManager.Levels.InterCellular);
 				break;
@@ -312,7 +305,7 @@ public class LevelManager implements InputProcessor{
 	{
 		if (levelIndex < 0 || levelIndex >= LevelManager.levelCount) return;
 		
-		GameLevel level = Instance.levels[levelIndex];
+		GameLevel level = LudumDare31.levelMgr.levels[levelIndex];
 		if (level != null) {
 			level.reset();
 		}		

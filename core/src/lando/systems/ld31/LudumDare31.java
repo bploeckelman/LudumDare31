@@ -22,7 +22,7 @@ public class LudumDare31 extends ApplicationAdapter {
     	
     	Assets.load();
     	
-    	levelMgr = LevelManager.initialize();
+    	levelMgr = new LevelManager();
     	
     	tweens = new TweenManager();       
         Tween.setCombinedAttributesLimit(4);
