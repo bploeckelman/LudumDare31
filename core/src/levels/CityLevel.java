@@ -33,6 +33,9 @@ public class CityLevel extends GameLevel {
 
     public static Map<CityTileTypes, TextureRegion> textures;
 
+    final float min_glow = 0.05f;
+    final float max_glow = 0.2f;
+
     CityTileTypes tiles[][];
     PowerTile[][] powerGrid;
     CityPowerSource[] powerSources;
@@ -81,8 +84,6 @@ public class CityLevel extends GameLevel {
                 .repeatYoyo(Tween.INFINITY, 0)
                 .start(LudumDare31.tweens);
 
-        final float min_glow = 0.05f;
-        final float max_glow = 0.2f;
         glowAlpha = new MutableFloat(min_glow);
         Tween.to(glowAlpha, 0, 1.33f)
                 .target(max_glow)
@@ -178,6 +179,25 @@ public class CityLevel extends GameLevel {
                 // Draw 'glow' overlay
                 if (powerGrid[y][x].energized) {
                     batch.setColor(1, 1, 0, glowAlpha.floatValue());
+                    batch.draw(Assets.squareTex,
+                            x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
+                    batch.setColor(Color.WHITE);
+                }
+
+                // Draw power source overlay
+                for (CityPowerSource powerSource : powerSources) {
+                    if (x == powerSource.x && y == powerSource.y) {
+                        batch.setColor(1, 1, 0, glowAlpha.floatValue() * 3f);
+                        batch.draw(Assets.squareTex,
+                                x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
+                        batch.setColor(Color.WHITE);
+                        break;
+                    }
+                }
+
+                // Draw bar sink overlay
+                if (x == barx && y == bary) {
+                    batch.setColor(1, 0, 1, glowAlpha.floatValue() * 3.5f);
                     batch.draw(Assets.squareTex,
                             x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
                     batch.setColor(Color.WHITE);
