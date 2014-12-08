@@ -16,6 +16,8 @@ public class InsectsAssets {
     public static Texture Bar;
     public static Texture Path;
     public static Texture Beer;
+    public static Texture Blank;
+    public static Texture Background;
 
     public static Texture Spider;
     public static TextureAtlas Ant;
@@ -33,6 +35,8 @@ public class InsectsAssets {
         Bar = new Texture("insects/Bar.png");
         Beer = new Texture("insects/Beer.png");
         Path = new Texture("insects/Path.png");
+        Blank = new Texture("insects/Blank.png");
+        Background = new Texture("insects/wood_grain.jpg");
 
         Spider = new Texture("insects/Spider.png");
 

@@ -233,6 +233,7 @@ public class Insects extends GameLevel {
     @Override
     public void draw(SpriteBatch batch) {
 
+        batch.draw(Assets.insectsAssets.Background, 0, 0, camera.viewportWidth, camera.viewportHeight - 32);
 
         for(int x = 0; x < this.tileWidth; x++){
             for(int y = 0; y < this.tileHeight; y++){
