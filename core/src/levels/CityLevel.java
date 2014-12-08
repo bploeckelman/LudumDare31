@@ -99,23 +99,8 @@ public class CityLevel extends GameLevel {
     @Override
     public void draw(SpriteBatch batch) {
         batch.setProjectionMatrix(camera.combined);
-//        batch.setColor(Color.WHITE);
         batch.setColor(0.4f, 0.4f, 0.4f, 1.0f);
         batch.draw(CityAssets.city_background, 0, margin_bottom);
-//        batch.setColor(0.4f, 0.4f, 0.4f, 1.0f);
-//        batch.draw(Assets.squareTex, 0, 0, camera.viewportWidth, camera.viewportHeight);
-//        for (int y = 0; y < tiles_high; ++y) {
-//            for (int x = 0; x < tiles_wide; ++x) {
-//                if (tiles[y][x] == CityTileTypes.bar) {
-//                    batch.setColor(Color.MAGENTA);
-//                    batch.draw(Assets.squareTex,
-//                            x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
-//                    batch.setColor(0.4f, 0.4f, 0.4f, 1.0f);
-//                }
-//                batch.draw(textures.get(tiles[y][x]),
-//                        x * tile_size, y * tile_size + margin_bottom, tile_size, tile_size);
-//            }
-//        }
 
         batch.setColor(Color.WHITE);
         for (int y = 0; y < tiles_high; ++y) {
@@ -133,9 +118,15 @@ public class CityLevel extends GameLevel {
 
         // HUD type stuff ---------------------
         powerBar.draw(batch);
+
         // Draw the currently active power grid type
+        batch.setColor(Color.DARK_GRAY);
+        batch.draw(Assets.squareTex,
+                tilePos.x * tile_size, tilePos.y * tile_size + margin_bottom, tile_size, tile_size);
+        batch.setColor(Color.WHITE);
         batch.draw(textures.get(powerBar.currentPowerLineType),
                 tilePos.x * tile_size, tilePos.y * tile_size + margin_bottom, tile_size, tile_size);
+
         // Draw the number of connections to the bar
         TextureRegion numConnections = CityAssets.connections0;
         if      (numBarConnections == 1) numConnections = CityAssets.connections1;
@@ -147,7 +138,10 @@ public class CityLevel extends GameLevel {
 
     @Override
     public int hasThreat() {
-        return 0;
+        if      (numBarConnections == 4)                           return 0;
+        else if (numBarConnections == 3 || numBarConnections == 2) return 1;
+        else if (numBarConnections == 1)                           return 2;
+        else                                                       return 3;
     }
 
     // ------------------------------------------------------------------------
