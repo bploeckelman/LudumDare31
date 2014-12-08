@@ -37,6 +37,7 @@ public class CityLevel extends GameLevel {
     CityPowerSource[] powerSources;
     PowerConnectionBar powerBar;
 
+    boolean[] stationConnections = new boolean[] { false, false, false, false };
     int numBarConnections = 0;
     int barx, bary;
 
@@ -172,12 +173,10 @@ public class CityLevel extends GameLevel {
                 tilePos.x * tile_size, tilePos.y * tile_size + margin_bottom, tile_size, tile_size);
 
         // Draw the number of connections to the bar
-        TextureRegion numConnections = CityAssets.connections0;
-        if      (numBarConnections == 1) numConnections = CityAssets.connections1;
-        else if (numBarConnections == 2) numConnections = CityAssets.connections2;
-        else if (numBarConnections == 3) numConnections = CityAssets.connections3;
-        else if (numBarConnections == 4) numConnections = CityAssets.connections4;
-        batch.draw(numConnections, 0, 0, tile_size * 2, tile_size * 2);
+        batch.draw((stationConnections[0] ? CityAssets.fuse_on : CityAssets.fuse_off), 32 * 0 + 2, 0);
+        batch.draw((stationConnections[1] ? CityAssets.fuse_on : CityAssets.fuse_off), 32 * 1 + 4, 0);
+        batch.draw((stationConnections[2] ? CityAssets.fuse_on : CityAssets.fuse_off), 32 * 2 + 6, 0);
+        batch.draw((stationConnections[3] ? CityAssets.fuse_on : CityAssets.fuse_off), 32 * 3 + 8, 0);
     }
 
     @Override
@@ -307,7 +306,10 @@ public class CityLevel extends GameLevel {
             barTile.left  = powerGrid[bary    ][barx + 1];
         else barTile.left = null;
 
-        boolean[] stationConnections = new boolean[] { false, false, false, false };
+        stationConnections[0] = false;
+        stationConnections[1] = false;
+        stationConnections[2] = false;
+        stationConnections[3] = false;
 
         connectionQueue.clear();
         connectionQueue.add(barTile);

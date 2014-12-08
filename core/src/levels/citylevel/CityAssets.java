@@ -25,8 +25,10 @@ public class CityAssets {
     public static TextureRegion road_corner_rt;
     public static TextureRegion road_corner_lb;
     public static TextureRegion road_corner_rb;
+
     public static TextureRegion power_station;
     public static TextureRegion power_pole;
+
     public static TextureRegion power_line_h;
     public static TextureRegion power_line_v;
     public static TextureRegion power_line_x;
@@ -49,6 +51,9 @@ public class CityAssets {
 
     public static Texture clouds_texture;
     public static TextureRegion clouds;
+
+    public static TextureRegion fuse_on;
+    public static TextureRegion fuse_off;
 
     public static void load() {
         city_background = new Texture("city/city_map.png");
@@ -92,6 +97,10 @@ public class CityAssets {
         connections4 = regions[7][4];
 
         empty = regions[7][7];
+
+        TextureRegion[][] fuseRegions = TextureRegion.split(spritesheet, 32, 64);
+        fuse_off = fuseRegions[2][0];
+        fuse_on = fuseRegions[2][1];
 
         clouds_texture = new Texture("city/clouds.png");
         clouds_texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
