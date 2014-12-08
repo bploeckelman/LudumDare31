@@ -53,7 +53,7 @@ public class CityLevel extends GameLevel {
     Vector2 tilePos = new Vector2();
 
     public CityLevel() {
-    	tutorialText = "There are power problems a brewin'.\n\nNo power means no patrons\n\nRepair the powerlines to your bar with your mouse.";
+    	tutorialText = "There's a power problem a brewin'.\n\nNo power means no patrons\n\nRepair the power lines to your bar with your mouse.\n\nDon't forget about your patrons.";
         CityAssets.load();
 
         textures = new HashMap<CityTileTypes, TextureRegion>();

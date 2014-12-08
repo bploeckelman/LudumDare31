@@ -55,7 +55,7 @@ public class Insects extends GameLevel {
 
     public Insects(){
         super();
-        tutorialText = "Bugs are in your dirty bar!\nSelect and place bug killing tech with your mouse.\n\nDon't forget about your partons\n\nZoom back by clicking on the green bar on the left";
+        tutorialText = "Bugs are in your dirty bar!\nSelect and place bug killing tech with your mouse.\n\nDon't forget about your patrons.\n\n\nZoom back by clicking on the\ngreen bar on the left";
         this.currentThreat = 0;
         this.enemyDeltaTime = 0;
         this.money = 15;

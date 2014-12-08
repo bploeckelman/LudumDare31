@@ -41,7 +41,7 @@ public class IntercellularLevel extends GameLevel {
     
     // Class constructor
     public IntercellularLevel() {
-    	tutorialText = "All the stress from running this bar (and fried food) is clogging your arteries.\n\nMatch 3 or more to clear a group.\nA white blood cell will bomb all that it touches.";
+    	tutorialText = "All the stress from running this\nbar (and fried food) is\nclogging your arteries.\n\nMatch 3 or more to clear a group.\n\n\nAnd don't forget about your patrons.";
     	cells = new ArrayList<BloodCell>();
     	gameBounds = new Rectangle((GameConstants.GameWidth - (tile_size * 10 + 16)) / 2.0f, 0, tile_size * 10 + 16, GameConstants.ScreenHeight);
     	spawnCell = new BloodCell(spawnPoint.x, spawnPoint.y, this, false);
