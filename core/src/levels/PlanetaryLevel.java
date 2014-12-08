@@ -16,9 +16,15 @@ public class PlanetaryLevel extends GameLevel {
 
     public static final String TAG = "PlanetaryLevel";
 
-    public static final float ASTROID_RADIUS_MIN = 8f;
-    public static final float ASTROID_RADIUS_MAX = 24f;
-    public static final float ASTROID_RADIUS_POW = 2f; // Higher values make large less common
+    public static final float ASTEROID_RADIUS_MIN = 8f;
+    public static final float ASTEROID_RADIUS_MAX = 24f;
+    public static final float ASTEROID_RADIUS_POW = 1.6f; // Higher values make large less common
+    public static final float ASTEROID_ROTATIONAL_VELOCITY_MAX = 256f;
+    public static final float ASTEROID_SPEED_MIN = 16f;
+    public static final float ASTEROID_SPEED_MAX = 128f;
+    public static final float ASTEROID_SPEED_POW = 2; // Higher makes fast less likely
+    public static final float ASTEROID_TRAJECTORY_SPREAD = 4f; // max angle off-target to start (either dir)
+    public static final float ASTEROID_TRAJECTORY_SPREAD_POW = 2.2f; // Higher values make aiming more accurate
     public static final float DAY_LENGTH = 4f;
     public static final int DIST_TO_MOON = 220;
     public static final int EARTH_RADIUS = 32;
@@ -50,7 +56,7 @@ public class PlanetaryLevel extends GameLevel {
     // -----------------------------------------------
 
 
-    private ArrayList<Astroid> astroids;
+    private ArrayList<Asteroid> asteroids;
     private Earth earth;
     private Moon moon;
     private ArrayList<Rocket> rockets;
@@ -95,7 +101,7 @@ public class PlanetaryLevel extends GameLevel {
         moon = new Moon();
 
         // Lists
-        astroids = new ArrayList<Astroid>();
+        asteroids = new ArrayList<Asteroid>();
         rockets = new ArrayList<Rocket>();
         rocketExplosions = new ArrayList<RocketExplosion>();
 
@@ -162,12 +168,15 @@ public class PlanetaryLevel extends GameLevel {
         float moonRotation = (moonOrbitAngle + MOON_TEXTURE_ROTATION) % 360;
         moon.setRotation(moonRotation);
 
-        // Astroids -----------------
-        for (int i = astroids.size() - 1; i >= 0; i--) {
-            astroids.get(i).update(dt);
-            if (astroids.get(i).isDestroyable()) {
-                astroids.remove(i);
+        // Asteroids -----------------
+        for (int i = asteroids.size() - 1; i >= 0; i--) {
+            asteroids.get(i).update(dt);
+            if (asteroids.get(i).isDestroyable()) {
+                asteroids.remove(i);
             }
+        }
+        if (asteroids.size() < 11) {
+            generateAsteroid();
         }
 
         // Rockets -----------------
@@ -194,8 +203,8 @@ public class PlanetaryLevel extends GameLevel {
         background.draw(batch);
         earth.draw(batch);
         moon.draw(batch);
-        for (Astroid astroid : astroids) {
-            astroid.draw(batch);
+        for (Asteroid asteroid : asteroids) {
+            asteroid.draw(batch);
         }
         for (RocketExplosion rocketExplosion : rocketExplosions) {
             rocketExplosion.draw(batch);
@@ -228,12 +237,12 @@ public class PlanetaryLevel extends GameLevel {
         rocketExplosions.add(new RocketExplosion(rocket.getTargetPos()));
     }
 
-    private void generateAstroid() {
+    private void generateAsteroid() {
 
         // Select a radius
-        float radius = (ASTROID_RADIUS_MAX - ASTROID_RADIUS_MIN) *
-                (float) Math.pow(Assets.rand.nextFloat(), ASTROID_RADIUS_POW) +
-                ASTROID_RADIUS_MIN;
+        float radius = (ASTEROID_RADIUS_MAX - ASTEROID_RADIUS_MIN) *
+                (float) Math.pow(Assets.rand.nextFloat(), ASTEROID_RADIUS_POW) +
+                ASTEROID_RADIUS_MIN;
 
         // Pick a threat direction
         Vector2 threatV2 = new Vector2(0f, 1f);
@@ -264,9 +273,44 @@ public class PlanetaryLevel extends GameLevel {
         }
         // Add the center position to get the edge coordinate
         threatV2.add(centerPos);
+        // Move the coordinate away from the edge by the radius
+        switch(threatEdge) {
+            case NORTH:
+                threatV2.add(0, radius);
+                break;
+            case EAST:
+                threatV2.add(radius, 0);
+                break;
+            case SOUTH:
+                threatV2.add(0, -radius);
+                break;
+            case WEST:
+            default:
+                threatV2.add(-radius, 0);
+                break;
+        }
 
-        // Select a radius
+        // Cool.  Now, which way is it traveling?
+        // Start by getting a norm pointing at earth.
+        Vector2 trajectory = centerPos.cpy().sub(threatV2).nor();
+        // Adjust the aim.
+        float spreadPercent = Assets.rand.nextFloat();
+        spreadPercent = (float) Math.pow(spreadPercent, ASTEROID_TRAJECTORY_SPREAD_POW);
+        spreadPercent *= Assets.rand.nextFloat() < 0.5 ? -1 : 1;
+        trajectory.rotate(ASTEROID_TRAJECTORY_SPREAD * spreadPercent);
+        // How fast?
+        float speed =  (ASTEROID_SPEED_MAX - ASTEROID_SPEED_MIN) *
+                (float) Math.pow(Assets.rand.nextFloat(), ASTEROID_SPEED_POW) +
+                ASTEROID_SPEED_MIN;
+        // Apply the speed to the trajectory
+        trajectory.scl(speed);
 
+        // Rotational velocity
+        float rotationalVelocity = (float) Math.pow(Assets.rand.nextFloat(), 2) * ASTEROID_ROTATIONAL_VELOCITY_MAX;
+        rotationalVelocity *= Assets.rand.nextFloat() < 0.5 ? -1 : 1;
+
+        // Make the thing!
+        asteroids.add(new Asteroid(threatV2, trajectory, radius, rotationalVelocity));
 
     }
 

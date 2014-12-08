@@ -1,28 +1,20 @@
 package levels;
 
 import java.util.ArrayList;
-
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.equations.Linear;
 import aurelienribon.tweenengine.equations.Quad;
-import aurelienribon.tweenengine.equations.Quart;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.ColorInfluencer.Random;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
 import lando.systems.ld31.Assets;
-import lando.systems.ld31.ColorAccessor;
 import lando.systems.ld31.GameConstants;
 import lando.systems.ld31.LudumDare31;
-import lando.systems.ld31.ParticleSystem;
 import lando.systems.ld31.Vector2Accessor;
 import levels.intercellular.BloodCell;
-import levels.intercellular.TileType;
+
+import java.util.ArrayList;
 
 /**
  * Created by vandillen on 12/6/14.
