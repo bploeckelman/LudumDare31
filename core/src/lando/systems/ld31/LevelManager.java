@@ -48,13 +48,12 @@ public class LevelManager implements InputProcessor{
         //levels[0] = new IntraCellularLevel();
         //levels[1] = new IntercellularLevel();
         //levels[2] = new Insects();
-//        levels[3] = new HumanLevel();
-        levels[4] = new CityLevel();
+        levels[3] = new HumanLevel();
+        //levels[4] = new CityLevel();
         //levels[5] = new PlanetaryLevel();
         //levels[6] = new GalacticLevel();
         //levels[7] = new Snowman();
-//        currentLevel = 3;
-	    currentLevel = 4;
+        currentLevel = 3;
         lastLevel = -1;
         Gdx.input.setInputProcessor(this);
         currentFBO = new FrameBuffer(Pixmap.Format.RGB888, GameConstants.ScreenWidth, GameConstants.ScreenHeight, false);
