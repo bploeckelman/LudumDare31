@@ -50,6 +50,7 @@ public class Assets {
     public static TextureRegion bloodRegions[][];
 
     public static ShaderProgram maskingProgram;
+    public static ShaderProgram waterProgram;
 
 
     // ----- Audio ------------------------------
@@ -113,6 +114,13 @@ public class Assets {
         //Good idea to log any warnings if they exist
         if (maskingProgram.getLog().length() != 0)
             System.out.println(maskingProgram.getLog());
+        
+        final String WATERVERTEX = Gdx.files.internal("shaders/water.vert").readString();
+        final String WATERFRAG = Gdx.files.internal("shaders/water.frag").readString();
+        waterProgram = new ShaderProgram(WATERVERTEX, WATERFRAG);
+        //Good idea to log any warnings if they exist
+        if (waterProgram.getLog().length() != 0)
+            System.out.println(waterProgram.getLog());
     }
 
     public static void dispose() {
