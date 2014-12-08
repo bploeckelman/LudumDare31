@@ -1,7 +1,9 @@
 package levels;
 
+import aurelienribon.tweenengine.equations.Linear;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -75,6 +77,12 @@ public class IntraCellularLevel extends GameLevel {
             if(!ship.isThrusting) {
             	SoundManager.getSound(IntraCellularAssets.shipThrust).loop();
                 ship.thrust(true);
+            }
+            Vector2 start = new Vector2(0, -(ship.sprite.getWidth()/2)).rotate(ship.sprite.getRotation()).add(ship.position);
+            for(int i = 0; i < 5; i++) {
+                particles.addParticle(start,
+                        ship.position.cpy().add(Assets.rand.nextFloat() * 10, Assets.rand.nextFloat() * 10),
+                        Color.RED, new Color(1f, 1f, 1f, 0), 1f, Linear.INOUT);
             }
         } else {
             ship.slowDown(dt);
