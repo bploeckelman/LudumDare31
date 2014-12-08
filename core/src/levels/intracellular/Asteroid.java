@@ -2,7 +2,9 @@ package levels.intracellular;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+
 import lando.systems.ld31.Assets;
+import lando.systems.ld31.Score;
 
 import java.util.List;
 
@@ -67,7 +69,7 @@ public class Asteroid {
 
     public void split(List asteroids, int index, Vector2 newVelocity) {
         asteroids.remove(index);
-
+        Score.ViriiKilled ++;
         if(size.splitInto != null) {
             asteroids.add(new Asteroid(position.x, position.y, size.splitInto, newVelocity.cpy().nor().rotate(90).scl(velocity)));
             asteroids.add(new Asteroid(position.x, position.y, size.splitInto, newVelocity.cpy().nor().rotate(-90).scl(velocity)));

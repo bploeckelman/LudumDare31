@@ -10,11 +10,11 @@ public class Score {
 	public static int PukingPatrons;
 	public static int ItemsCollected;
 	
-	public static int ViriiKilled;
+	public static int ViriiKilled; // Done;
 	
-	public static int ArteryGermsKilled;
+	public static int ArteryGermsKilled; // Done
 	
-	public static int BugsKilled;
+	public static int BugsKilled; // Done
 	
 	public static int PowerTilesPlaced;
 	

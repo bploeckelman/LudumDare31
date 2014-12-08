@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
 import lando.systems.ld31.LudumDare31;
+import lando.systems.ld31.Score;
 import lando.systems.ld31.TransitionManager;
 import lando.systems.ld31.Vector2Accessor;
 import levels.intercellular.BloodCell;
@@ -210,8 +211,10 @@ public class IntercellularLevel extends GameLevel {
     	for (int i =0; i < cells.size(); i++){
     		BloodCell cell = cells.get(i);
     		if (!cell.settled) continue;
-    		if (!chain.contains(cell)) 
+    		if (!chain.contains(cell)) {
+    			Score.ArteryGermsKilled++;
     			cell.alive = false;
+    		}
     	}
     }
     

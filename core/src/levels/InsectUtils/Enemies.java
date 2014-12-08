@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import java.util.List;
 
+import lando.systems.ld31.Score;
+
 /**
  * Created by jhoopes on 12/6/14.
  */
@@ -63,6 +65,7 @@ public abstract class Enemies {
 
         if(this.health < 1){
             this.alive = false;
+            Score.BugsKilled++;
         }
     }
 
