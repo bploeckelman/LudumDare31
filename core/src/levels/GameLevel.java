@@ -202,7 +202,7 @@ public abstract class GameLevel {
 	 */
 	public abstract void handleInput(float dt);
 	
-	float _tutorialTime = 10f;
+	protected float _tutorialTime = 10f;
 	
 	public void update(float dt, boolean isTop)
 	{

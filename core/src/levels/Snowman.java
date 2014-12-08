@@ -15,8 +15,9 @@ public class Snowman extends GameLevel {
 	private ScaleImage _mainImage;
 	private ScaleImage _occulousImage;
 	
+	private String nextText = "Wait, it wasn't real.\n\nLike a fantastic dream... but\nmaybe one day you can own a\nbar in Wisconsin\n\nEat your vegetables and don't do drugs, kids";
 	public Snowman() {
-		tutorialText = "Looks like our home was destroyed by another galaxy.  Good thing this was just a game.";
+		tutorialText = "You allowed the galaxies to collide and your galaxy has been destroyed!\n\nAre you sure you are from Wisconsin?\n\nWhat about the patrons?";
 		_mainImage = new ScaleImage(_snowman, GameConstants.GameHeight);
 		_mainImage.y = -600;
 		
@@ -38,6 +39,8 @@ public class Snowman extends GameLevel {
 	
 	float _distance = 400;
 	float _rotation = 1f;
+	boolean altMessage = false;
+	
 	@Override
 	public void update(float dt) {
 		if (!top) return;
@@ -53,6 +56,10 @@ public class Snowman extends GameLevel {
 			_occulousImage.x += dy;
 			_occulousImage.rotation -= _rotation;
 			_rotation += 0.08f;
+		} else if (!altMessage) {
+			tutorialText = nextText;
+			altMessage = true;
+			_tutorialTime = 10;
 		}
 	}
 
