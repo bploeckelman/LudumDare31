@@ -6,7 +6,7 @@ import lando.systems.ld31.Assets;
 
 public class Bullet {
     public static float fireRate = .2f;
-    public static float fireDuration = 1;
+    public static float fireDuration = 2f;
 
     public Sprite sprite;
     public Vector2 origin;

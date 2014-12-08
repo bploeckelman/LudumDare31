@@ -84,6 +84,7 @@ public class GalacticLevel extends GameLevel {
 	
 	@Override
 	public boolean touchUp(int screenX, int screenY, int button) {
+		super.touchUp(screenX, screenY, button);
 		touchedGalaxy = null;
 		return false;
 	};

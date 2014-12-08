@@ -46,7 +46,7 @@ public class HumanLevel extends GameLevel {
 	Bartender _bartender;
 	PatronManager _patronManager;
 	
-	int _glassCount = 20;
+	int _glassCount = 10;
 	GlassWidget _glassWidget = new GlassWidget();
 	ScoreWidget _cashWidget = new ScoreWidget();
 	
@@ -218,7 +218,7 @@ public class HumanLevel extends GameLevel {
 			if (_glassCount > 99) {
 				_glassCount = 99;
 			}
-			_glassRegen = 2f;
+			_glassRegen = 20f;
 		}
 		
 		updatePowerLevel();

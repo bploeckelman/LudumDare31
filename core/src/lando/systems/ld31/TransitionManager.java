@@ -22,6 +22,7 @@ public class TransitionManager {
 		
 		GameLevel level = lm.levels[lm.currentLevel];
 		level.zoomOutPoint = pukeSpot;
+		level.zoomOutPoint.y = 768 - level.zoomOutPoint.y;
 		lm.addLevel(2);
 	}
 	

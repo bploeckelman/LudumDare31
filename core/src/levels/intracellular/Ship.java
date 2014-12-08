@@ -2,7 +2,10 @@ package levels.intracellular;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+
 import lando.systems.ld31.Assets;
+import lando.systems.ld31.LevelManager;
+import lando.systems.ld31.SoundManager;
 
 public class Ship {
     public static float invulnerabilityTime = 2;
@@ -83,6 +86,7 @@ public class Ship {
     }
 
     public Bullet shoot() {
+    	SoundManager.play(LevelManager.Levels.IntraCellular, IntraCellularAssets.shipShoot, .5f);
         return new Bullet(position.x, position.y, sprite.getRotation() + 90, velocity);
     }
 

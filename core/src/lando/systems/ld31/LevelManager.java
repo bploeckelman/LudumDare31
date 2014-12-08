@@ -299,10 +299,10 @@ public class LevelManager implements InputProcessor{
 		
 		switch (LudumDare31.levelMgr.currentLevel){
 			case 0:
-				active = (level == LevelManager.Levels.InterCellular);
+				active = (level == LevelManager.Levels.IntraCellular);
 				break;
 			case 1: 
-				active = (level == LevelManager.Levels.IntraCellular);
+				active = (level == LevelManager.Levels.InterCellular);
 				break;
 			case 2:
 				active = (level == LevelManager.Levels.Insects);
