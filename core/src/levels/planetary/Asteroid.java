@@ -89,6 +89,12 @@ public class Asteroid extends DestroyableObject {
 
     // -----------------------------------------------------------------------------------------------------------------
 
+    public Vector2 getPos() {
+        return pos;
+    }
+    public float getRadius() {
+        return radius;
+    }
 
 
 }

@@ -9,6 +9,10 @@ public class RocketExplosion extends DestroyableObject {
 
     public static final String TAG = "RocketExplosion";
 
+    public static enum PHASE {
+        EXPLODE, IMPLODE
+    }
+
     private final static float EXPLOSION_DURATION = 0.2f;
     private final static double EXPLOSION_EASING_POWER = 1;
     private final static float IMPLOSION_DURATION = 0.8f;
@@ -18,16 +22,19 @@ public class RocketExplosion extends DestroyableObject {
     private Vector2 pos;
     private float timer;
     private Sprite explosion;
-    private float explosionRadius;
+    private float radius;
+    private PHASE phase;
 
     public RocketExplosion(Vector2 position) {
 
         this.pos = position;
         this.timer = 0f;
         this.explosion = new Sprite(Assets.planetaryTempExplosion);
-        this.explosionRadius = 0;
+        this.radius = 0;
+        this.phase = PHASE.EXPLODE;
 
         this.explosion.setPosition(this.pos.x, this.pos.y);
+
     }
 
     @Override
@@ -35,6 +42,15 @@ public class RocketExplosion extends DestroyableObject {
         explosion.draw(batch);
     }
 
+    public PHASE getPhase() {
+        return phase;
+    }
+    public Vector2 getPos() {
+        return pos;
+    }
+    public float getRadius() {
+        return radius;
+    }
     public void update(float dt) {
         timer += dt;
 
@@ -45,27 +61,31 @@ public class RocketExplosion extends DestroyableObject {
             return;
 
         } else if (timer <= EXPLOSION_DURATION) {
+            // Set Phase
+            phase = PHASE.EXPLODE;
             // Scale percent
             percent = timer / EXPLOSION_DURATION;
             // Easing
             percent = (float) Math.pow(percent, EXPLOSION_EASING_POWER);
 
         } else if (timer <= EXPLOSION_DURATION + IMPLOSION_DURATION) {
+            // Set Phase
+            phase = PHASE.IMPLODE;
             // Scale percent
             percent = (timer - EXPLOSION_DURATION) / IMPLOSION_DURATION;
             // Easing
             percent = (float) Math.pow((1 - percent), IMPLOSION_EASING_POWER);
             // What's the radius?
-            explosionRadius = EXPLOSION_RADIUS * percent;
+            radius = EXPLOSION_RADIUS * percent;
 
         } else {
             // We're done!
             setDestroyable(true);
         }
 
-        explosionRadius = EXPLOSION_RADIUS * percent;
-        explosion.setSize(explosionRadius * 2, explosionRadius * 2);
-        explosion.setPosition(pos.x - explosionRadius, pos.y - explosionRadius);
+        radius = EXPLOSION_RADIUS * percent;
+        explosion.setSize(radius * 2, radius * 2);
+        explosion.setPosition(pos.x - radius, pos.y - radius);
 
     }
 

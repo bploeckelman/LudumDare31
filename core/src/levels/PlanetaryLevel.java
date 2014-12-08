@@ -23,7 +23,7 @@ public class PlanetaryLevel extends GameLevel {
     public static final float ASTEROID_RADIUS_POW = 1.6f; // Higher values make large less common
     public static final float ASTEROID_ROTATIONAL_VELOCITY_MAX = 256f;
     public static final float ASTEROID_SPEED_MIN = 16f;
-    public static final float ASTEROID_SPEED_MAX = 128f;
+    public static final float ASTEROID_SPEED_MAX = 64f;
     public static final float ASTEROID_SPEED_POW = 2; // Higher makes fast less likely
     public static final float ASTEROID_TRAJECTORY_SPREAD = 4f; // max angle off-target to start (either dir)
     public static final float ASTEROID_TRAJECTORY_SPREAD_POW = 2.2f; // Higher values make aiming more accurate
@@ -63,6 +63,10 @@ public class PlanetaryLevel extends GameLevel {
     private Moon moon;
     private ArrayList<Rocket> rockets;
     private ArrayList<RocketExplosion> rocketExplosions;
+
+    // RocketExplosion collections, sorted by phase.  Updated with each call to updateRocketExplosions
+    private ArrayList<RocketExplosion> rocketExplosionsExploding = new ArrayList<RocketExplosion>();
+    private ArrayList<RocketExplosion> rocketExplosionsImploding = new ArrayList<RocketExplosion>();
 
     // -----------------------------------------------
 
@@ -143,6 +147,7 @@ public class PlanetaryLevel extends GameLevel {
         // Update the dayTimer
         dayTimer += dt / DAY_LENGTH;
 
+
         // Update the background
 //        tempV2.set(
 //                MathUtils.clamp(Gdx.input.getX(), 0, GameConstants.ScreenWidth),
@@ -163,45 +168,16 @@ public class PlanetaryLevel extends GameLevel {
 //        background.setCenter(backgroundPos.x, backgroundPos.y);
 
 
-        // Update the Earth
-        float earthRotation = (dayTimer % 1f) * 360;
-        earth.setRotation(earthRotation);
+        updateHeavenlyBodies(dt);
+        updateRockets(dt);
+        updateRocketExplosions(dt);
+        updateAsteroids(dt);
 
-        // Moon Orbit Angle
-        moonOrbitAngle = (((dayTimer / MOON_ORBIT_PERIOD) % 1) * 360 + MOON_INITIAL_ORBIT_ANGLE);
-        moonPos.set(moonInitialPos.cpy().rotate(moonOrbitAngle).add(earthPos));
-        moon.setPosition(moonPos);
-        // Moon rotation
-        float moonRotation = (moonOrbitAngle + MOON_TEXTURE_ROTATION) % 360;
-        moon.setRotation(moonRotation);
-
-        // Asteroids -----------------
-        for (int i = asteroids.size() - 1; i >= 0; i--) {
-            asteroids.get(i).update(dt);
-            if (asteroids.get(i).isDestroyable()) {
-                asteroids.remove(i);
-            }
-        }
         if (asteroids.size() < 11) {
             generateAsteroid();
         }
 
-        // Rockets -----------------
-        for (int i = rockets.size() - 1; i >= 0; i--) {
-            rockets.get(i).update(dt);
-            if (rockets.get(i).isDestroyable()) {
-                detonateRocket(rockets.get(i));
-                rockets.remove(i);
-            }
-        }
 
-        // Explosions! ----------------
-        for (int i = rocketExplosions.size() - 1; i >= 0; i--) {
-            rocketExplosions.get(i).update(dt);
-            if (rocketExplosions.get(i).isDestroyable()) {
-                rocketExplosions.remove(i);
-            }
-        }
 
     }
 
@@ -231,13 +207,23 @@ public class PlanetaryLevel extends GameLevel {
 
         Vector2 gameTouchPos = getGamePos(new Vector2(screenX, screenY));
 
-        launchRocketFromEarth(gameTouchPos);
+//        launchRocketFromEarth(gameTouchPos);
         launchRocketFromMoon(gameTouchPos);
 
         return true;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    private boolean checkForCircleCollision(Vector2 v1, float r1, Vector2 v2, float r2) {
+        // Quick check for miss
+        if (Math.abs(v1.x-v2.x) > r1+r2 && Math.abs(v1.y-v2.y) > r1+r2) {
+            return false;
+        } else {
+            // Let's actually compute the distance
+            return v1.dst(v2) <= r1 + r2;
+        }
+    }
 
     private void detonateRocket(Rocket rocket) {
         // Explosion!
@@ -342,6 +328,100 @@ public class PlanetaryLevel extends GameLevel {
 
     private void launchRocketFromMoon(Vector2 target) {
         launchRocketFromHeavenlyBody(moonPos, MOON_RADIUS, target);
+    }
+
+    /**
+     * Update the Asteroids
+     * @param dt
+     */
+    private void updateAsteroids(float dt) {
+        Asteroid thisAstroid;
+        // Reverse for loop, as we might be removing some
+        for (int i = asteroids.size() - 1; i >= 0; i--) {
+            thisAstroid = asteroids.get(i);
+            // Update
+            thisAstroid.update(dt);
+            // Remove/process destroyed
+            if (thisAstroid.isDestroyable()) {
+                asteroids.remove(i);
+                continue;
+            }
+            // Check for explosion collision
+            for (RocketExplosion rocketExplosion : rocketExplosionsExploding) {
+
+                if (checkForCircleCollision(
+                        rocketExplosion.getPos(), rocketExplosion.getRadius(),
+                        thisAstroid.getPos(), thisAstroid.getRadius())) {
+                    // Collision! Destroy it.
+                    asteroids.remove(i);
+                    continue;
+                }
+            }
+        }
+    }
+    /**
+     * Updates the Earth and the Moon
+     * • Position/Rotation
+     * @param dt
+     */
+    private void updateHeavenlyBodies(float dt) {
+
+        // Update the Earth
+        float earthRotation = (dayTimer % 1f) * 360;
+        earth.setRotation(earthRotation);
+
+        // Moon Orbit Angle
+        moonOrbitAngle = (((dayTimer / MOON_ORBIT_PERIOD) % 1) * 360 + MOON_INITIAL_ORBIT_ANGLE);
+        moonPos.set(moonInitialPos.cpy().rotate(moonOrbitAngle).add(earthPos));
+        moon.setPosition(moonPos);
+        // Moon rotation
+        float moonRotation = (moonOrbitAngle + MOON_TEXTURE_ROTATION) % 360;
+        moon.setRotation(moonRotation);
+
+    }
+
+    /**
+     *
+     * @param dt
+     */
+    private void updateRocketExplosions(float dt) {
+        // Clear the phase tracking arrays
+        rocketExplosionsExploding.clear();
+        rocketExplosionsImploding.clear();
+        // Foreach, backwards for removal reasons
+        RocketExplosion thisRocketExplosion;
+        for (int i = rocketExplosions.size() - 1; i >= 0; i--) {
+            thisRocketExplosion = rocketExplosions.get(i);
+            // Update it
+            thisRocketExplosion.update(dt);
+            // Check for destruction
+            if (thisRocketExplosion.isDestroyable()) {
+                // Remove it
+                rocketExplosions.remove(i);
+                continue;
+            }
+            // Sort it into the phase tracking arrays
+            if (thisRocketExplosion.getPhase() == RocketExplosion.PHASE.EXPLODE) {
+                rocketExplosionsExploding.add(thisRocketExplosion);
+            }
+            if (thisRocketExplosion.getPhase() == RocketExplosion.PHASE.IMPLODE) {
+                rocketExplosionsImploding.add(thisRocketExplosion);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param dt
+     */
+    private void updateRockets(float dt) {
+        for (int i = rockets.size() - 1; i >= 0; i--) {
+            rockets.get(i).update(dt);
+            if (rockets.get(i).isDestroyable()) {
+                detonateRocket(rockets.get(i));
+                rockets.remove(i);
+            }
+        }
     }
 
 
