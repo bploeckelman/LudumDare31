@@ -31,6 +31,7 @@ public class LevelManager implements InputProcessor{
 	}
 	
 	public static final int levelCount = 7;
+	public static int powerLevel = 4;
 	
     public GameLevel[] levels = new GameLevel[levelCount + 1];
     public int currentLevel;
