@@ -18,6 +18,7 @@ import lando.systems.ld31.Score;
 import lando.systems.ld31.TransitionManager;
 import lando.systems.ld31.Vector2Accessor;
 import levels.intercellular.BloodCell;
+import levels.intracellular.IntraCellularAssets;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class IntercellularLevel extends GameLevel {
     public Rectangle gameBounds;
     public ArrayList<BloodCell> cells;
     public float levelTimer = 30f;
+    float timeAccum = 0;
 
     
     // Class constructor
@@ -150,7 +152,7 @@ public class IntercellularLevel extends GameLevel {
     
     @Override
     public void update(float dt) {
-
+    	timeAccum+= dt;
     	for (int i = 0; i < cells.size(); i++){
     		cells.get(i).update(dt);
     	}
@@ -244,6 +246,12 @@ public class IntercellularLevel extends GameLevel {
 
     @Override
     public void draw(SpriteBatch batch) {
+    	
+    	batch.setShader(Assets.waterProgram);
+    	Assets.waterProgram.setUniformf("time", timeAccum);
+        batch.draw(Assets.cellbackground, 0, 0, camera.viewportWidth - 100, camera.viewportHeight);
+        batch.setShader(null);
+        
     	batch.setColor(Color.WHITE);
     	batch.draw(Assets.bloodVessel, gameBounds.x, gameBounds.y, gameBounds.width, gameBounds.height);
     	for (int i = 0; i < cells.size(); i++){

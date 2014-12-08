@@ -36,7 +36,7 @@ public class InsectsAssets {
         Beer = new Texture("insects/Beer.png");
         Path = new Texture("insects/Path.png");
         Blank = new Texture("insects/Blank.png");
-        Background = new Texture("insects/wood_grain.jpg");
+        Background = new Texture("insects/woodgrain.png");
 
         Spider = new Texture("insects/Spider.png");
 
