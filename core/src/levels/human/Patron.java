@@ -65,6 +65,8 @@ public class Patron extends MovementImage {
 		}
 	}
 	
+	private float _flipTimer;
+	
 	@Override 
 	public void update(float dt) {
 		super.update(dt);
@@ -79,6 +81,14 @@ public class Patron extends MovementImage {
 			_glass.x = x + width - (_glass.y - _glassY);
 			_glass.y += 15 *dt;
 			_glass.rotation += 90 * dt/1.5f;
+		}
+		
+		if (runningAway) {
+			_flipTimer -= dt;
+			if (_flipTimer < 0) {
+				_flipTimer = 0.5f;
+				flipImage = !flipImage;
+			}
 		}
 	}
 	
