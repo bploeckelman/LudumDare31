@@ -153,6 +153,7 @@ public class IntercellularLevel extends GameLevel {
     		nextSpawn += 10;
     	}
     	nextSpawn = Math.max(nextSpawn - dt, 0);
+    	fixHangers();
     }
     
     public BloodCell getCellAtPos(Vector2 pos){
@@ -163,7 +164,26 @@ public class IntercellularLevel extends GameLevel {
     }
     
     public void fixHangers(){
-    	// TODO maybe do this.
+    	ArrayList<BloodCell> chain = new ArrayList<BloodCell>();
+		ArrayList<BloodCell> toCheck = new ArrayList<BloodCell>();
+    	for (int x =0; x < 10; x++){
+    		BloodCell cell = getCellAtPos(new Vector2(x, 1));
+    		if (cell != null) toCheck.add(cell);
+    	}
+    	while (!toCheck.isEmpty()){
+    		BloodCell cell = toCheck.remove(0);
+    		if (!chain.contains(cell)){
+    			chain.add(cell);
+    			toCheck.addAll(getNeighbors(cell));
+    		}
+    	}
+    	
+    	for (int i =0; i < cells.size(); i++){
+    		BloodCell cell = cells.get(i);
+    		if (!cell.settled) continue;
+    		if (!chain.contains(cell)) 
+    			cell.alive = false;
+    	}
     }
     
     public ArrayList<BloodCell> getNeighbors(BloodCell cell){

@@ -10,7 +10,8 @@ import javax.xml.soap.Text;
  */
 public class CityAssets {
 
-    // TODO (brain): store in spritesheet and split into textureregions
+    public static Texture city_background;
+
     public static Texture spritesheet;
 
     public static TextureRegion bar;
@@ -37,10 +38,18 @@ public class CityAssets {
     public static TextureRegion power_line_down_t;
     public static TextureRegion power_line_left_t;
     public static TextureRegion power_line_right_t;
+
+    public static TextureRegion connections0;
+    public static TextureRegion connections1;
+    public static TextureRegion connections2;
+    public static TextureRegion connections3;
+    public static TextureRegion connections4;
+
     public static TextureRegion empty;
 
 
     public static void load() {
+        city_background = new Texture("city/city_map.png");
         spritesheet = new Texture("city/city_tiles.png");
 
         TextureRegion[][] regions = TextureRegion.split(spritesheet, 32, 32);
@@ -73,6 +82,12 @@ public class CityAssets {
         power_line_down_t    = regions[2][5];
         power_line_left_t    = regions[2][6];
         power_line_right_t   = regions[2][7];
+
+        connections0 = regions[7][0];
+        connections1 = regions[7][1];
+        connections2 = regions[7][2];
+        connections3 = regions[7][3];
+        connections4 = regions[7][4];
 
         empty = regions[7][7];
 

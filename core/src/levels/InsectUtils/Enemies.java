@@ -14,11 +14,15 @@ public abstract class Enemies {
 
     protected String name;
     protected Sprite enemySprite;
-    protected float speed;
+    protected float originalSpeed;
+    protected float currentSpeed;
     protected ArrayList<Vector2> checkPoints = new ArrayList<Vector2>();
     protected boolean alive;
-    protected int health;
+    protected float health;
     protected int value;
+
+    protected float slowEnemyFor;
+    protected float slowDelta;
 
     protected Vector2 currentPosition;
 
@@ -33,11 +37,14 @@ public abstract class Enemies {
         this.checkPoints.add(new Vector2((float) 18.5 * 32, (pathYStart * 32) - (7*32) + 16));
         this.checkPoints.add(new Vector2((float) 18.5 * 32, (pathYStart * 32) + 16));
         this.checkPoints.add(new Vector2((float) 26.5 * 32, (pathYStart * 32) + 16));
+
+        this.slowEnemyFor = 0;
+        this.slowDelta = 0;
     }
 
     public String getName(){ return this.name; }
 
-    public float getSpeed(){ return this.speed; }
+    public float getSpeed(){ return this.currentSpeed; }
 
     public Sprite getEnemySprite(){ return this.enemySprite; }
 
@@ -51,12 +58,18 @@ public abstract class Enemies {
 
     public boolean alive(){ return this.alive; }
 
-    public void damageEnemy(int damage){
+    public void damageEnemy(float damage){
         this.health = this.health - damage;
 
         if(this.health < 1){
             this.alive = false;
         }
+    }
+
+    public void slowEnemy(int time, int factor){
+
+        this.currentSpeed = this.originalSpeed / factor;
+        this.slowEnemyFor = time;
     }
 
     public int pathsLeft(){ return this.checkPoints.size(); }

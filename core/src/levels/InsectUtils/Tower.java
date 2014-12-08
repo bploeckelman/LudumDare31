@@ -15,12 +15,15 @@ public abstract class Tower {
     protected Sprite towerSprite;
     protected float shootSpeed;
     protected float range;
-    protected int towerDamage;
+    protected float towerDamage;
     protected int cost;
     protected Vector2 position;
     protected Enemies target;
     protected ArrayList<Bullet> towerBullets;
     protected float lastShotTime;
+
+    protected int slowTime;
+    protected int slowFactor;
 
     public Tower(){
         this.towerBullets = new ArrayList<Bullet>();

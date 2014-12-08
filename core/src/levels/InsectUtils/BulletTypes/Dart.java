@@ -11,11 +11,11 @@ import levels.InsectUtils.Enemies;
  */
 public class Dart extends Bullet {
 
-    public Dart(Vector2 origin, Enemies target, int towerDamage){
+    public Dart(Vector2 origin, Enemies target, float towerDamage){
 
         this.name = "Dart";
-        this.shotSpeed = 40;
-        this.damage = 1;
+        this.shotSpeed = 50;
+        this.damage = towerDamage;
         Sprite  newBullet = new Sprite(Assets.insectsAssets.DartBullet);
         newBullet.setSize(4, 4);
         Vector2 newBulletLocation = new Vector2(origin.x, origin.y);
