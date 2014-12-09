@@ -19,27 +19,34 @@ public class PlanetaryLevel extends GameLevel {
 
     public static final String TAG = "PlanetaryLevel";
 
-    public static final float ASTEROID_RADIUS_MIN = 8f;
-    public static final float ASTEROID_RADIUS_MAX = 24f;
-    public static final float ASTEROID_RADIUS_POW = 1.6f; // Higher values make large less common
+    public static final float ASTEROID_RADIUS_MIN = 12f;
+    public static final float ASTEROID_RADIUS_MAX = 32f;
+    public static final float ASTEROID_RADIUS_POW = 2f; // Higher values make large less common
     public static final float ASTEROID_ROTATIONAL_VELOCITY_MAX = 256f;
     public static final float ASTEROID_SPEED_MIN = 32f;
     public static final float ASTEROID_SPEED_MAX = 82f;
     public static final float ASTEROID_SPEED_POW = 2.5f; // Higher makes fast less likely
-    public static final float ASTEROID_TRAJECTORY_SPREAD = 40f; // max angle off-target to start (either dir)
+    public static final float ASTEROID_TRAJECTORY_SPREAD = 36f; // max angle off-target to start (either dir)
     public static final float ASTEROID_TRAJECTORY_SPREAD_POW = 1.8f; // Higher values make aiming more accurate
-    public static final int ASTEROID_MAX_COUNT = 16;
+    public static final int ASTEROID_MAX_COUNT = 14;
     public static final float DAY_LENGTH = 4f;
     public static final int DIST_TO_MOON = 220;
     public static final int EARTH_RADIUS = 32;
+    public static final float EARTH_HEALTH_REGEN = 0.01f;
+    public static final float MOON_HEALTH_REGEN = 0.02f;
     public static final int MOON_RADIUS = 17;
     public static final int MOON_INITIAL_ORBIT_ANGLE = 60;
+    public static final float HEALTH_REQUIRED_TO_LAUNCH = 0.2f;
     /** Rotation to apply to the moon's texture point the near side of the moon's surface downwards towards earth. */
     public static final int MOON_TEXTURE_ROTATION = 0;
     public static final float MOON_ORBIT_PERIOD = 27.322f; // Days
     public static final float BACKGROUND_SHIFT_DIST = 64f; // Max number of pixels the bg can shift from center
     public static final float BACKGROUND_SHIFT_RANGE = 300f; // dist from center to get max shift effect
     public static final float BACKGROUND_SHIFT_POWER = 300f; // dist from center to get max shift effect
+
+    public static final float EARTH_LAUNCH_COOLDOWN = 0.8f;
+    public static final float MOON_LAUNCH_COOLDOWN = 0.4f;
+
     public static enum EDGE {
         NORTH, SOUTH, EAST, WEST
     }
@@ -80,6 +87,9 @@ public class PlanetaryLevel extends GameLevel {
     private float dayTimer = 0;
     private float levelTimer = 60f;
 
+    private float earthLaunchCountdown = 0;
+    private float moonLaunchCountdown = 0;
+
 
     private Sprite background;
 
@@ -110,7 +120,7 @@ public class PlanetaryLevel extends GameLevel {
         // Where's the moon?
         moonPos = new Vector2();
         moonPos.set(moonInitialPos.cpy().rotate(MOON_INITIAL_ORBIT_ANGLE).add(earthPos));
-        moon = new Moon();
+        moon = new Moon(moonPos);
 
         // Lists
         asteroids = new ArrayList<Asteroid>();
@@ -127,7 +137,7 @@ public class PlanetaryLevel extends GameLevel {
         background.setCenter(centerPos.x, centerPos.y);
 
         // Set the initial cooldown countdown to create a shower
-        showerCooldownCountdown = SHOWER_COOLDOWN + SHOWER_COOLDOWN_DEVIATION - (SHOWER_DURATION_DEVIATION * 2 * Assets.rand.nextFloat());
+        showerCooldownCountdown = 1; //SHOWER_COOLDOWN + SHOWER_COOLDOWN_DEVIATION - (SHOWER_DURATION_DEVIATION * 2 * Assets.rand.nextFloat());
 
     }
 
@@ -147,6 +157,8 @@ public class PlanetaryLevel extends GameLevel {
 
     @Override
     public void update(float dt) {
+
+        // Timers ---------------------------
     	levelTimer -= dt;
     	if (levelTimer < 0){
     		TransitionManager.Instance.defendVirii();
@@ -154,6 +166,9 @@ public class PlanetaryLevel extends GameLevel {
     	}
         // Update the dayTimer
         dayTimer += dt / DAY_LENGTH;
+        // Cooldown timers
+        earthLaunchCountdown -= dt;
+        moonLaunchCountdown -= dt;
 
 
         // Update the background
@@ -184,7 +199,7 @@ public class PlanetaryLevel extends GameLevel {
 
         // Set the threat level
         double threatPercent = (double) asteroids.size() / ASTEROID_MAX_COUNT;
-        threatLevel = (int) Math.ceil(4 * threatPercent);
+        threatLevel = (int) Math.min(Math.ceil(4 * threatPercent), 3);
 
     }
 
@@ -218,8 +233,12 @@ public class PlanetaryLevel extends GameLevel {
 
         Vector2 gameTouchPos = getGamePos(new Vector2(screenX, screenY));
 
-//        launchRocketFromEarth(gameTouchPos);
-        launchRocketFromMoon(gameTouchPos);
+        if (earth.getHealthPercent() >= HEALTH_REQUIRED_TO_LAUNCH) {
+            launchRocketFromEarth(gameTouchPos);
+        }
+        if (moon.getHealthPercent() >= HEALTH_REQUIRED_TO_LAUNCH) {
+            launchRocketFromMoon(gameTouchPos);
+        }
 
         return true;
     }
@@ -325,7 +344,10 @@ public class PlanetaryLevel extends GameLevel {
     }
 
     private void launchRocketFromEarth(Vector2 target) {
-        launchRocketFromHeavenlyBody(earthPos, EARTH_RADIUS, target);
+        if (earthLaunchCountdown <= 0) {
+            launchRocketFromHeavenlyBody(earthPos, EARTH_RADIUS, target);
+            earthLaunchCountdown = EARTH_LAUNCH_COOLDOWN;
+        }
     }
 
     private void launchRocketFromHeavenlyBody(Vector2 bodyPos, float bodyRadius, Vector2 target) {
@@ -338,7 +360,10 @@ public class PlanetaryLevel extends GameLevel {
     }
 
     private void launchRocketFromMoon(Vector2 target) {
-        launchRocketFromHeavenlyBody(moonPos, MOON_RADIUS, target);
+        if (moonLaunchCountdown <= 0) {
+            launchRocketFromHeavenlyBody(moonPos, MOON_RADIUS, target);
+            moonLaunchCountdown = MOON_LAUNCH_COOLDOWN;
+        }
     }
 
     private void processEarthCollision(Asteroid asteroid) {
@@ -465,10 +490,10 @@ public class PlanetaryLevel extends GameLevel {
 
     //----------------------------------------------------------------------------------------------------------
 
-    private static final float SHOWER_COOLDOWN = 20;
-    private static final float SHOWER_COOLDOWN_DEVIATION = 5;
-    private static final float SHOWER_DURATION = 5f;
-    private static final float SHOWER_DURATION_DEVIATION = 2f;
+    private static final float SHOWER_COOLDOWN = 28;
+    private static final float SHOWER_COOLDOWN_DEVIATION = 2;
+    private static final float SHOWER_DURATION = 15f;
+    private static final float SHOWER_DURATION_DEVIATION = 1f;
 
     private float showerCooldownCountdown = 0;
     private float showerDurationCountdown = 0;
@@ -486,8 +511,10 @@ public class PlanetaryLevel extends GameLevel {
         // Are we in a shower?
         if (showerDurationCountdown > 0) {
             // Yes.
-            if (asteroids.size() < 10) {
-                generateAsteroid();
+            if (asteroids.size() < ASTEROID_MAX_COUNT) {
+                if (Assets.rand.nextFloat() < (1/60f)) {
+                    generateAsteroid();
+                }
             }
         }
     }

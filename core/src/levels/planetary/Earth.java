@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class Earth {
 
-
     /** The center position of the object */
     private Vector2 pos = new Vector2();
     /** Rotation of earth in degrees */
@@ -20,6 +19,9 @@ public class Earth {
     private ArrayList<StrikeExplosion> strikeExplosions;
     private Vector2 _tempV2 = new Vector2();
 
+    private HealthBar healthBar;
+    private float healthPercent = 1;
+
     // -----------------------------------------------
 
 
@@ -27,10 +29,13 @@ public class Earth {
 
         strikeExplosions = new ArrayList<StrikeExplosion>();
 
+        healthBar = new HealthBar(position, PlanetaryLevel.EARTH_RADIUS * 2 - 20, 14, healthPercent);
+
         baseEarth = new Sprite(Assets.plEarth);
         baseEarth.setSize(PlanetaryLevel.EARTH_RADIUS * 2, PlanetaryLevel.EARTH_RADIUS * 2);
         setPosition(position);
         baseEarth.setOriginCenter();
+
 
 
     }
@@ -59,25 +64,32 @@ public class Earth {
 //        batch.setShader(null);
 //        Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE0);
 
+
+
+        // Draw the health bar
+        healthBar.draw(batch);
+
         // Draw the explosions
         for (StrikeExplosion sE : strikeExplosions) {
             sE.draw(batch);
         }
 
+
+
+
     }
 
+    public float getHealthPercent() { return healthPercent; }
+
     public void update(float dt) {
+        // Heal
+        healthPercent = Math.min(1, healthPercent+(PlanetaryLevel.EARTH_HEALTH_REGEN * dt));
+        healthBar.setHealthPercent(healthPercent);
         // No need to update position/rotation each frame.
         // Update StrikeExplosions
         updateStrikeExplosions(dt);
     }
 
-//    public Vector2 getPosition() {
-//        return position;
-//    }
-//    public float getRotation() {
-//        return r;
-//    }
     public void setPosition(Vector2 position) {
         pos.set(position);
         updatePositions();
@@ -97,10 +109,15 @@ public class Earth {
         // Create the new StrikeExplosion
         // Todo: small or large?
         strikeExplosions.add(new StrikeExplosionLarge(pos, r, earthRelativeRotation, PlanetaryLevel.EARTH_RADIUS));
+
+        // Damage the earth.
+        healthPercent = Math.max(0, healthPercent - 0.5f);
+        healthBar.setHealthPercent(healthPercent);
     }
 
     private void updatePositions() {
         baseEarth.setCenter(pos.x, pos.y);
+        healthBar.setPosition(pos);
     }
 
     private void updateRotations() {
@@ -122,5 +139,9 @@ public class Earth {
             }
         }
     }
+
+    // -------------------------------------------------------------------------------------
+
+
 
 }

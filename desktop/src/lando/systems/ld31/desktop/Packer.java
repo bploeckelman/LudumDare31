@@ -9,7 +9,7 @@ public class Packer {
 		TexturePacker.process(
                 "/Users/icmcnamara/local/workspace/ld31/design/received/Large Explosion",
                 "/Users/icmcnamara/local/workspace/ld31/design/received/large_explosion_packed",
-                "lage_explosion");
+                "large_strike_explosion");
 
 
 	}
