@@ -210,7 +210,12 @@ public class Patron extends MovementImage {
 	}
 
 	public void runaway() {
-		// scream?
+
+		if (!hasPuked) {
+			SoundManager.play(LevelManager.Levels.Human, "tapper/scream.mp3");
+		}
+
+		
 		runningAway = true;
 		speed = -300 + Assets.rand.nextInt(150);
 	}
