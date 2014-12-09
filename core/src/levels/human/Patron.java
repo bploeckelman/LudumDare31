@@ -149,7 +149,7 @@ public class Patron extends MovementImage {
 		
 		if (remove) {
 			Score.Total += 200;
-			Score.CashMoneyYo += 5;
+			Score.CashMoneyYo += 2;
 		}
 		
 		return remove;

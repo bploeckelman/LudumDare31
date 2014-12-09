@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.Score;
 import lando.systems.ld31.TransitionManager;
 import levels.InsectUtils.*;
 import levels.InsectUtils.EnemyTypes.Spider;
@@ -47,7 +48,6 @@ public class Insects extends GameLevel {
     protected float nextEnemyDeltaTime;
     protected int pathYStart;
 
-    protected int money; // amount the player has to spend
 
     protected ArrayList<HashMap<Object, Object>>  towerSelects;
     protected String currentTowerType;
@@ -58,7 +58,6 @@ public class Insects extends GameLevel {
         tutorialText = "Bugs are in your dirty bar!\nSelect and place bug killing tech with your mouse.\n\nDon't forget about your patrons.\n\n\nZoom back by clicking on the\ngreen bar on the left";
         this.currentThreat = 0;
         this.enemyDeltaTime = 0;
-        this.money = 15;
         this.currentWaveNum = 0;
         this.enemies = new ArrayList<Enemies>();
         this.towers = new ArrayList<Tower>();
@@ -164,8 +163,8 @@ public class Insects extends GameLevel {
         }
 
 
-        if(this.money >= newTower.getCost()){
-            this.money = this.money - newTower.getCost();
+        if(Score.CashMoneyYo >= newTower.getCost()){
+        	Score.CashMoneyYo = Score.CashMoneyYo - newTower.getCost();
             this.towers.add(newTower);
             this.baseMap[cellXNum][cellYNum].setHasTower(true);
         }
@@ -267,7 +266,7 @@ public class Insects extends GameLevel {
 
 
 
-        Assets.smallFont.draw(batch, "Coins: " + Integer.toString(this.money), 0, this.camera.viewportHeight - 6);
+        Assets.smallFont.draw(batch, "Coins: " + Integer.toString(Score.CashMoneyYo), 0, this.camera.viewportHeight - 6);
         Assets.smallFont.draw(batch, "Wave: " + Integer.toString(this.currentWaveNum), 0, this.camera.viewportHeight - 32);
 
 
@@ -289,7 +288,7 @@ public class Insects extends GameLevel {
                                 .add(cellCenter);
                         particles.addParticle(cellCenter, dest, Color.WHITE, Color.YELLOW, 1f, Quad.OUT);
                     }
-                    this.money = this.money + this.enemies.get(x).getValue();
+                    Score.CashMoneyYo = Score.CashMoneyYo + this.enemies.get(x).getValue();
                     this.enemies.remove(x);
                 }
             }
