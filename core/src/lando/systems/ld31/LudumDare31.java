@@ -34,7 +34,7 @@ public class LudumDare31 extends ApplicationAdapter {
 		levelMgr = new LevelManager();
         batch = new SpriteBatch();
 
-        music = Gdx.audio.newMusic(new FileHandle("music.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         music.setLooping(true);
         music.setVolume(0.2f);
         music.play();

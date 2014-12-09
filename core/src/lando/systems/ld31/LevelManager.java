@@ -54,7 +54,7 @@ public class LevelManager implements InputProcessor{
         //levels[0] = new IntraCellularLevel();
         //levels[1] = new IntercellularLevel();
         //levels[2] = new Insects();
-        levels[3] = new HumanLevel();
+        //levels[3] = new HumanLevel();
         //levels[4] = new CityLevel();
         //levels[5] = new PlanetaryLevel();
         //levels[6] = new GalacticLevel();
@@ -132,6 +132,7 @@ public class LevelManager implements InputProcessor{
     }
 
     public void update(float dt){
+    	if (!gameStarted) return;
         for (int i = 0; i < levels.length; i++){
             if (levels[i] == null) continue;
             levels[i].update(dt, (i == currentLevel));
@@ -139,6 +140,12 @@ public class LevelManager implements InputProcessor{
     }
 
     public void render(SpriteBatch batch){
+    	if (!gameStarted){
+    		batch.begin();
+    		batch.draw(Assets.titleScreen, 0, 0, GameConstants.ScreenWidth, GameConstants.ScreenHeight);
+    		batch.end();
+    		return;
+    	}
     	if (lastLevel != -1){
     		lastFBO.begin();
         	batch.begin();
@@ -224,6 +231,7 @@ public class LevelManager implements InputProcessor{
 	boolean touchedDown = false;
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if (!gameStarted) return false;
 		// TODO Auto-generated method stub
 		if (pointer != 0) return false;
 		Vector3 gamePos = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -242,6 +250,11 @@ public class LevelManager implements InputProcessor{
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
+		if (!gameStarted) {
+			gameStarted = true;
+			addLevel(3);
+			return true;
+		}
 		if (pointer != 0) return false;
 		touchedDown = false;
 		if (levels[currentLevel] != null && screenX < GameConstants.GameWidth){
@@ -253,6 +266,7 @@ public class LevelManager implements InputProcessor{
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		if (!gameStarted) return false;
 		// TODO Auto-generated method stub
 		if (pointer != 0) return false;
 		if (levels[currentLevel] != null && screenX < GameConstants.GameWidth){
@@ -263,6 +277,7 @@ public class LevelManager implements InputProcessor{
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
+		
 		if (levels[currentLevel] != null){
 			levels[currentLevel].mouseMoved(screenX, screenY);
 		}
@@ -271,6 +286,7 @@ public class LevelManager implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount) {
+		if (!gameStarted) return false;
 		// TODO Auto-generated method stub
 		if (!touchedDown){
 			setLevel(MathUtils.clamp(currentLevel + Math.abs(amount) / amount, 0, 6));
