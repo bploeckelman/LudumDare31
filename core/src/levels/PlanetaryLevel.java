@@ -1,12 +1,11 @@
 package levels;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.Score;
 import lando.systems.ld31.TransitionManager;
 import levels.planetary.*;
 
@@ -393,6 +392,7 @@ public class PlanetaryLevel extends GameLevel {
                         rocketExplosion.getPos(), rocketExplosion.getRadius(),
                         thisAstroid.getPosition(), thisAstroid.getRadius())) {
                     // Collision! Destroy it.
+                    Score.AsteroidsDestroyed++;
                     asteroids.remove(i);
                     continue astroidLoop;
                 }
@@ -523,8 +523,6 @@ public class PlanetaryLevel extends GameLevel {
         showerCooldownCountdown = SHOWER_COOLDOWN + SHOWER_COOLDOWN_DEVIATION - (SHOWER_DURATION_DEVIATION * 2 * Assets.rand.nextFloat());
         // Set a new duration
         showerDurationCountdown = SHOWER_DURATION + SHOWER_DURATION_DEVIATION - (SHOWER_DURATION_DEVIATION * 2 * Assets.rand.nextFloat());
-
-        Gdx.app.log(TAG, "startShower | sCC="+showerCooldownCountdown+", sDC="+showerDurationCountdown);
     }
 
 
