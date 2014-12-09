@@ -1,6 +1,5 @@
 package levels;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import lando.systems.ld31.Assets;
@@ -170,8 +169,6 @@ public class Snowman extends GameLevel {
 		add("Asteroids destroyed", "Your total", Score.AsteroidsDestroyed);
 	}
 	
-	NumberFormat formater = NumberFormat.getCurrencyInstance();
-	
 	private void add(String stat, String yourStat, int yourValue) {
 		add(stat, yourStat, yourValue, 10, 100, false);
 	}
@@ -203,7 +200,7 @@ public class Snowman extends GameLevel {
 
 
 	private String format(int value, boolean cash) {
-		return (cash) ? formater.format(value) : "" + value;
+		return ((cash) ? "$" : "") + value;
 	}
 	
 	private void add(String text, int size, Color color) {

@@ -1,7 +1,5 @@
 package levels.human;
 
-import java.text.NumberFormat;
-
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.Box;
 import lando.systems.ld31.GameConstants;
@@ -20,12 +18,10 @@ public class ScoreWidget extends GameObject {
 	public float x = 20;
 	public float y = GameConstants.GameHeight - 70;
 	
-	private NumberFormat _formatter = NumberFormat.getCurrencyInstance();
-	
 	public void update(float dt) {
 		if (_text == null || _score != Score.CashMoneyYo) {
 			_score = Score.CashMoneyYo;
-			_text = _formatter.format(_score);
+			_text = "$" + _score;
 		}
 	}
 	

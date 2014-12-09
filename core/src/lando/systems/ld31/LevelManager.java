@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
@@ -142,7 +144,8 @@ public class LevelManager implements InputProcessor{
     public void render(SpriteBatch batch){
     	if (!gameStarted){
     		batch.begin();
-    		batch.draw(Assets.titleScreen, 0, 0, GameConstants.ScreenWidth, GameConstants.ScreenHeight);
+    		//batch.draw(Assets.titleScreen, 0, 0, GameConstants.ScreenWidth, GameConstants.ScreenHeight);
+    		drawTitle(batch);
     		batch.end();
     		return;
     	}
@@ -209,6 +212,26 @@ public class LevelManager implements InputProcessor{
         batch.end();
     }
 
+
+	private void drawTitle(SpriteBatch batch) {
+		float width = GameConstants.ScreenWidth;
+		float height = GameConstants.ScreenHeight;
+		
+		BitmapFont font = Assets.gameFont;
+		
+		float y = height - 180;
+		font.setScale(4f);
+		font.drawWrapped(batch, "BAR", 0, y, width, HAlignment.CENTER);
+		
+		y -= 200;
+		font.setScale(2f);		
+		font.drawWrapped(batch, "Order of", 0, y, width, HAlignment.CENTER);
+		
+		y -= 150;
+		
+		font.setScale(1f);		
+		font.drawWrapped(batch, "Magnitude", 0, y, width, HAlignment.CENTER);
+	}
 
 	@Override
 	public boolean keyDown(int keycode) {
