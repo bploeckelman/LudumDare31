@@ -144,8 +144,8 @@ public class LevelManager implements InputProcessor{
     public void render(SpriteBatch batch){
     	if (!gameStarted){
     		batch.begin();
-    		//batch.draw(Assets.titleScreen, 0, 0, GameConstants.ScreenWidth, GameConstants.ScreenHeight);
-    		drawTitle(batch);
+    		batch.draw(Assets.titleScreen, 0, 0, GameConstants.ScreenWidth, GameConstants.ScreenHeight);
+    		//drawTitle(batch);
     		batch.end();
     		return;
     	}
@@ -212,6 +212,7 @@ public class LevelManager implements InputProcessor{
         batch.end();
     }
 
+    /*
 
 	private void drawTitle(SpriteBatch batch) {
 		float width = GameConstants.ScreenWidth;
@@ -233,6 +234,8 @@ public class LevelManager implements InputProcessor{
 		font.drawWrapped(batch, "Magnitude", 0, y, width, HAlignment.CENTER);
 	}
 
+*/
+    
 	@Override
 	public boolean keyDown(int keycode) {
 		// TODO Auto-generated method stub

@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Snowman extends GameLevel {
 
-	private static Texture _snowman = new Texture("snowman.png");
+	public static Texture Snowman = new Texture("snowman.png");
 	private static Texture _occulous = new Texture("occulous.png");
 	
 	private ScaleImage _mainImage;
@@ -24,7 +24,7 @@ public class Snowman extends GameLevel {
 	private String nextText = "Wait, it wasn't real.\n\nLike a fantastic dream... but\nmaybe one day you can own a\nbar in Wisconsin\n\nEat your vegetables and don't do drugs, kids";
 	public Snowman() {
 		tutorialText = "You allowed the galaxies to collide and your galaxy has been destroyed!\n\nAre you sure you are from Wisconsin?\n\nWhat about the patrons?";
-		_mainImage = new ScaleImage(_snowman, GameConstants.GameHeight);
+		_mainImage = new ScaleImage(Snowman, GameConstants.GameHeight);
 		_mainImage.y = -600;
 		
 		_occulousImage = new ScaleImage(_occulous, 400);
