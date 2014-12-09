@@ -42,7 +42,8 @@ public class CityLevel extends GameLevel {
     CityPowerSource[] powerSources;
     PowerConnectionBar powerBar;
 
-    boolean[] stationConnections = new boolean[] { false, false, false, false };
+    boolean[] stationConnections = new boolean[] { true, true, true, true };
+    boolean[] prevConnectedState = new boolean[] { true, true, true, true };
     int numBarConnections = 0;
     int barx, bary;
 
@@ -65,6 +66,8 @@ public class CityLevel extends GameLevel {
     int lastLightningTileX = -1;
     int lastLightningTileY = -1;
     Sound lightningSound;
+    Sound powerOnSound;
+    Sound powerOffSound;
 
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
@@ -108,6 +111,8 @@ public class CityLevel extends GameLevel {
                 .start(LudumDare31.tweens);
 
         lightningSound = SoundManager.getSound("city/lightning_strike.mp3");
+        powerOnSound   = SoundManager.getSound("city/power_on.mp3");
+        powerOffSound  = SoundManager.getSound("city/power_off.mp3");
     }
 
     @Override
@@ -424,6 +429,8 @@ public class CityLevel extends GameLevel {
             barTile.left  = powerGrid[bary    ][barx + 1];
         else barTile.left = null;
 
+
+        System.arraycopy(stationConnections, 0, prevConnectedState, 0, stationConnections.length);
         stationConnections[0] = false;
         stationConnections[1] = false;
         stationConnections[2] = false;
@@ -459,6 +466,17 @@ public class CityLevel extends GameLevel {
             if (powerTile.right != null && powerTile.right.energized && !powerTile.right.visited) {
                 powerTile.right.visited = true;
                 connectionQueue.add(powerTile.right);
+            }
+        }
+
+        // Play a power on/off sound if the connection state changed
+        for (int i = 0; i < prevConnectedState.length; ++i) {
+            if (prevConnectedState[i] != stationConnections[i]) {
+                if (stationConnections[i]) {
+                    SoundManager.play(LevelManager.Levels.City, powerOnSound, 0.5f);
+                } else {
+                    SoundManager.play(LevelManager.Levels.City, powerOffSound, 0.5f);
+                }
             }
         }
 
