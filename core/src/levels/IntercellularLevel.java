@@ -13,8 +13,10 @@ import com.badlogic.gdx.math.Vector2;
 
 import lando.systems.ld31.Assets;
 import lando.systems.ld31.GameConstants;
+import lando.systems.ld31.LevelManager;
 import lando.systems.ld31.LudumDare31;
 import lando.systems.ld31.Score;
+import lando.systems.ld31.SoundManager;
 import lando.systems.ld31.TransitionManager;
 import lando.systems.ld31.Vector2Accessor;
 import levels.intercellular.BloodCell;
@@ -156,9 +158,13 @@ public class IntercellularLevel extends GameLevel {
     	for (int i = 0; i < cells.size(); i++){
     		cells.get(i).update(dt);
     	}
+    	
+    	boolean deadCells = false;
     	for (int i = cells.size() -1; i >= 0; i--){
     		if (!cells.get(i).alive) {
+    			deadCells = true;
     			BloodCell cell = cells.remove(i);
+    			Score.ArteryGermsKilled++;
     			for (int j = 0; j < 40; j++){
     				Vector2 cellCenter = new Vector2(16,16).add(cell.pos);
     				Vector2 dest = new Vector2(1,0).rotate(Assets.rand.nextInt(360)).scl(Assets.rand.nextFloat() * 40)
@@ -167,6 +173,11 @@ public class IntercellularLevel extends GameLevel {
     			}
     		}
     	}
+    	
+    	if (deadCells){
+    		SoundManager.play(LevelManager.Levels.InterCellular, "intercellular/mouthpop.wav", .5f);
+    	}
+    	
     	if (nextSpawn <= 0 && !cellsMoving()){
     		addChains();
     		nextSpawn += 20 + Assets.rand.nextInt(20);
@@ -210,14 +221,18 @@ public class IntercellularLevel extends GameLevel {
     		}
     	}
     	
+    	boolean deadCells = false;
     	for (int i =0; i < cells.size(); i++){
     		BloodCell cell = cells.get(i);
     		if (!cell.settled) continue;
     		if (!chain.contains(cell)) {
-    			Score.ArteryGermsKilled++;
+    			
     			cell.alive = false;
+    			
     		}
     	}
+    	
+
     }
     
     public ArrayList<BloodCell> getNeighbors(BloodCell cell){
