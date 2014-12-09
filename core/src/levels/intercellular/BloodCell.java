@@ -155,6 +155,7 @@ public class BloodCell {
     }
     
     public void update(float dt){
+    	if (pos.y < -100) alive = false;
     	animationTimer += dt;
     	if (settled) return;
     	
