@@ -7,6 +7,7 @@ import aurelienribon.tweenengine.equations.*;
 import aurelienribon.tweenengine.primitives.MutableFloat;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -63,6 +64,7 @@ public class CityLevel extends GameLevel {
     boolean lightningBoltDone = true;
     int lastLightningTileX = -1;
     int lastLightningTileY = -1;
+    Sound lightningSound;
 
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
@@ -104,6 +106,8 @@ public class CityLevel extends GameLevel {
                 .ease(Quad.INOUT)
                 .repeatYoyo(Tween.INFINITY, 0)
                 .start(LudumDare31.tweens);
+
+        lightningSound = SoundManager.getSound("city/lightning_strike.mp3");
     }
 
     @Override
@@ -381,6 +385,8 @@ public class CityLevel extends GameLevel {
                             }
                         })
                         .start(LudumDare31.tweens);
+
+                SoundManager.play(LevelManager.Levels.City, lightningSound, 1);
 
                 LevelManager.powerLevel = numBarConnections;
                 break;
