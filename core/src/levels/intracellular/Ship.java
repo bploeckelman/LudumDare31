@@ -86,7 +86,7 @@ public class Ship {
     }
 
     public Bullet shoot() {
-    	SoundManager.play(LevelManager.Levels.IntraCellular, IntraCellularAssets.shipShoot, .5f);
+    	SoundManager.play(LevelManager.Levels.IntraCellular, IntraCellularAssets.shipShoot, .1f);
         return new Bullet(position.x, position.y, sprite.getRotation() + 90, velocity);
     }
 

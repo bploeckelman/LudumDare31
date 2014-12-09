@@ -191,7 +191,7 @@ public class Insects extends GameLevel {
 
             }else{
                 this.currentWave = null;
-                this.nextWaveTime = (Assets.rand.nextFloat() * 10) + 10;
+                this.nextWaveTime = (Assets.rand.nextFloat() * 2) + 2;
             }
         }else{
             // wait for next wave

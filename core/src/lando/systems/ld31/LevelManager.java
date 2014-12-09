@@ -44,6 +44,8 @@ public class LevelManager implements InputProcessor{
     private final FrameBuffer currentFBO;
     private final FrameBuffer lastFBO;
     private OrthographicCamera camera;
+    
+    private boolean gameStarted;
 
     public LevelManager(){
     	camera = new OrthographicCamera(GameConstants.ScreenWidth, GameConstants.ScreenHeight);

@@ -228,7 +228,7 @@ public class IntraCellularLevel extends GameLevel {
             if(ship.invulnerabilityTimeLeft <= 0 &&
                     ship.position.dst(asteroid.position) < asteroid.sprite.getWidth()/2 + ship.sprite.getWidth()/2)
             {
-            	SoundManager.play(LevelManager.Levels.IntraCellular, IntraCellularAssets.shipExplode, .5f);
+            	SoundManager.play(LevelManager.Levels.IntraCellular, IntraCellularAssets.shipExplode, .2f);
                 ship.reset((camera.viewportWidth - 100)/2, camera.viewportHeight/2);
             }
 
