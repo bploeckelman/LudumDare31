@@ -257,10 +257,8 @@ public abstract class GameLevel {
 				lm.addLevel(7);
 			} 
 		}
-		
-		*/
-		
 	}
+	*/
 		
 	protected void gotFocus(boolean hasFocus) { }
 
