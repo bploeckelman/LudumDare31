@@ -231,9 +231,9 @@ public abstract class GameLevel {
 		}
 		
 		//temp
-		debugLevelJump();
+		//debugLevelJump();
 	}
-	
+	/*
 	private void debugLevelJump() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
 		{		
@@ -257,10 +257,8 @@ public abstract class GameLevel {
 				lm.addLevel(7);
 			} 
 		}
-		
-		
-		
 	}
+	*/
 		
 	protected void gotFocus(boolean hasFocus) { }
 
