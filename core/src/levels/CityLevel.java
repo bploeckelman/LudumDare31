@@ -68,6 +68,7 @@ public class CityLevel extends GameLevel {
     Sound lightningSound;
     Sound powerOnSound;
     Sound powerOffSound;
+    Sound placeLine;
 
     Vector3 screenPos = new Vector3();
     Vector3 worldPos = new Vector3();
@@ -113,6 +114,7 @@ public class CityLevel extends GameLevel {
         lightningSound = SoundManager.getSound("city/lightning_strike.mp3");
         powerOnSound   = SoundManager.getSound("city/power_on.mp3");
         powerOffSound  = SoundManager.getSound("city/power_off.mp3");
+        placeLine      = SoundManager.getSound("city/place_line.mp3");
     }
 
     @Override
@@ -300,11 +302,6 @@ public class CityLevel extends GameLevel {
             return;
         }
 
-        // Update score
-        if (powerLineType != CityTileTypes.empty) {
-            Score.PowerTilesPlaced++;
-        }
-
         // Place the current power tile grid at the tile under the mouse
         PowerTile thisTile = powerGrid[y][x];
         thisTile.powerGridType = powerLineType;
@@ -355,6 +352,12 @@ public class CityLevel extends GameLevel {
                 thisTile.right = null;
                 thatTile.left = null;
             }
+        }
+
+        // Update score and play a 'placed line' sound
+        if (powerLineType != CityTileTypes.empty) {
+            Score.PowerTilesPlaced++;
+            SoundManager.play(LevelManager.Levels.City, placeLine, 0.25f);
         }
     }
 
